@@ -1,0 +1,13 @@
+aca ira un header y un footer,
+en los header ira el css y en el footer ira el javascript
+
+En el loader, va asi:
+<?php $this->load->view('template/header')?>
+<?php $this->load->view($contenido)?>
+<?php $this->load->view('template/footer')?>
+
+
+$data['contendido'] = 'direccion/a/la/página';
+$this->load->view('template/loader', $data);
+
+

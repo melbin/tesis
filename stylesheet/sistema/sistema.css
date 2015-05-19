@@ -1,0 +1,19 @@
+
+.image_position {
+	position: fixed;
+    top: 10px;
+    left: 20%;
+}
+
+.imagen_principal {
+	
+}
+
+#pie {
+		clear: both;
+		position: absolute; 
+		display: block;
+		right: 30%; 
+		bottom: 0; 
+		height: 3em;
+	}

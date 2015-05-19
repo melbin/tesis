@@ -1,0 +1,8 @@
+Options +Indexes
+RewriteEngine on
+RewriteCond $1 !^(index.php|bower_components|css|dist|js|images|robots\.txt)
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond $1 !^(includes)
+RewriteRule ^(.*)$ /tesis/index.php?/$1 [L]
