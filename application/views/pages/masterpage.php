@@ -164,65 +164,11 @@
                             </div>
                             <!-- /input-group -->
                         </li>
-                        <?php if(!$menu_sistema) {?>
-                        <li>
-                            <a href="#"><i class="fa fa-list-alt fa-fw"></i> Solicitudes<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="solicitudes">Crear Solicitud</a>
-                                </li>
-                                <li>
-                                    <a href="#">Solicitudes Rechazadas</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Abastecimiento<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Solicitudes Pendientes</a>
-                                </li>
-                                <li>
-                                    <a href="#">Solicitudes Rechazadas</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Financiero<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Solicitudes Pendientes</a>
-                                </li>
-                                <li>
-                                    <a href="#">Solicitudes Rechazadas</a>
-                                </li>
-                            </ul>       
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-table fa-fw"></i> Reportes</a>
-                        </li>
-                        
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="#">Login Page</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <?php } 
-                        else {
-                               if(isset($menus)){
-                                    echo $menus;
-                               } 
-                        }
+                         
+                        <?php
+                            if(isset($menus)){
+                                echo $menus;
+                            }
                         ?>
                         
                     </ul>

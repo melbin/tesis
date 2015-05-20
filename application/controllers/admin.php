@@ -16,7 +16,7 @@ class Admin extends CI_Controller {
 		$datos['titulo']="Sistema";
 		$datos['logo'] = $this->Regional_model->get_parametro("logo");
 		$datos['menu_sistema']=true;
-		$datos['opcion_menu'] = $this->Regional_model->get_tabla('sio_sistema_opcion', array('sio_estado'=>1));
+		$datos['opcion_menu'] = $this->Regional_model->get_tabla('sio_sistema_opcion', array('sio_menu'=>2,'sio_estado'=>1));
 	//	var_dump($datos['botones']); die();
 		$this->__cargarVista($datos);
 	}
