@@ -33,7 +33,10 @@
     <link href="<?php echo base_url()?>bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
      <!-- jQuery --> 
-   <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery.min.js"></script>  
+   <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-2.1.4.js"></script>  
+
+    <!-- Resuelve problemas de incompatibilidades con jQuerys viejos -->
+   <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-migrate-1.2.1.min.js"></script>  
 
     <!-- jquery.browser.js  Is a plugin-->
     <script src="<?php echo base_url()?>bower_components/jquery/jquery.browser.js"></script>  
