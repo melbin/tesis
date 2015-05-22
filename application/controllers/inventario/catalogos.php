@@ -249,16 +249,18 @@ class Catalogos extends CI_Controller {
 			$columnas = array(
 				'pro_codigo',
 				'pro_nombre',
-				'pro_descripcion',
+				'pro_sub_id',
 				'pro_esp_id',
 				'pro_uni_id',
 				'pro_tip_id',
+				'pro_descripcion',
 				'pro_estado'
 				);
 
 			$requeridos = array(
 					'pro_codigo',
 					'pro_nombre',
+					'pro_sub_id',
 					'pro_esp_id',
 					'pro_tip_id',
 					'pro_saldo'
@@ -267,6 +269,7 @@ class Catalogos extends CI_Controller {
 			$alias = array(
 					'pro_codigo' => 'codigo',
 					'pro_nombre' => 'nombre',
+					'pro_sub_id' => 'subcatalogo',
 					'pro_descripcion' => 'descripcion',
 					'pro_esp_id' => 'especifico',
 					'pro_uni_id' => 'unidad/medida',
@@ -286,6 +289,7 @@ class Catalogos extends CI_Controller {
 			$crud->set_relation('pro_esp_id','esp_especifico','esp_nombre');
 			$crud->set_relation('pro_uni_id','uni_unidad_medida','uni_valor');
 			$crud->set_relation('pro_tip_id','tip_tipo_producto','tip_nombre');
+			$crud->set_relation('pro_sub_id','sub_subcatalogo','sub_nombre');
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
