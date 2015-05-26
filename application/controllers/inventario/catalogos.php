@@ -235,6 +235,47 @@ class Catalogos extends CI_Controller {
 	 }
 	}
 
+function procesos(){
+
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+
+			$crud = new grocery_CRUD();
+
+			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
+			$crud->set_table('pro_proceso');
+			$crud->set_subject('Procesos');
+			$crud->required_fields('pro_nombre');
+			$crud->columns('pro_nombre','pro_descripcion','pro_estado');
+			
+			$crud->display_as('pro_nombre','nombre');
+			$crud->display_as('pro_descripcion','descripcion');
+			$crud->display_as('pro_estado','estado');
+			
+			$crud->field_type('pro_usu_mod', 'hidden', $this->tank_auth->get_user_id());
+			$crud->field_type('pro_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
+			$crud->field_type('pro_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
+
+
+		// Datos generales de la pagina	
+			$data['menu_sistema']=true;
+			$data['vista_name']='inventario/index';
+			$data['titulo']="Procesos";
+			$data['logo'] = $this->Regional_model->get_parametro("logo");
+			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>1));
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',1);
+		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
+
+		// 	Estas tres lineas son principales cuando se desea imprimir un Grocery Crud en el sistema
+		 	$crud->unset_jquery(); // No llama al jQuery del Grocery Crud
+		 	$output = $crud->render();
+		 	//$this->load->view('sistema/pais',$output);
+		 	$data['texto'] = $this->load->view('inventario/catalogos/catalogos', $output, true); 
+		 	$this->__cargarVista($data);	 	 
+	 }
+	}
+
 	function productos(){
 
 		if (!$this->tank_auth->is_logged_in()) {
