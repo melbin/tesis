@@ -11,10 +11,25 @@
 
 #pie {
 		clear: both;
-		position: absolute; 
-		display: block;
-		right: 30%; 
+		/*position: relative; */
+		display: block !important;
+		left: 30%; 
+		text-align: center;
 		bottom: 0; 
 		height: 3em;
 	}
 
+#pro_entrada label.error {
+    color: #FB3A3A;
+    display: inline-block;
+    margin: 4px 0 5px 100px;
+    padding: 0;
+    text-align: left;
+    width: 220px;
+}
+
+#bodega, #proveedor, #entrada, #articulo {
+	display: block !important;
+	margin: -30px 0 5px 0px;
+    visibility: hidden;
+}

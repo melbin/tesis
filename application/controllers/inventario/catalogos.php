@@ -166,7 +166,7 @@ class Catalogos extends CI_Controller {
 					'ali_nombre'=>'nombre',
 					'ali_id'=>'codigo',
 					'ali_direccion'=>'direccion',
-					'sub_estado'=>'estado'
+					'ali_estado'=>'estado'
 				);
 
 			$crud->required_fields($requeridos);

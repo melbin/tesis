@@ -17,8 +17,15 @@
     <!-- MetisMenu CSS -->
     <link href="<?php echo base_url()?>bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
+    <!-- CSS jQuery_UI -->
+    
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>js/jQuery_UI/css/jquery-ui.css" />
     <!-- CSS Nuevo-->
     <link href="<?php echo base_url()?>stylesheet/sistema/sistema.css" rel="stylesheet">
+
+    <!-- CSS del Select2-->
+    <link href="<?php echo base_url()?>stylesheet/select2.min.css" rel="stylesheet">
+    <link href="<?php echo base_url()?>stylesheet/select2-bootstrap.css" rel="stylesheet">
 
     <!-- Timeline CSS -->
     <link href="<?php echo base_url()?>dist/css/timeline.css" rel="stylesheet">
@@ -29,11 +36,21 @@
     <!-- Morris Charts CSS -->
     <link href="<?php echo base_url()?>bower_components/morrisjs/morris.css" rel="stylesheet">
 
+    <!-- Alertas plugin de jQuery -->
+    <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.core.css" /> <!-- centra -->
+    <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.bootstrap.css" /> <!-- centra -->
+    <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.default.css" /> <!--estilo borde -->
+    
+    
     <!-- Custom Fonts -->
     <link href="<?php echo base_url()?>bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
      <!-- jQuery --> 
    <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-2.1.4.js"></script>  
+
+   <!-- jQuery UI -->
+   <script src="<?php echo base_url()?>js/jQuery_UI/ui/jquery-ui.js"></script>
+
 
     <!-- Resuelve problemas de incompatibilidades con jQuerys viejos -->
    <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-migrate-1.2.1.min.js"></script>  
@@ -44,8 +61,23 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url()?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
+    <!-- jQuery Masked Input -->
+    <script src="<?php echo base_url()?>js/jquery.maskedinput.js"></script>
+    
+    <!-- Plugin para Selects  -->
+    <script src="<?php echo base_url()?>js/select2.min.js"></script>
+
+    <!-- Plugin de Alertify -->
+    <script src="<?php echo base_url()?>js/alertify/alertify.js"></script>
+
     <!-- Metis Menu Plugin JavaScript -->
     <script src="<?php echo base_url()?>bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Validar todo tipo de campos -->
+    <script src="<?php echo base_url()?>js/validar.js"></script>
+
+    <!-- Plugin para Validar Formularios -->
+    <script src="<?php echo base_url()?>js/jquery.validate.js"></script>
 
     <!-- Morris Charts JavaScript -->
     <script src="<?php echo base_url()?>bower_components/raphael/raphael-min.js"></script>
@@ -206,12 +238,34 @@
     </div>
     <!-- /#wrapper -->
 
-    <div id="pie">              
+    <div class="row-fluid" id="pie">              
+        
         <span style="color: #c0c0c0; font-size: 10pt;">Copyright 2015 ©&nbsp;Regional de Salud. Todos los Derechos Resevados</span>
+        
     </div>
 
 </body>
 
 </html>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        tipo_alerta='<?php echo $this->session->flashdata('tipo_alerta');?>';
+        texto_alerta = '<?php echo $this->session->flashdata('texto_alerta') ?>';
+
+        if(tipo_alerta === 'success')
+        {    
+            alertify.success(texto_alerta);
+        } 
+        else if(tipo_alerta === 'error')
+        {
+            alertify.error(texto_alerta);
+        }
+    });
+</script>
+
+
+
 
 
