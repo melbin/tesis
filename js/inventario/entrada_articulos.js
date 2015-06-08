@@ -15,7 +15,8 @@
 		$("#cantidad , #precio").validarCampo('0123456789.,'); 
 
 		$("#cancelar").live("click", function(){
-			alertify.alert("Pendiente de programar");
+			// alertify.alert("Pendiente de programar");
+            location.reload();
  		});
 
 		jQuery.validator.addMethod("selectNone",function(value, element) { 

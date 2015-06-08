@@ -11,7 +11,7 @@
             <table width="50%" border="0" align="left">
                 <tr><th width="23%"></th><th></th><th></th></tr>
                 <tr> <!-- <i id="requerido">*</i> -->
-                  <td><label>Bodega:</label></td>
+                  <td><label>Bodega:</label><b class="error" style="color:red; display:none;">*</b></label></td>
                     <td colspan="2">
                         <select class="form-control" id="bodega" name="bodega">
                             <?php if(isset($articulos)) {echo $articulos;} ?>
@@ -28,7 +28,7 @@
                 <tr>
                 <td width="10%"><label>Tipo de salida:</label></td>
                     <td colspan="2">
-                        <select class="form-control" id="entrada" name="entrada">
+                        <select class="form-control" id="salida" name="salida">
                             <?php if(isset($procesos)) {echo $procesos;} ?>
                         </select>
                     </td>
@@ -39,7 +39,7 @@
 
 	<div class="panel panel-default">
         <div class="panel-heading">
-        	<label>Datos Especificos</label>
+        	<label>Datos Específicos</label>
         </div>
         <div class="panel-body">
         	<table width="50%" border="0" align="left">
@@ -58,6 +58,7 @@
                     <td colspan="2">                        
                         <div class="form-group">    
                             <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad" onchange="validar_cantidad();">    
+                            <input type="hidden" id="cant_real" name="cant_real">
                         </div>              
                     </td>
                 </tr>

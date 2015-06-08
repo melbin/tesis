@@ -19,7 +19,7 @@
 		height: 3em;
 	}
 
-#pro_entrada label.error {
+label.error {
     color: #FB3A3A;
     display: inline-block;
     margin: 4px 0 5px 100px;

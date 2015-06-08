@@ -42,12 +42,62 @@ class Abastecimiento extends CI_Controller {
 			redirect('/auth/login/');
 		
 		} else {
+
+			if($_POST){
+				 // print_r($_POST); exit();
+
+				$sar_actualizar = array(
+						'sar_cantidad' 	=> $this->input->post('cant_real'),
+						'sar_estado' 	=> 1,
+						'sar_usu_mod'	=> $this->tank_auth->get_user_id(),
+						'sar_fecha_mod' => date('Y-m-d H:i:s', strtotime($_POST['fecha_salida'].date('H:i:s'))),
+					);
+				
+				$row_afected = $this->pro_model->actualizar_registro('sar_saldo_articulo', $sar_actualizar, $_POST['articulo']);
 			
-			$data['user_id']	= $this->tank_auth->get_user_id();
+				// Registrar el movimiento en moi_movimiento_inv
+				$movimiento = array(
+						'moi_ali_id'	=> 	$this->input->post('bodega'),
+						'moi_pro_id'	=> 	$this->input->post('salida'),
+						'moi_fecha'		=> 	date('Y-m-d H:i:s'),
+						'moi_estado'	=>	1,
+						'moi_fecha_mod' =>	date('Y-m-d H:i:s'),
+						'moi_usu_mod'	=>	$this->tank_auth->get_user_id()
+					);
+
+				$moi_id = $this->regional_model->insertar_registro('moi_movimiento_inv', $movimiento);
+
+				// Guardar detalle
+				$detalle = array(
+						'dee_sar_id' => $_POST['articulo'], // Este es el id del registro en sar_saldo_articulo
+						'dee_moi_id' => $moi_id,
+						'dee_cantidad' => $this->input->post('cantidad'),
+						'dee_estado' => 1,
+						'dee_fecha_mod' => date("Y-m-d H:i:s"),
+						'dee_usu_mod' => $this->tank_auth->get_user_id()
+					);
+
+				$detalle_id = $this->regional_model->insertar_registro('dee_detalle_mov', $detalle);
+
+
+				if($row_afected>0 && $moi_id>0 && $detalle_id>0)
+				{
+					$alerta=array('registro'=>$registro,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Salida Exitosa.");
+				} else
+				{
+					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Salida No efectuada",'texto_alerta'=>"La salida no pudo ser efectuada.");
+				}
+				
+				$this->session->set_flashdata($alerta);       
+				redirect('home/abastecimiento/salida_de_articulos');								
+
+			} else
+			{
+				$data['user_id']	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "abastecimiento/salida_de_articulos";
 			$data['logo'] = $this->regional_model->get_parametro("logo");
-			$data['titulo']="Salida de articulos";
+			$data['titulo']="Salida de artículos";
 
 			// Obtenemos los valores de los Select
 			$data['articulos'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),null,'','ali_id',true);
@@ -60,6 +110,7 @@ class Abastecimiento extends CI_Controller {
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		 	
 			$this->__cargarVista($data);
+			}
 		}	
 	}
 
@@ -131,7 +182,7 @@ class Abastecimiento extends CI_Controller {
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "abastecimiento/entrada_de_articulos";
 			$data['logo'] = $this->regional_model->get_parametro("logo");
-			$data['titulo']="Entrada de articulos";
+			$data['titulo']="Entrada de artículos";
 
 			// Obtenemos los valores de los Select
 			$data['articulos'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),null,'','ali_id',true);
@@ -155,7 +206,7 @@ class Abastecimiento extends CI_Controller {
 		$articulos = $this->pro_model->get_articulos($id_bodega);
 		$html="";
 		foreach ($articulos as $key => $value) {
-			$html .= '<option value="'.$value['pro_id'].'">'.$value['pro_nombre'].'::'.$value['sar_cantidad'].'</option>';
+			$html .= '<option value="'.$value['sar_id'].'">'.$value['pro_nombre'].'::'.$value['sar_cantidad'].'</option>';
 		}
 
 		$arreglo = array(

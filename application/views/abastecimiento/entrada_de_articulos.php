@@ -55,13 +55,13 @@
 
 	<div class="panel panel-default">
         <div class="panel-heading">
-        	<label>Datos Especificos</label>
+        	<label>Datos Específicos</label>
         </div>
         <div class="panel-body">
         	<table width="50%" align="left">
         		<tr><th></th><th></th><th></th></tr>
         		<tr>
-        		<td width="10%"><label>Articulo:</label></td>
+        		<td width="10%"><label>Artículo:</label></td>
         			<td colspan="2">
         				<select class="form-control" id="articulo" name="articulo">
         					<?php if(isset($productos)) {echo $productos;} ?>
@@ -94,10 +94,3 @@
     </div>
     </form>
 </div>
-
-
-
-
-
-
-

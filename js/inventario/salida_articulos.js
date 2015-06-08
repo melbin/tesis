@@ -3,7 +3,7 @@
         // Definir mascara
         $("#fecha_salida").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
-		$("#bodega ,#proveedor, #entrada, #articulo").select2({
+		$("#bodega ,#proveedor, #salida, #articulo").select2({
             minimumResultsForSearch: 4,
             placeholder: "Seleccione",
             theme: "classic", // bootstrap
@@ -12,7 +12,8 @@
 		$("#cantidad , #precio").validarCampo('0123456789.,'); 
 
 		$("#cancelar").live("click", function(){
-			alertify.alert("Pendiente de programar");
+			// alertify.alert("Pendiente de programar");
+              location.reload();
  		});    
 
         $("#bodega").change(function(){
@@ -37,7 +38,6 @@
         });
 
         // Validar Cantidad
-
 		jQuery.validator.addMethod("selectNone",function(value, element) { 
 	   		if (element.value == "0") { 
 	      		return false; 
@@ -55,7 +55,7 @@
             cantidad: "required",
             bodega: {selectNone: true},
             proveedor: {selectNone: true},
-            entrada: {selectNone: true},
+            salida: {selectNone: true},
             articulo: {selectNone: true},
             // email: {
             //     required: true,
@@ -69,13 +69,14 @@
         },
 
         // Specify the validation error messages
+
         messages: {
             fecha_salida: "Seleccione una fecha",
             cantidad: "Seleccione una cantidad",
       		bodega: "Seleccione una bodega",      
       		proveedor: "Seleccione una proveedor",      
-            entrada: "Seleccione una entrada",
-            articulo: "Seleccione un articulo",
+            salida: "Seleccione un tipo de proceso",
+            articulo: "Seleccione un artículo",
             // password: {
             //     required: "Please provide a password",
             //     minlength: "Your password must be at least 5 characters long"
@@ -103,7 +104,8 @@
         {
             alertify.alert("Por favor, ingrese una cantidad menor");
             $("#cantidad").val('').focus();   
-        }
+        } else
+        { $("#cant_real").val(total); }
     };
 	// $("#cancelar").click(function(){
 	// 	alert("Aun en proceso");
