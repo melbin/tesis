@@ -13,6 +13,30 @@ class Regional_model extends CI_Model
 
 	}
 
+    function get_productosxcategoria($cat_id = NULL)
+    {
+        $query = "
+                SELECT  pro_id, pro_nombre, pro_codigo FROM sub_subcatalogo
+                INNER JOIN pro_producto ON pro_producto.pro_sub_id = sub_subcatalogo.sub_id
+                WHERE sub_cat_id = ".$cat_id." and sub_estado = 1
+                ";
+             
+        $resultado = $this->db->query($query)->result_array();
+        return $resultado;
+    }
+
+    function cargar_productosxsubcategoria($sub_id=NULL)
+    {
+        $query = "
+                SELECT  pro_id, pro_nombre, pro_codigo FROM sub_subcatalogo
+                INNER JOIN pro_producto ON pro_producto.pro_sub_id = sub_subcatalogo.sub_id
+                WHERE pro_sub_id = ".$sub_id." and sub_estado = 1
+                ";
+             
+        $resultado = $this->db->query($query)->result_array();
+        return $resultado;   
+    }
+
 	function get_parametro($parametro){
 		$this->db->select();
 		$this->db->from('par_parametro');
@@ -21,6 +45,22 @@ class Regional_model extends CI_Model
 
 		return $query['par_valor'];
 	}
+
+    function get_existencias($where)
+    {
+        $this->db->select()
+                 ->from('sar_saldo_articulo')
+                 ->where($where)
+                 ->join('ali_almacen_inv','ali_almacen_inv.ali_id = sar_ali_id')
+                 ->limit(1)
+                 ;
+
+        $query = $this->db->get()->row_array();
+        if($query>0){
+            return $query;
+        }         
+
+    }
 
 	function insertar_registro($tabla, $data){
 		$this->db->insert($tabla, $data);

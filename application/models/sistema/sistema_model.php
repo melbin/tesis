@@ -35,11 +35,32 @@ class Sistema_model extends CI_Model
 		$this->db->select();
 		$this->db->from($tabla);
 		$this->db->where($where);
+
 		$query = $this->db->get()->row_array();
 		if($query>0){
 			return $query;
 		}
+	}
 
+	function get_campo($tabla, $campo ,$where=NULL){
+		$query = $this->db->select()
+				 	->from($tabla)
+				 	->where($where)
+				 	->limit(1)
+				 	;
+
+		$result = $this->db->get($query);
+
+		if($result->num_rows() > 0){
+			$fila = $result->row();
+			foreach ($fila as $key => $value) {
+				if($key == $campo){
+					return $value;
+				}
+			}
+
+		} 
+		return null;
 	}
 
 	function get_tabla($tabla, $where){

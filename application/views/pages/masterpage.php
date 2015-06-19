@@ -76,6 +76,9 @@
     <!-- Validar todo tipo de campos -->
     <script src="<?php echo base_url()?>js/validar.js"></script>
 
+     <!-- Formatos a Numeros -->
+    <script src="<?php echo base_url()?>js/jquery.number.js"></script>
+
     <!-- Plugin para Validar Formularios -->
     <script src="<?php echo base_url()?>js/jquery.validate.js"></script>
 
