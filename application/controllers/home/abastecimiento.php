@@ -122,14 +122,36 @@ class Abastecimiento extends CI_Controller {
 		} else {
 
 			if($_POST){
-				
+				//die(print_r($_POST)); 
 				// Insertarmos en sar_saldo_articulo 
-				$articulos = array(
-						'sar_pro_id' 	=> ($_POST['articulo']!=0)? $_POST['articulo']: NULL,
+
+				$productos = $this->input->post('productos');
+				$precios = $this->input->post('precios');
+				$cantidad = $this->input->post('cantidad');
+				$descripcion = $this->input->post('descripcion'); // Puede venir Null
+
+				// Registramos el movimiento en moi_movimiento_inv
+				if(!empty($productos)){
+					$movimiento = array(
+						'moi_ali_id' => ($_POST['bodega']!=0)? $_POST['bodega'] : NULL,
+						'moi_prv_id' => ($_POST['proveedor']!=0)? $_POST['proveedor']: NULL,
+						'moi_pro_id' => ($_POST['entrada']!=0)? $_POST['entrada']: NULL,
+						'moi_fecha' => 	date("Y-m-d H:i:s", strtotime($_POST['fecha_registro'].date('H:i:s'))),
+						'moi_estado' => 1,
+						'moi_fecha_mod' => date("Y-m-d H:i:s"),
+						'moi_usu_mod' => $this->tank_auth->get_user_id()
+					);
+
+				$moi_id = $this->regional_model->insertar_registro('moi_movimiento_inv', $movimiento);	
+				} // End if
+				
+				foreach ($productos as $key => $value) {
+					$articulos = array(
+						'sar_pro_id' 	=> $value,
 						'sar_ali_id' 	=> ($_POST['bodega']!=0)? $_POST['bodega'] : NULL,
-						'sar_cantidad' 	=> ($_POST['cantidad']!=0) ? $_POST['cantidad']: NULL,
-						'sar_precio' 	=> ($_POST['precio']!=0) ? $_POST['precio'] : NULL,
-						'sar_fecha' 	=>  date("Y-m-d H:i:s", strtotime($_POST['fecha_registro'])),
+						'sar_cantidad' 	=> $cantidad[$key],
+						'sar_precio' 	=> $precios[$key],
+						'sar_fecha' 	=>  date("Y-m-d H:i:s", strtotime($_POST['fecha_registro'].date('H:i:s'))),
 						'sar_estado' 	=> 1,
 						'sar_usu_mod' 	=> $this->tank_auth->get_user_id(),
 						'sar_fecha_mod' => date("Y-m-d H:i:s")
@@ -137,33 +159,20 @@ class Abastecimiento extends CI_Controller {
 
 				$sar_id = $this->regional_model->insertar_registro('sar_saldo_articulo', $articulos);
 
-				// Registramos el movimiento en moi_movimiento_inv
-
-				$movimiento = array(
-						'moi_ali_id' => ($_POST['bodega']!=0)? $_POST['bodega'] : NULL,
-						'moi_prv_id' => ($_POST['proveedor']!=0)? $_POST['proveedor']: NULL,
-						'moi_pro_id' => ($_POST['entrada']!=0)? $_POST['entrada']: NULL,
-						'moi_fecha' => date("Y-m-d", strtotime($_POST['fecha_registro'])),
-						'moi_estado' => 1,
-						'moi_fecha_mod' => date("Y-m-d H:i:s"),
-						'moi_usu_mod' => $this->tank_auth->get_user_id()
-					);
-
-				$moi_id = $this->regional_model->insertar_registro('moi_movimiento_inv', $movimiento);
-
-				// Registrar el detalle, Actualmente es por registro, pero lo correcto seria
-				// que registrara muchos productos a la misma vez.
-
 				$detalle = array(
 						'dee_sar_id' => $sar_id,
 						'dee_moi_id' => $moi_id,
-						'dee_cantidad' => $_POST['cantidad'],
+						'dee_cantidad' => $cantidad[$key],
+						'dee_descripcion' => ($descripcion[$key] !='')? $descripcion[$key]: NULL,
 						'dee_estado' => 1,
 						'dee_fecha_mod' => date("Y-m-d H:i:s"),
 						'dee_usu_mod' => $this->tank_auth->get_user_id()
 					);
 
 				$detalle_id = $this->regional_model->insertar_registro('dee_detalle_mov', $detalle);
+
+				} // End foreach
+
 
 				if($sar_id>0 && $moi_id>0 && $detalle_id>0)
 				{

@@ -199,7 +199,7 @@
     <input id="total_suma_hidden" name="total" type="hidden">
 </div>    
     <div class="form-actions">
-        <button type="button" class="btn btn-success" id="registrar_solicitud" disabled><span class="icon16 icomoon-icon-checkmark white"></span> Procesar</button>
+        <button type="button" class="btn btn-success" id="registrar_solicitud" disabled><span class="fa fa-check white"></span> Procesar</button>
         <!-- <button type="button" class="btn btn-danger" id="anular" disabled><span class="icomoon-icon-cancel-3"></span>Anular</button> -->
     </div>
 
