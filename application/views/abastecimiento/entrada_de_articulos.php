@@ -46,7 +46,7 @@
         			<td colspan="2">
         				<select class="form-control" id="entrada" name="entrada" placeholder="seleccione">
         					<?php if(isset($procesos)) {echo $procesos;} ?>
-        				</select>
+        				</select> 
                         <div id="entrada_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>
