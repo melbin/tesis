@@ -45,25 +45,34 @@
         	<table width="50%" border="0" align="left">
                 <tr><th></th><th></th><th></th></tr>
                 <tr>
-                <td width="10%"><label>Articulo:</label></td>
+                <td width="10%"><label>Artículo:</label></td>
                     <td colspan="2">
                         <select class="form-control" id="articulo" name="articulo">
                             <option value="0">Seleccione</option>
                         </select>
+                        <div id="articulo_error" style="color:red;font-size:11px;"></div>
                     </td>
                 </tr>
-
+                <tr>
+                <td width="10%"><label>Descripción:</label></td>
+                    <td colspan="2">                        
+                        <div class="form-group">    
+                            <textarea id="descripcion" name="descripcion" style="width:100%" disabled="disabled"></textarea>
+                        </div>              
+                    </td>
+                </tr>
                 <tr>
                 <td width="10%"><label>Cantidad:</label></td>
                     <td colspan="2">                        
                         <div class="form-group">    
                             <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad" onchange="validar_cantidad();">    
                             <input type="hidden" id="cant_real" name="cant_real">
+                            <div id="cantidad_error" style="color:red;font-size:11px;"></div>
                         </div>              
                     </td>
                 </tr>
                 <tr>
-                    <td><button id="add" name="add" type="submit" class="btn btn-primary"> <span class="fa fa-check">Procesar</span></button></td>
+                    <td><button id="agregar" name="agregar" type="button" class="btn btn-primary"> <span class="fa fa-check">Agregar</span></button></td>
                     <td><button id="cancelar" name="cancelar" type="button" class="btn btn-danger"> <span class="fa fa-times"> Cancelar</span></button></td>
                     <td></td>
                 </tr>
@@ -71,6 +80,45 @@
             </table>
  		</div>
     </div>
+
+            <!-- Creacion del datatable -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5><b>Detalle de productos</b></h5>
+        </div>
+        <div class="panel-body">
+        <br /><small id="validar_datagried" style="color:red;" ></small>    
+        <table class="responsive table table-bordered contenedor" id="datagried" name="datagried">
+        <thead id="cabezera" style="display:none;">
+        <tr>
+            <th style="display:none;">
+                Id Producto
+            </th>
+            <th>
+                Nombre del Artículo
+            </th>
+            <th style="">
+                Cantidad
+            </th>
+             <th style="">
+                Acción
+            </th>
+        </tr>
+        </thead>
+    <tbody id="contenedor">
+
+    </tbody>
+</table>
+
+    <div class="form-actions">
+    <!-- <td><button id="add" name="add" type="submit" class="btn btn-primary"> <span class="fa fa-check">Agregar</span></button></td> -->
+        <button type="button" class="btn btn-success" id="registrar_salida" disabled><span class="fa fa-check white"></span> Procesar</button>
+        <!-- <button type="button" class="btn btn-danger" id="anular" disabled><span class="icomoon-icon-cancel-3"></span>Anular</button> -->
+    </div>
+
+        </div>
+    </div>
+
     </form>
 </div>
 

@@ -74,7 +74,7 @@
         			</td>
         		</tr>
                 <tr>
-                <td width="10%"><h5>Descripcion:</h5></td>
+                <td width="10%"><label>Descripción:</label></td>
                     <td colspan="2">                        
                         <div class="form-group">    
                             <textarea id="descripcion" name="descripcion" style="width:100%" disabled="disabled"></textarea>
@@ -122,7 +122,7 @@
                 Id Producto
             </th>
             <th>
-                Nombre de Artículo
+                Nombre del Artículo
             </th>
             <th style="">
                 Cantidad

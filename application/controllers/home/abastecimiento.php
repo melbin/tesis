@@ -44,34 +44,45 @@ class Abastecimiento extends CI_Controller {
 		} else {
 
 			if($_POST){
-				 // print_r($_POST); exit();
+				 //print_r($_POST); exit();
 
-				$sar_actualizar = array(
-						'sar_cantidad' 	=> $this->input->post('cant_real'),
+				$sar_registro = $this->input->post('sar_registro');
+				$cantidad_inv = $this->input->post('cantidad');
+				$cantidad_salida = $this->input->post('cantidad_salida');
+				$descripcion = $this->input->post('descripcion'); // Puede venir Null
+
+				if(!empty($sar_registro)) {
+				// Registrar el movimiento en moi_movimiento_inv
+					$movimiento = array(
+							'moi_ali_id'	=> 	$this->input->post('bodega'),
+							'moi_pro_id'	=> 	$this->input->post('salida'),
+							'moi_fecha'		=> 	date('Y-m-d H:i:s'),
+							'moi_estado'	=>	1,
+							'moi_fecha_mod' =>	date('Y-m-d H:i:s'),
+							'moi_usu_mod'	=>	$this->tank_auth->get_user_id()
+						);
+
+					$moi_id = $this->regional_model->insertar_registro('moi_movimiento_inv', $movimiento);
+				} // End if 
+
+				foreach ($sar_registro as $key => $value) {
+					// Realizar salida de Inventario.
+					$sar_actualizar = array(
+						'sar_cantidad' 	=> $cantidad_inv[$key],
 						'sar_estado' 	=> 1,
 						'sar_usu_mod'	=> $this->tank_auth->get_user_id(),
 						'sar_fecha_mod' => date('Y-m-d H:i:s', strtotime($_POST['fecha_salida'].date('H:i:s'))),
 					);
 				
-				$row_afected = $this->pro_model->actualizar_registro('sar_saldo_articulo', $sar_actualizar, $_POST['articulo']);
-			
-				// Registrar el movimiento en moi_movimiento_inv
-				$movimiento = array(
-						'moi_ali_id'	=> 	$this->input->post('bodega'),
-						'moi_pro_id'	=> 	$this->input->post('salida'),
-						'moi_fecha'		=> 	date('Y-m-d H:i:s'),
-						'moi_estado'	=>	1,
-						'moi_fecha_mod' =>	date('Y-m-d H:i:s'),
-						'moi_usu_mod'	=>	$this->tank_auth->get_user_id()
-					);
-
-				$moi_id = $this->regional_model->insertar_registro('moi_movimiento_inv', $movimiento);
+				$row_afected = $this->pro_model->actualizar_registro('sar_saldo_articulo', $sar_actualizar, $value);	
+				
 
 				// Guardar detalle
 				$detalle = array(
-						'dee_sar_id' => $_POST['articulo'], // Este es el id del registro en sar_saldo_articulo
+						'dee_sar_id' => $value, // Este es el id del registro en sar_saldo_articulo
 						'dee_moi_id' => $moi_id,
-						'dee_cantidad' => $this->input->post('cantidad'),
+						'dee_cantidad' => $cantidad_salida[$key],
+						'dee_descripcion' => $descripcion[$key],
 						'dee_estado' => 1,
 						'dee_fecha_mod' => date("Y-m-d H:i:s"),
 						'dee_usu_mod' => $this->tank_auth->get_user_id()
@@ -79,6 +90,7 @@ class Abastecimiento extends CI_Controller {
 
 				$detalle_id = $this->regional_model->insertar_registro('dee_detalle_mov', $detalle);
 
+				}
 
 				if($row_afected>0 && $moi_id>0 && $detalle_id>0)
 				{

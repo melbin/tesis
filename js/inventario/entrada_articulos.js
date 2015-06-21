@@ -11,8 +11,26 @@
             allowClear: true
         });
 
+        $("#proveedor").change(function(){
+            $("#proveedor-error").hide();
+        });
+        $("#bodega").change(function(){
+            $("#bodega-error").hide();
+        });
+        $("#entrada").change(function(){
+            $("#entrada-error").hide();
+        });
+
         $("#articulo").change(function(){
             $("#descripcion").attr('disabled',false);
+            $("#articulo_error").text('');
+        });
+
+        $("#cantidad").focus(function(){
+            $("#cantidad_error").text('');
+        });
+        $("#precio").focus(function(){
+            $("#precio_error").text('');
         });
 
 		// $("#bodega, #proveedor, #entrada, #articulo").selectmenu();
@@ -72,7 +90,6 @@
 		});
 
       var row=0;
-
       $("#agregar").on("click",function(){
             
        if($.trim($('#precio').val())!='' && $.trim($('#cantidad').val())!='' && $('#articulo').val() !=0){
