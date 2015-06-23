@@ -18,8 +18,14 @@
     <link href="<?php echo base_url()?>bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
     <!-- CSS jQuery_UI -->
-    
     <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>js/jQuery_UI/css/jquery-ui.css" />
+
+    <!-- DataTables CSS -->
+    <link type="text/css" href="<?php echo base_url()?>bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link type="text/css" href="<?php echo base_url()?>bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
     <!-- CSS Nuevo-->
     <link href="<?php echo base_url()?>stylesheet/sistema/sistema.css" rel="stylesheet">
 
@@ -46,7 +52,10 @@
     <link href="<?php echo base_url()?>bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
      <!-- jQuery --> 
-   <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-2.1.4.js"></script>  
+   <!-- <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-2.1.4.js"></script>   -->
+
+   <!-- jQuery -->
+    <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
 
    <!-- jQuery UI -->
    <script src="<?php echo base_url()?>js/jQuery_UI/ui/jquery-ui.js"></script>
@@ -89,6 +98,10 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="<?php echo base_url()?>dist/js/sb-admin-2.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="<?php echo base_url()?>bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo base_url()?>bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
 
     <?php if(isset($texto2)) { ?>
     <!-- CSS y JavaScript del Grocery Crud -->

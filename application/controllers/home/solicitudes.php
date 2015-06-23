@@ -110,6 +110,32 @@ class Solicitudes extends CI_Controller {
 		echo json_encode($arreglo);
 	}
 
+	function ver_solicitudes()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+
+			$data['logo'] = $this->regional_model->get_parametro("logo");
+			$data['titulo']="Solicitudes en proceso";
+			$data['vista_name'] = "solicitudes/ver_solicitudes";
+
+				// All your code goes here
+			$data['solicitudes'] = $this->regional_model->detalle_solicitud();
+			
+			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
+			//print_r($this->db->last_query()); die();
+			//print_r($html); die();
+
+				// Obtener los link del panel Izquierdo.
+			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
+		 	
+			$this->__cargarVista($data);
+		}
+	}
+
 	function crear_solicitud(){
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');

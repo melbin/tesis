@@ -6,7 +6,7 @@
 
 <div class="panel panel-default">
         <div class="panel-heading">
-        	<b>Solicitudes de Articulos</b> 
+        	<b>Solicitudes de Artículos</b> 
         </div>
        
         <div class="panel-body">
@@ -56,13 +56,13 @@
                     </td>
                 </tr>
                 <tr>
-                <td width="10%"><h5>Direccion Lugar de Entrega:</h5></td>
+                <td width="10%"><h5>Dirección Lugar de Entrega:</h5></td>
                     <td colspan="2">
                         <textarea id="lugar_entrega" name="lugar_entrega" style="width:100%" disabled="disabled"></textarea>
                     </td>
                 </tr>
                 <tr>
-                <td width="10%"><h5>Categoria:<b style="color:red;">*</b></h5></td>
+                <td width="10%"><h5>Categoría:<b style="color:red;">*</b></h5></td>
                     <td colspan="2">
                         <select class="form-control select2" id="categoria" name="categoria" placeholder="seleccione">
                             <?php if(isset($categoria)) {echo $categoria;} ?>
@@ -95,7 +95,7 @@
         	<table width="50%" align="left">
         		<tr><th></th><th></th><th></th></tr>
                 <tr>
-                <td width="10%"><h5>Subcategoria:</h5></td>
+                <td width="10%"><h5>Subcategoría:</h5></td>
                     <td colspan="2">
                         <select class="form-control select2" id="sub_categoria" name="sub_categoria" placeholder="seleccione" disabled="disabled">
                             
@@ -113,7 +113,7 @@
         			</td>
         		</tr>
         		<tr>
-                <td width="10%"><h5>Descripcion:</h5></td>
+                <td width="10%"><h5>Descripción:</h5></td>
                     <td colspan="2">                        
                         <div class="form-group">    
                             <textarea id="descripcion" name="descripcion" style="width:100%" disabled="disabled"></textarea>
