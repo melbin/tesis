@@ -31,6 +31,14 @@ class Sistema_model extends CI_Model
 		return $query;
 	}
 
+	function actualizar_registro($tabla,$datos,$where)
+	{
+		$this->db->where($where);
+		$this->db->update($tabla,$datos);
+		$rows = $this->db->affected_rows();
+    	return $rows;
+	}
+
 	function get_registro($tabla, $where){
 		$this->db->select();
 		$this->db->from($tabla);

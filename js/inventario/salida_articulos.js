@@ -3,7 +3,7 @@
         // Definir mascara
         $("#fecha_salida").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
-		$("#bodega ,#proveedor, #salida, #articulo").select2({
+		$("#bodega, #categoria, #sub_categoria, #proveedor, #salida, #articulo").select2({
             minimumResultsForSearch: 4,
             placeholder: "Seleccione",
             theme: "classic", // bootstrap
@@ -103,9 +103,52 @@
             form.submit();
         }
 
-		});
+		}); // Fin validar formulario
 
-    
+        $("#categoria").change(function(){
+         
+        var id_cat = $("#categoria").val();
+        $("#sub_categoria").attr('disabled',false);
+
+        $.ajax({
+            url: 'cargar_subcategorias',
+            type: 'POST',
+            dataType: 'json',
+            data: {id : id_cat},
+            success:function(data) {
+              //  alert(data.drop);
+               $("#sub_categoria").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
+               cargar_articulos(id_cat);
+            }
+        });
+    });
+
+    $("#sub_categoria").change(function(){
+        var id_sub = $("#sub_categoria").val();
+
+        $.ajax({
+            url: 'cargar_productosxsubcategoria',
+            type: 'POST',
+            dataType: 'json',
+            data: {id : id_sub},
+            success:function(data) {
+               $("#articulo").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
+            }
+        });
+    });
+
+        function cargar_articulos(id)
+    {
+        $.ajax({
+            url: 'cargar_productosxcategoria',
+            type: 'POST',
+            dataType: 'json',
+            data: {id:id},
+            success:function(data) {
+               $("#articulo").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
+            }
+        });
+    }
       var row=0;
       $("#agregar").on("click",function(){
             
@@ -167,7 +210,7 @@
         var cantidad_act = cadena_select.split('::');
         var total = parseInt(cantidad_act[1]) - parseInt(cantidad_sug);
 
-        if(total<=0)
+        if(total<0)
         {
             alertify.alert("Por favor, ingrese una cantidad menor");
             $("#cantidad").val('').focus();   

@@ -57,10 +57,10 @@ class Suministros extends CI_Controller {
 				);
 
 			$alias = array(
-					'rub_nombre'=>'nombre',
-					'rub_id'=>'codigo',
-					'rub_descripcion'=>'descripcion',
-					'rub_estado'=>'estado'
+					'rub_nombre'=>'Nombre',
+					'rub_id'=>'Código',
+					'rub_descripcion'=>'Descripción',
+					'rub_estado'=>'Estado'
 				);
 
 			$crud->required_fields($requeridos);
@@ -118,13 +118,13 @@ class Suministros extends CI_Controller {
 				);
 
 			$alias = array(
-					'emp_rubro_id'=>'rubro',
-					'emp_mun_id'=>'municipio',
-					'emp_nombre'=>'nombre',
-					'emp_descripcion'=>'descripcion',
-					'emp_id'=>'codigo',
-					'emp_direccion'=>'direccion',
-					'emp_estado'=>'estado'
+					'emp_rubro_id'=>'Rubro',
+					'emp_mun_id'=>'Municipio',
+					'emp_nombre'=>'Nombre',
+					'emp_descripcion'=>'Descripción',
+					'emp_id'=>'Código',
+					'emp_direccion'=>'Dirección',
+					'emp_estado'=>'Estado'
 				);
 
 			$crud->required_fields($requeridos);
@@ -185,14 +185,14 @@ class Suministros extends CI_Controller {
 				);
 
 			$alias = array(
-					'prv_id'=>'id',
-					'prv_empresa_id'=>'empresa',
-					'prv_nombre'=>'nombre',
-					'prv_apellido'=>'apellido',
-					'prv_correo'=>'correo',
-					'prv_descripcion'=>'descripcion',
-					'prv_telefono'=>'telefono',
-					'prv_estado'=>'estado'
+					'prv_id'=>'ID',
+					'prv_empresa_id'=>'Empresa',
+					'prv_nombre'=>'Nombre',
+					'prv_apellido'=>'Apellido',
+					'prv_correo'=>'Correo',
+					'prv_descripcion'=>'Descripción',
+					'prv_telefono'=>'Teléfono',
+					'prv_estado'=>'Estado'
 				);
 
 			$crud->required_fields($requeridos);
@@ -255,13 +255,13 @@ class Suministros extends CI_Controller {
 				);
 
 			$alias = array(
-					'con_prv_id'=>'proveedor',
-					'con_contrato'=>'contrato',
-					'con_monto'=>'monto',
-					'con_retencion'=>'retencion',
-					'con_renta'=>'renta',
-					'con_nit'=>'nit',
-					'con_estado'=>'estado'
+					'con_prv_id'=>'Proveedor',
+					'con_contrato'=>'Contrato',
+					'con_monto'=>'Monto',
+					'con_retencion'=>'Retención',
+					'con_renta'=>'Renta',
+					'con_nit'=>'Nit',
+					'con_estado'=>'Estado'
 				);
 
 			$crud->required_fields($requeridos);
@@ -322,10 +322,10 @@ class Suministros extends CI_Controller {
 				);
 
 			$alias = array(
-					'cct_sol_id'=>'solicitud',
-					'cct_nota'=>'nota',
-					'cct_descripcion'=>'descripcion',
-					'cct_fecha'=>'fecha'
+					'cct_sol_id'=>'Solicitud',
+					'cct_nota'=>'Nota',
+					'cct_descripcion'=>'Descripción',
+					'cct_fecha'=>'Fecha'
 				);
 
 			$crud->add_fields('contratista','cct_sol_id','cct_nota','cct_descripcion','cct_fecha');

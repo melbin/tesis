@@ -13,6 +13,35 @@ class Regional_model extends CI_Model
 
 	}
 
+    function detalle_sol($id_sol=NUL)
+    {
+        $query = $this->db->select()
+                    ->from('sol_solicitud')
+                    ->join('dpi_departamento_interno','dpi_id=sol_dpi_id','left')
+                    ->join('ali_almacen_inv','ali_id=sol_ali_id','left')
+                    ->join('soe_solicitud_envio','soe_id=sol_soe_id','left')
+                    ->join('tps_tipo_solicitud','tps_id=sol_tps_id','left')    
+                    ->join('des_detalle_solicitud','des_sol_id=sol_id','left')
+                    ->join('ets_estado_solicitud','ets_id=des_ets_id','left')
+                    ->join('fon_fondo','fon_id=des_fon_id','left')
+                    ->where('sol_id',$id_sol);
+                    ;
+
+        $result = $this->db->get()->result_array();               
+        return $result;             
+    }
+
+    function detalle_sol_productos($id_sol=NULL)
+    {
+        $query = $this->db->select()
+                 ->from('pxs_productoxsolicitud')
+                 ->join('pro_producto', 'pro_producto.pro_id = pxs_pro_id')
+                 ->where('pxs_sol_id',$id_sol);
+                 ;
+        $result = $this->db->get()->result_array();               
+        return $result;                         
+    }
+
     function get_productosxcategoria($cat_id = NULL)
     {
         $query = "
@@ -68,7 +97,7 @@ class Regional_model extends CI_Model
     	return $last_id;
 	}
 
-    function detalle_solicitud(){
+    function detalle_solicitud($where=NULL){
         $query = $this->db->select()
                     ->from('sol_solicitud')
                     ->join('dpi_departamento_interno','sol_dpi_id=dpi_id','left')
@@ -77,6 +106,27 @@ class Regional_model extends CI_Model
                     ->join('ets_estado_solicitud','des_ets_id = ets_id','left')
                     ->where('sol_estado',1)
                     ;
+          if(!empty($where)){
+            $this->db->where($where);
+          }          
+
+        $result = $this->db->get()->result_array();               
+        return $result; 
+    }
+
+    function detalle_sol_abastecimiento($where=NULL){
+        $query = $this->db->select()
+                    ->from('sol_solicitud')
+                    ->join('dpi_departamento_interno','sol_dpi_id=dpi_id','left')
+                    ->join('ali_almacen_inv','sol_ali_id = ali_id','left')
+                    ->join('des_detalle_solicitud','des_sol_id=sol_id','left')
+                    ->join('ets_estado_solicitud','des_ets_id = ets_id','left')
+                    ->where('sol_estado',1)
+                    ->where_in('des_ets_id',array('1','2','4'));
+                    ;
+          if(!empty($where)){
+            $this->db->where($where);
+          }          
 
         $result = $this->db->get()->result_array();               
         return $result; 

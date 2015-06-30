@@ -44,6 +44,22 @@
         <div class="panel-body">
         	<table width="50%" border="0" align="left">
                 <tr><th></th><th></th><th></th></tr>
+                <!-- <tr>
+                <td width="10%"><label>Categoría:</label></td>
+                    <td colspan="2">
+                        <select class="form-control select2" id="categoria" name="categoria" placeholder="seleccione">
+                            <?php if(isset($categoria)) {echo $categoria;} ?>
+                        </select>
+                        <div id="categoria_error" style="color:red;font-size:11px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                <td width="10%"><label>Subcategoría:</label></td>
+                    <td colspan="2">
+                        <select class="form-control select2" id="sub_categoria" name="sub_categoria" placeholder="seleccione" disabled="disabled">
+                        </select>
+                    </td>
+                </tr> -->
                 <tr>
                 <td width="10%"><label>Artículo:</label></td>
                     <td colspan="2">

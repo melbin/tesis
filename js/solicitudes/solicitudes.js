@@ -6,6 +6,13 @@
             alert();
         });
 
+        if($("#lugar_entrega").text()!=''){
+            $("#lugar_entrega").attr('disabled',false);
+        }
+
+        var pathArray = window.location.pathname.split( '/' );
+        var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
+
         // Quitar campos requeridos 
         $("#articulo").change(function(){
             $("#articulo_error").text('');
@@ -15,15 +22,18 @@
         });
         $("#dpi_interno").change(function(){
             $("#dpi_interno_error").text('');
+            $("#dpi_interno-error").text('');
         });
         $("#bodega").change(function(){
             $("#bodega_error").text('');
+            $("#bodega-error").text('');
         });
         $("#categoria").change(function(){
             $("#categoria_error").text('');
         });
         $("#fondo").change(function(){
             $("#fondo_error").text('');
+            $("#fondo-error").text('');
         });
         $("#cantidad").change(function(){
             $("#cantidad_error").text('');
@@ -61,6 +71,7 @@
                 data: {id:articulo},
                 success: function(data) {
                     $("#precio").val(data.drop);
+                    $("#um").val(data.um);
                     $(".unidad_medida").show();
                     if(data.existencias.length>0){
                         alertify.success(data.existencias);
@@ -69,12 +80,21 @@
             });            
         });
 
+
+        $("#categoria").on("select2:open", function(){
+            if($('#datagried tr').length>1 ){
+                alertify.alert("Por favor seleccione artículos de una sola categoría.");  
+            }
+        });
+
         $("#categoria").change(function(){
+         
             var id_cat = $("#categoria").val();
             $("#sub_categoria").attr('disabled',false);
+            $(".unidad_medida").hide();
 
             $.ajax({
-                url: 'cargar_subcategorias',
+                url: urlj+"home/solicitudes/cargar_subcategorias",
                 type: 'POST',
                 dataType: 'json',
                 data: {id : id_cat},
@@ -89,9 +109,10 @@
 
         $("#sub_categoria").change(function(){
             var id_sub = $("#sub_categoria").val();
+            $(".unidad_medida").hide();
 
             $.ajax({
-                url: 'cargar_productosxsubcategoria',
+                url: urlj+"home/solicitudes/cargar_productosxsubcategoria",
                 type: 'POST',
                 dataType: 'json',
                 data: {id : id_sub},
@@ -108,7 +129,7 @@
             $("#lugar_entrega").attr('disabled',false);    
 
             $.ajax({
-                url: 'cargar_direccion',
+                url: urlj+"home/solicitudes/cargar_direccion",
                 type: 'POST',
                 dataType: 'json',
                 data: {id : id_bod},
@@ -127,48 +148,40 @@
             "Please select an option." 
         );
 
-         $("#pro_entrada").validate({
+         $("#frm_solicitud").validate({
             // Specify the validation rules
             ignore: "",
         rules: {
-            fecha_registro: "required",
-            cantidad: "required",
-            bodega: {selectNone: true},
-            proveedor: {selectNone: true},
-            entrada: {selectNone: true},
-            articulo: {selectNone: true},
-            // email: {
-            //     required: true,
-            //     email: true
-            // },
-            // password: {
-            //     required: true,
-            //     minlength: 5
-            // },
-            // agree: "required"
+            fecha_entrega: "required",
+            bodega: {selectNone: true},    
+            dpi_interno: {selectNone: true},
+            categoria: {selectNone: true},
+            fondo: {selectNone: true},
+            lugar_entrega: {
+                required: true,
+                minlength: 5
+            }, 
         },
 
         // Specify the validation error messages
         messages: {
-            fecha_registro: "Seleccione una fecha de registro",
-            cantidad: "Seleccione una cantidad",
+            fecha_entrega: "Seleccione una fecha de registro",
+            lugar_entrega: "Seleccione una dirección",
             bodega: "Seleccione una bodega",      
-            proveedor: "Seleccione un proveedor",      
-            entrada: "Seleccione una entrada",
-            articulo: "Seleccione un articulo",
-            // password: {
-            //     required: "Please provide a password",
-            //     minlength: "Your password must be at least 5 characters long"
-            // },
-            // email: "Please enter a valid email address",
-            // agree: "Please accept our policy"
+            categoria: "Seleccione una categoría",      
+            dpi_interno: "Seleccione un departamento",
+            fondo: "Seleccione un fondo",
+            lugar_entrega: {
+                 required: "Ingrese un lugar de entrega",
+                 minlength: "Debe colocar al menos 5 caracteres"
+            },
         },
 
         submitHandler: function(form) {
             form.submit();
         }
 
-        });
+        }); // Fin validar Formulario
 
       var row=0;
 
@@ -186,9 +199,9 @@
 
                 $("#datagried").append('<tr id="'+numero_fila+'"><td><input type="hidden" value="'+numero_fila+'" name="ids_filaP[]" />'
                     
-                    +'<input type="hidden" name="categoria[]" id="categoria" value="'+$("#categoria").val()+'"/>'
+                    // +'<input type="hidden" name="categoria[]" id="categoria" value="'+$("#categoria").val()+'"/>'
                     +'<input type="hidden" name="productos[]" id="productos" value="'+$("#articulo").val()+'"/>'
-                    +'<input type="hidden" name="unidad_med[]" id="unidad_med" value="'+$("#um").val()+'"/>'
+                    // +'<input type="hidden" name="unidad_med[]" id="unidad_med" value="'+$("#um").val()+'"/>'
                     +'<input type="hidden" name="financiamiento[]" id="financiamiento" value="'+$("#fondo").val()+'"/>'
                     +'<input type="hidden" name="cantidad[]" id="cantidadi'+row+'" value="'+$("#cantidad").val()+'"/>'
                     +'<input type="hidden" name="precios[]" id="precioi'+row+'" value="'+$("#precio").val()+'"/>'
@@ -203,10 +216,10 @@
                     /*+'<button type="button" id="editar" name="'+row+'" class="editar" style="width:35px;height:35px;"/></td>*/+'</tr>');
         
 
-                $('#cantidadi'+row+'').val($("#cantidad").val());
-                $('#precioi'+row+'').val($("#precio").val());
-                $('#descripcioni'+row+'').val($("#descripcion").val());
-                $('#totali'+row+'').val($("#precio").val()*$("#cantidad").val());
+                // $('#cantidadi'+row+'').val($("#cantidad").val());
+                // $('#precioi'+row+'').val($("#precio").val());
+                // $('#descripcioni'+row+'').val($("#descripcion").val());
+                // $('#totali'+row+'').val($("#precio").val()*$("#cantidad").val());
 
                 $("#cantidad").val('');
                 $("#precio").val('');

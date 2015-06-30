@@ -9,6 +9,7 @@ class Solicitudes extends CI_Controller {
 		$this->load->library('masterpage');
 		$this->load->model('regional_model');
 		$this->load->model('sistema/sistema_model');
+		$this->load->model('inventario/productos_model');
 	}
 	// Al hacer una peticion a esta pagina, es porque se quiere acceder al menu de sistema.
 	// Por eso no es necesario jalar el id de sistema.
@@ -69,6 +70,7 @@ class Solicitudes extends CI_Controller {
 		if($id_pro !=0){
 			//$precio = $this->sistema_model->get_campo('sar_saldo_articulo','sar_cantidad', array('sar_pro_id'=>$id_pro, 'sar_estado'=>1));	
 			$existencias = $this->regional_model->get_existencias(array('sar_pro_id'=>$id_pro));
+			//die(print_r($existencias));
 			if(!empty($existencias)){
 				$precio = $existencias['sar_precio'];
 			}
@@ -82,7 +84,10 @@ class Solicitudes extends CI_Controller {
 			$html = $existen .' '.$existencias['sar_cantidad'].' '.$unidades .' en la bodega '.$existencias['ali_nombre'] .'.';
 		}
 
-		$arreglo = array("drop"=>$precio, "existencias"=>$html);
+		// Obtener Unidad de Medida
+		$um = $this->productos_model->get_um(array('pro_id'=>$id_pro));
+
+		$arreglo = array("drop"=>$precio, "existencias"=>$html, 'um'=>$um['uni_valor']);
 		echo json_encode($arreglo);
 	}
 
@@ -110,6 +115,49 @@ class Solicitudes extends CI_Controller {
 		echo json_encode($arreglo);
 	}
 
+	function filtrar_solicitudes()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			// All your code goes here.
+			if($_POST){
+				//die(print_r($_POST));
+				$fecha_inicio = $this->input->post('fecha_inicio');
+				$fecha_fin = $this->input->post('fecha_hasta');
+				$depto = $this->input->post('depto');
+				$estado = $this->input->post('estado');
+				$where = array();
+
+				if(!empty($fecha_inicio) && !empty($fecha_fin)){
+					$where['sol_fecha >='] = $fecha_inicio;
+					$where['sol_fecha <='] = $fecha_fin;
+				}
+				if(!empty($depto)){
+					$where['sol_dpi_id'] = $depto;
+				}
+				if(!empty($estado)){
+					$where['ets_id'] = $estado;
+				}
+				$data['solicitudes'] = $this->regional_model->detalle_solicitud($where);
+				$html =  $this->load->view('solicitudes/cargar_tabla',$data,true);	
+
+			 	echo json_encode(array('drop'=>$html));
+			}
+		}	
+	}
+
+	function cargar_alerta_rechazada()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			$id_sol = $this->input->post('id');
+			$etiqueta = $this->sistema_model->get_registro('res_rechazo_solicitud', array('res_sol_id'=>$id_sol, 'res_estado'=>1));	
+			echo json_encode(array('drop'=>$etiqueta['res_descripcion']));
+		}	
+	}
+
 	function ver_solicitudes()
 	{
 		if (!$this->tank_auth->is_logged_in()) {
@@ -122,10 +170,12 @@ class Solicitudes extends CI_Controller {
 
 				// All your code goes here
 			$data['solicitudes'] = $this->regional_model->detalle_solicitud();
-			
 			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
+			
+			$data['departamentos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','{dpi_nombre}','',array('dpi_estado'=>1),null,'','dpi_id',true);
+			$data['estado'] = $this->regional_model->get_dropdown('ets_estado_solicitud','{ets_nombre}','',array('ets_estado'=>1),null,'','ets_id',true);
 			//print_r($this->db->last_query()); die();
-			//print_r($html); die();
+			//print_r($data['html']); die();
 
 				// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
@@ -189,6 +239,7 @@ class Solicitudes extends CI_Controller {
 					'des_fecha' 	=> date('Y-m-d H:i:s'),
 					'des_total'		=> $this->input->post('total'),
 					'des_fon_id'	=> $this->input->post('fondo'),
+					'des_cat_id'	=> $this->input->post('categoria'),
 					'des_plazo_entrega'	=>	$this->input->post('plazo_entrega'),
 					'des_direccion'	=> $this->input->post('lugar_entrega'),
 					'des_sol_id'	=> $sol_id,
@@ -212,9 +263,9 @@ class Solicitudes extends CI_Controller {
 			foreach ($productos as $key => $value) {
 				$pro_solicitud = array(
 					'pxs_sol_id'	=> $sol_id,
-					'pxs_cat_id'	=> $categoria[$key],
+				//  'pxs_cat_id'	=> $categoria[$key],
 					'pxs_pro_id'	=> $value,
-					'pxs_uni_id'	=> $unidad_medida[$key],
+				//  'pxs_uni_id'	=> $unidad_medida[$key],
 					'pxs_cantidad'	=> $cantidad[$key],
 					'pxs_precio'	=> $precios[$key],
 					'pxs_descripcion'=> $descripcion[$key],
@@ -225,7 +276,7 @@ class Solicitudes extends CI_Controller {
 				$pro_sol = $this->regional_model->insertar_registro('pxs_productoxsolicitud', $pro_solicitud);
 			}
 			// crear alerta OK
-			$alerta=array('registro'=>$registro,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Creacion de solicitud exitosa.");
+			$alerta=array('registro'=>$registro,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Creación de solicitud exitosa.");
 		} else {
 			// crear alerta FAIL
 			$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Solicitud no procesada",'texto_alerta'=>"Por favor, revisar datos ingresados.");

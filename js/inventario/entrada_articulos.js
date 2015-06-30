@@ -4,7 +4,7 @@
         $("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
         // Codigo para los select
-        $("#bodega ,#proveedor, #entrada, #articulo").select2({
+        $("#categoria, #sub_categoria, #bodega ,#proveedor, #entrada, #articulo").select2({
             minimumResultsForSearch: 4,
             placeholder: "Seleccione",
             theme: "classic", // bootstrap
@@ -87,7 +87,52 @@
             form.submit();
         }
 
-		});
+		}); // Fin validdar formulario
+
+    $("#categoria").change(function(){
+         
+        var id_cat = $("#categoria").val();
+        $("#sub_categoria").attr('disabled',false);
+
+        $.ajax({
+            url: 'cargar_subcategorias',
+            type: 'POST',
+            dataType: 'json',
+            data: {id : id_cat},
+            success:function(data) {
+              //  alert(data.drop);
+               $("#sub_categoria").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
+               cargar_articulos(id_cat);
+            }
+        });
+    });
+
+    $("#sub_categoria").change(function(){
+        var id_sub = $("#sub_categoria").val();
+
+        $.ajax({
+            url: 'cargar_productosxsubcategoria',
+            type: 'POST',
+            dataType: 'json',
+            data: {id : id_sub},
+            success:function(data) {
+               $("#articulo").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
+            }
+        });
+    });
+
+    function cargar_articulos(id)
+    {
+        $.ajax({
+            url: 'cargar_productosxcategoria',
+            type: 'POST',
+            dataType: 'json',
+            data: {id:id},
+            success:function(data) {
+               $("#articulo").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
+            }
+        });
+    }
 
       var row=0;
       $("#agregar").on("click",function(){

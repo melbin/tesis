@@ -66,14 +66,17 @@ class Especificos extends CI_Controller {
 				);
 
 			$alias = array(
-					'esp_nombre'=>'nombre',
-					'esp_concepto'=>'concepto',
-					'esp_presupuesto_votado'=>'presupuesto votado',
-					'esp_modificaciones'=>'modificaciones',
-					'esp_devengado'=>'devengado',
-					'esp_congelado'=>'congelado',
-					'esp_saldo'=>'saldo',
-					'esp_estado'=>'estado'
+					'esp_nombre'=>'Nombre',
+					'esp_concepto'=>'Concepto',
+					'esp_presupuesto_votado'=>'Presupuesto Votado',
+					'esp_modificaciones'=>'Modificaciones',
+					'esp_devengado'=>'Devengado',
+					'esp_presupuesto_mod'=>'Presupuesto Modificado',
+					'esp_porcentaje_ejecucion'=>'Porcentaje de ejecución',
+					'esp_observaciones'=>'Observaciones',
+					'esp_congelado'=>'Congelado',
+					'esp_saldo'=>'Saldo',
+					'esp_estado'=>'Estado'
 				);
 
 			$crud->required_fields($requeridos);

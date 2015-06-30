@@ -18,7 +18,7 @@ class Productos_model extends CI_Model
 		$query ="
 				SELECT pro_id, pro_nombre, sar_cantidad, sar_precio, sar_id  FROM pro_producto
 				INNER JOIN sar_saldo_articulo ON sar_saldo_articulo.sar_pro_id = pro_producto.pro_id
-				WHERE  sar_ali_id=".$id_bodega;
+				WHERE sar_estado = 1 AND sar_ali_id=".$id_bodega;
 
 		$articulos=$this->db->query($query)->result_array();
       	return $articulos;
@@ -58,7 +58,21 @@ class Productos_model extends CI_Model
 		if($query>0){
 			return $query;
 		}
+	}
 
+	function get_um($where)
+	{
+        $this->db->select()
+         ->from('pro_producto')
+         ->where($where)
+         ->join('uni_unidad_medida', 'uni_unidad_medida.uni_id = pro_uni_id')
+         ->limit(1)
+         ;
+
+        $query = $this->db->get()->row_array();
+        if($query>0){
+            return $query;
+        }
 	}
 
 	function get_tabla($tabla, $where){

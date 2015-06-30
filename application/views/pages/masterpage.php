@@ -29,6 +29,12 @@
     <!-- CSS Nuevo-->
     <link href="<?php echo base_url()?>stylesheet/sistema/sistema.css" rel="stylesheet">
 
+    <!-- CSS FancyBox-->
+    <link href="<?php echo base_url()?>js/fancy_box/jquery.fancybox.css" rel="stylesheet">
+    <link href="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-buttons.css" rel="stylesheet">
+    <link href="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-thumbs.css" rel="stylesheet">
+
+
     <!-- CSS del Select2-->
     <link href="<?php echo base_url()?>stylesheet/select2.min.css" rel="stylesheet">
     <link href="<?php echo base_url()?>stylesheet/select2-bootstrap.css" rel="stylesheet">
@@ -102,6 +108,12 @@
     <!-- DataTables JavaScript -->
     <script src="<?php echo base_url()?>bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url()?>bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+    <!-- FancyBox -->
+    <script src="<?php echo base_url()?>js/fancy_box/jquery.fancybox.pack.js"></script>
+    <script src="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-buttons.js"></script>
+    <script src="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-media.js"></script>
+    <script src="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-thumbs.js"></script>
 
     <?php if(isset($texto2)) { ?>
     <!-- CSS y JavaScript del Grocery Crud -->
@@ -253,11 +265,11 @@
         </div>
     </div>
     <!-- /#wrapper -->
-
+    <a href="#" class="scrollup">Scroll</a>  <!-- Boton para Subir en la pagina -->
+    <div id="wait"><img src="<?php echo base_url(); ?>media/sistema/spinner.gif" width="64" height="64" /><br> Cargando.. </div>
+    
     <div class="row-fluid" id="pie">              
-        
         <span style="color: #c0c0c0; font-size: 10pt;">Copyright 2015 ©&nbsp;Regional de Salud. Todos los Derechos Resevados</span>
-        
     </div>
 
 </body>
@@ -267,6 +279,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
         tipo_alerta='<?php echo $this->session->flashdata('tipo_alerta');?>';
         texto_alerta = '<?php echo $this->session->flashdata('texto_alerta') ?>';
 
@@ -278,6 +291,33 @@
         {
             alertify.error(texto_alerta);
         }
+
+
+        $(window).scroll(function(){
+            if ($(this).scrollTop() > 100) {
+                $('.scrollup').fadeIn();
+            } else {
+                $('.scrollup').fadeOut();
+            }
+        });
+
+        $('.scrollup').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 600);
+            return false;
+        });
+
+        //  cargar un Wait en cada peticion Ajax
+           // $(document).ajaxStart(function(){
+           //  setTimeout(function(){
+           //      $("#wait").css("display", "block");
+           //  }, 2000);
+     
+           //  });
+           //  $(document).ajaxComplete(function(){
+           //      $("#wait").css("display", "none");
+           //  });
+        // Fin de la prueba
+
     });
 </script>
 

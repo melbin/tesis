@@ -43,14 +43,15 @@ class Catalogos extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('cat_catalogo');
-			$crud->set_subject('Catalogos');
+			$crud->set_subject('Catálogos');
 			$crud->required_fields('cat_nombre');
 			$crud->required_fields('cat_codigo ');
 			$crud->columns('cat_nombre','cat_codigo','cat_fecha','cat_estado');
-			$crud->display_as('cat_nombre','catalogo');
-			$crud->display_as('cat_codigo','codigo');
-			$crud->display_as('cat_fecha','fecha');
-			$crud->display_as('cat_estado','estado');			
+			$crud->display_as('cat_nombre','Nombre');
+			$crud->display_as('cat_codigo','Código');
+			$crud->display_as('cat_descripcion','Descripción');
+			$crud->display_as('cat_fecha','Fecha');
+			$crud->display_as('cat_estado','Estado');			
 			$crud->field_type('cat_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('cat_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('cat_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
@@ -101,12 +102,12 @@ class Catalogos extends CI_Controller {
 				);
 
 			$alias = array(
-					'sub_nombre'=>'nombre',
-					'sub_codigo'=>'codigo',
-					'sub_fecha'=>'fecha',
-					'sub_cat_id'=>'catalogo',
-					'sub_descripcion'=>'descripcion',
-					'sub_estado'=>'estado'
+					'sub_nombre'=>'Nombre',
+					'sub_codigo'=>'Código',
+					'sub_fecha'=>'Fecha',
+					'sub_cat_id'=>'Catálogo',
+					'sub_descripcion'=>'Descripción',
+					'sub_estado'=>'Estado'
 				);
 
 			$crud->required_fields($requeridos);
@@ -163,10 +164,10 @@ class Catalogos extends CI_Controller {
 				);
 
 			$alias = array(
-					'ali_nombre'=>'nombre',
-					'ali_id'=>'codigo',
-					'ali_direccion'=>'direccion',
-					'ali_estado'=>'estado'
+					'ali_nombre'=>'Nombre',
+					'ali_id'=>'Código',
+					'ali_direccion'=>'Dirección',
+					'ali_estado'=>'Estado'
 				);
 
 			$crud->required_fields($requeridos);
@@ -209,9 +210,9 @@ class Catalogos extends CI_Controller {
 			$crud->required_fields('uni_nombre','uni_valor');
 			
 			$crud->columns('uni_nombre','uni_valor','uni_estado');
-			$crud->display_as('uni_nombre','nombre');
-			$crud->display_as('uni_estado','estado');
-			$crud->display_as('uni_valor','valor');
+			$crud->display_as('uni_nombre','Nombre');
+			$crud->display_as('uni_estado','Estado');
+			$crud->display_as('uni_valor','Valor');
 			$crud->field_type('uni_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('uni_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('uni_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
@@ -249,9 +250,12 @@ function procesos(){
 			$crud->required_fields('pro_nombre');
 			$crud->columns('pro_nombre','pro_descripcion','pro_estado');
 			
-			$crud->display_as('pro_nombre','nombre');
-			$crud->display_as('pro_descripcion','descripcion');
-			$crud->display_as('pro_estado','estado');
+			$crud->display_as('pro_nombre','Nombre');
+			$crud->display_as('pro_descripcion','Descripción');
+			$crud->display_as('pro_entrada','Entrada');
+			$crud->display_as('pro_salida','Salida');
+			$crud->display_as('pro_estado','Estado');
+			$crud->display_as('pro_fecha','Fecha');
 			
 			$crud->field_type('pro_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('pro_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
@@ -308,14 +312,15 @@ function procesos(){
 				);
 
 			$alias = array(
-					'pro_codigo' => 'codigo',
-					'pro_nombre' => 'nombre',
-					'pro_sub_id' => 'subcatalogo',
-					'pro_descripcion' => 'descripcion',
-					'pro_esp_id' => 'especifico',
-					'pro_uni_id' => 'unidad/medida',
-					'pro_tip_id' => 'tipo',
-					'pro_estado'  => 'estado'
+					'pro_codigo' => 'Código',
+					'pro_nombre' => 'Nombre',
+					'pro_codigo_nac' => 'Cod. Naciones Unidas',
+					'pro_sub_id' => 'Subcatálogo',
+					'pro_descripcion' => 'Descripción',
+					'pro_esp_id' => 'Específico',
+					'pro_uni_id' => 'Unidad/Medida',
+					'pro_tip_id' => 'Tipo',
+					'pro_estado'  => 'Estado'
 				);
 
 			$crud->required_fields($requeridos);

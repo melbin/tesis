@@ -44,9 +44,9 @@ class Abastecimiento extends CI_Controller {
 		} else {
 
 			if($_POST){
-				 //print_r($_POST); exit();
+				// print_r($_POST); exit();
 
-				$sar_registro = $this->input->post('sar_registro');
+				$sar_registro = $this->input->post('sar_registro');  // Id del articulo
 				$cantidad_inv = $this->input->post('cantidad');
 				$cantidad_salida = $this->input->post('cantidad_salida');
 				$descripcion = $this->input->post('descripcion'); // Puede venir Null
@@ -66,13 +66,14 @@ class Abastecimiento extends CI_Controller {
 				} // End if 
 
 				foreach ($sar_registro as $key => $value) {
+
 					// Realizar salida de Inventario.
 					$sar_actualizar = array(
 						'sar_cantidad' 	=> $cantidad_inv[$key],
-						'sar_estado' 	=> 1,
+						'sar_estado' 	=> ($cantidad_inv[$key]==0)? 0:1,
 						'sar_usu_mod'	=> $this->tank_auth->get_user_id(),
 						'sar_fecha_mod' => date('Y-m-d H:i:s', strtotime($_POST['fecha_salida'].date('H:i:s'))),
-					);
+					);	
 				
 				$row_afected = $this->pro_model->actualizar_registro('sar_saldo_articulo', $sar_actualizar, $value);	
 				
@@ -115,6 +116,7 @@ class Abastecimiento extends CI_Controller {
 			$data['articulos'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),null,'','ali_id',true);
 			$data['procesos'] = $this->regional_model->get_dropdown('pro_proceso','pro_nombre','',array('pro_salida'=>1,'pro_estado'=>1),null,'','pro_id',true);
 			$data['productos'] = $this->regional_model->get_dropdown('pro_producto','{pro_codigo}::{pro_nombre}','',array('pro_estado'=>1),null,'','pro_id',true);
+			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),null,'','cat_id',true);
 
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
@@ -210,6 +212,7 @@ class Abastecimiento extends CI_Controller {
 			$data['proveedores'] = $this->regional_model->get_dropdown('prv_proveedor','prv_nombre','',array('prv_estado'=>1),null,'','prv_id',true);
 			$data['procesos'] = $this->regional_model->get_dropdown('pro_proceso','pro_nombre','',array('pro_entrada'=>1,'pro_estado'=>1),null,'','pro_id',true);
 			$data['productos'] = $this->regional_model->get_dropdown('pro_producto','{pro_codigo}::{pro_nombre}','',array('pro_estado'=>1),null,'','pro_id',true);
+			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),null,'','cat_id',true);
 
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
@@ -219,6 +222,42 @@ class Abastecimiento extends CI_Controller {
 			$this->__cargarVista($data);
 			}
 		}
+	}
+
+	function cargar_subcategorias()
+	{
+		$id_cat = $this->input->post('id');
+		$subcategoria = $this->regional_model->get_dropdown('sub_subcatalogo','{sub_nombre}::{sub_codigo}','',array('sub_cat_id'=>$id_cat,'sub_estado'=>1),null,'','sub_id',true);
+		$arreglo = array('drop'=>$subcategoria);
+		echo json_encode($arreglo);
+	}
+
+		function cargar_productosxcategoria()
+	{
+		$id_cat = $this->input->post('id');
+		$subcategoria = $this->regional_model->get_productosxcategoria($id_cat);
+		//echo $this->db->last_query();
+		$html="<option value='0' selected>Seleccione</option>";
+		foreach ($subcategoria as $key => $value) {
+			$html .= "<option value= ".$value['pro_id']." > ".$value['pro_nombre'].'::'.$value['pro_codigo']."</option>";
+		}
+
+		$arreglo = array('drop'=>$html);
+		echo json_encode($arreglo);
+	}
+
+		function cargar_productosxsubcategoria()
+	{
+		$id_sub = $this->input->post('id');
+		$productos = $this->regional_model->cargar_productosxsubcategoria($id_sub);
+		
+		$html="<option value='0' selected>Seleccione</option>";
+		foreach ($productos as $key => $value) {
+			$html .= "<option value= ".$value['pro_id']." > ".$value['pro_nombre'].'::'.$value['pro_codigo']."</option>";
+		}
+
+		$arreglo = array('drop'=>$html);
+		echo json_encode($arreglo);
 	}
 
 	function cargar_articulos()
@@ -235,6 +274,133 @@ class Abastecimiento extends CI_Controller {
 			);
 
 		echo json_encode($arreglo);
+	}
+
+	function rechazar_solicitud()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			if($_POST){
+				//die(print_r($_POST));
+
+				$sol = $this->input->post('solicitud');
+				$motivo = $this->input->post('motivo');
+
+				$array = array(
+						'res_sol_id' => $sol,
+						'res_descripcion' => $motivo,
+						'res_fecha' => date('Y-m-d H:i:s'),
+						'res_estado'=>1, 
+						'res_usu_mod' => $this->tank_auth->get_user_id(),
+						'res_fecha_mod' => date('Y-m-d H:i:s')
+					);
+
+				$sol_rechazada = $this->regional_model->insertar_registro('res_rechazo_solicitud', $array);
+
+				if($sol_rechazada>0){
+				
+				$where = array('des_sol_id'=>$sol);
+				$array = array(
+					'des_ets_id'=>3,
+					'des_fecha_mod' => date('Y-m-d H:i:s')
+				);
+				
+				$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
+				
+				if($row_afected>0)
+				{
+					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Transacción Exitosa",'texto_alerta'=>"Se rechazo la solicitud de manera exitosa.");
+				} else
+				{
+					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"La solicitud no pudo ser aprobada.");
+				}
+			} else { $alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"La solicitud no pudo ser aprobada."); }
+	
+			$this->session->set_flashdata($alerta);       
+			redirect('home/abastecimiento/procesar_solicitudes');
+
+			}
+		}	
+	}
+
+	function procesar_solicitudes()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+
+			$data['logo'] = $this->regional_model->get_parametro("logo");
+			$data['titulo']="Solicitudes pendientes";
+			$data['vista_name'] = "solicitudes/procesar_solicitudes";
+
+				// All your code goes here
+			$data['abastecimiento'] = 1;
+			$data['solicitudes'] = $this->regional_model->detalle_sol_abastecimiento();
+			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
+			// die(print_r($this->db->last_query()));
+				// Obtener los link del panel Izquierdo.
+			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
+		 	
+			$this->__cargarVista($data);
+		}
+	}
+
+	function ver_solicitudes_edit($id=NULL)
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+
+			$data['logo'] = $this->regional_model->get_parametro("logo");
+			$data['titulo']="Solicitudes pendientes";
+			$data['vista_name'] = "solicitudes/ver_solicitudes_edit";
+
+			// All your code goes here
+			// Consulta para obtener todos los detalles de la solicitud
+			$detalle_solicitud = $this->regional_model->detalle_sol($id);
+			$data['detalle_sol'] = $detalle_solicitud;
+			// die(print_r($detalle_solicitud));
+			$data['dep_internos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','dpi_nombre','',array('dpi_estado'=>1),$detalle_solicitud[0]['dpi_id'],'','dpi_id',true);
+			$data['bodega'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),$detalle_solicitud[0]['ali_id'],'','ali_id',true);	
+			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),$detalle_solicitud[0]['des_cat_id'],'','cat_id',true);
+			$data['fondo'] = $this->regional_model->get_dropdown('fon_fondo','fon_nombre','',array('fon_estado'=>1),$detalle_solicitud[0]['fon_id'],'','fon_id',true);
+			$table['info_general'] = $detalle_solicitud;
+			$table['solicitud'] = $this->regional_model->detalle_sol_productos($id);
+			$data['detalle_articulos'] = $this->load->view('solicitudes/cargar_datatable', $table,true);
+
+			// Obtener los link del panel Izquierdo.
+			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
+		 	
+			$this->__cargarVista($data);	
+		}
+	}
+
+	function aprobar_solicitud()
+	{
+		if($_POST){
+			$sol = $this->input->post('solicitud');
+			$where = array('des_sol_id'=>$sol);
+			$array = array(
+				'des_ets_id'=>6,
+				'des_fecha_mod' => date('Y-m-d H:i:s')
+				);
+			$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
+			if($row_afected>0)
+				{
+					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Aprobación Exitosa",'texto_alerta'=>"Se aprobo la solicitud de manera exitosa.");
+				} else
+				{
+					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"La solicitud no pudo ser aprobada.");
+				}
+				$this->session->set_flashdata($alerta);       
+
+			redirect('home/abastecimiento/procesar_solicitudes');								
+		}
 	}
 
 

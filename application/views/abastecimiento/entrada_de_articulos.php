@@ -15,7 +15,7 @@
         	<table width="50%" align="left">
         		<tr><th width="23%"></th><th></th><th></th></tr>
         		<tr> <!-- <i id="requerido">*</i> -->
-        		<td width="10%"><label>Bodega:</label></td>
+        		<td width="10%"><label>Bodega:<b style="color:red;">*</b></label></td>
         			<td colspan="2">
         				<select class="form-control" id="bodega" name="bodega" placeholder="seleccione">
         					<?php if(isset($articulos)) {echo $articulos;} ?>
@@ -24,7 +24,7 @@
         			</td>
         		</tr>
         		<tr>
-        		<td width="10%"><label>Proveedor:</label></td>
+        		<td width="10%"><label>Proveedor:<b style="color:red;">*</b></label></td>
         			<td colspan="2">
         				<select class="form-control" id="proveedor" name="proveedor">
         					<?php if(isset($proveedores)) {echo $proveedores;} ?>
@@ -42,7 +42,7 @@
         			</td>
         		</tr>
         		<tr>
-        		<td width="10%"><label>Tipo de entrada:</label></td>
+        		<td width="10%"><label>Tipo de entrada:<b style="color:red;">*</b></label></td>
         			<td colspan="2">
         				<select class="form-control" id="entrada" name="entrada" placeholder="seleccione">
         					<?php if(isset($procesos)) {echo $procesos;} ?>
@@ -65,6 +65,22 @@
         	<table width="50%" align="left">
         		<tr><th></th><th></th><th></th></tr>
         		<tr>
+                <td width="10%"><label>Categoría:</label></td>
+                    <td colspan="2">
+                        <select class="form-control select2" id="categoria" name="categoria" placeholder="seleccione">
+                            <?php if(isset($categoria)) {echo $categoria;} ?>
+                        </select>
+                        <div id="categoria_error" style="color:red;font-size:11px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                <td width="10%"><label>Subcategoría:</label></td>
+                    <td colspan="2">
+                        <select class="form-control select2" id="sub_categoria" name="sub_categoria" placeholder="seleccione" disabled="disabled">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
         		<td width="10%"><label>Artículo:</label></td>
         			<td colspan="2">
         				<select class="form-control" id="articulo" name="articulo">
@@ -84,10 +100,8 @@
         		<tr>
         		<td width="10%"><label>Cantidad:</label></td>
 	        		<td colspan="2">	        			
-                        <div class="form-group">	
 		        			<input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad">	
-	        			</div>
-                        <div id="cantidad_error" style="color:red;font-size:11px;"></div>				
+                            <div id="cantidad_error" style="color:red;font-size:11px;"></div>				
         			</td>
         		</tr>
         		<tr>
