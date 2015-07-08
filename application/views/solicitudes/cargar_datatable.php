@@ -46,11 +46,11 @@
                         <input type="hidden" name="precios[]" id="precioi<?php echo $row; ?>" value="<?php echo $value['pxs_precio']; ?>"/>
                         <input type="hidden" name="descripcion[]" id="descripcioni<?php echo $row; ?>" value="<?php echo $value['pxs_descripcion']; ?>"/>
                         <input type="hidden" name="total[]" id="totali<?php echo $row; ?>" class="activo" value="<?php echo $subtotal; ?>"/>
-                        <label name="producto_label" id="productos"/><?php echo $value['pro_nombre']; ?>
+                        <label name="producto_label" id="productos"></label><?php echo $value['pro_nombre']; ?>
                     </td>
-                    <td><label name="cantidad_label" id="cantidadl<?php echo $row; ?>"/><?php echo $value['pxs_cantidad']; ?></td>
-                    <td><label name="precio_label" id="preciol<?php echo $row; ?>"/><?php echo $value['pxs_precio']; ?></td>
-                    <td><label name="total_label" id="totall<?php echo $row; ?>"/><?php echo $subtotal; ?></td>
+                    <td><label name="cantidad_label" id="cantidadl<?php echo $row; ?>"></label><?php echo $value['pxs_cantidad']; ?></td>
+                    <td><label name="precio_label" id="preciol<?php echo $row; ?>"></label><?php echo number_format($value['pxs_precio'],2); ?></td>
+                    <td><label name="total_label" id="totall<?php echo $row; ?>"></label><?php echo number_format($subtotal,2); ?></td>
                     <td><button type="button" id="remove" id_fila="<?php echo $row; ?>" class="remove" ><span class="glyphicon glyphicon-remove"></span> Anular</button>
                 </tr>
                 <?php $row++; } ?>

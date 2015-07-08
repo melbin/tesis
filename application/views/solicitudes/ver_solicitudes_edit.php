@@ -2,7 +2,7 @@
 <script src="<?php echo base_url()?>js/solicitudes/solicitudes.js"></script>  
 
 <div>
-<form class="" id="frm_solicitud_edit" name="frm_solicitud_edit" method="POST" action="<?php echo base_url()?>home/abastecimiento/ver_solicitudes_edit"> 
+<form class="" id="frm_solicitud" name="frm_solicitud" method="POST" action="<?php echo base_url()?>home/abastecimiento/ver_solicitudes_edit"> 
 
 <div class="panel panel-default">
         <div class="panel-heading">
@@ -37,7 +37,7 @@
         		<tr>
         		<td width="10%"><h5>Fecha registro:</h5></td>
         			<td colspan="2">
-        				<input id="fecha_entrega" name="fecha_entrega" type="text" value="<?php echo date('d-m-Y H:i:s', strtotime($detalle_sol[0]['sol_fecha'])); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+        				<input id="fecha_entrega" name="fecha_entrega" type="text" value="<?php echo date('d-m-Y', strtotime($detalle_sol[0]['sol_fecha'])); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
         			</td>
         		</tr>
                 <tr>
@@ -166,7 +166,7 @@
 </div>
 
 <div>
-    <form class="" id="sol_aceptar" name="sol_aceptar" method="POST" action="<?php echo base_url()?>home/abastecimiento/aprobar_solicitud"> 
+    <form class="" id="sol_aceptar" name="sol_aceptar" method="POST" action="<?php echo (!isset($financiero))? base_url().'home/abastecimiento/aprobar_solicitud' : base_url().'home/abastecimiento/aprobar_solicitud2'; ?>"> 
         <input type="hidden" name="solicitud" value="<?php echo $detalle_sol[0]['sol_id']; ?>">
     </form>
 </div>
@@ -179,8 +179,13 @@
         </div>
         <div class="panel-body">
         <form id="sol_rechazar" name="sol_rechazar" method="POST" action="<?php echo base_url()?>home/abastecimiento/rechazar_solicitud"> 
+      
           <input type="hidden" name="solicitud" value="<?php echo $detalle_sol[0]['sol_id']; ?>">
-    
+          <?php if(!empty($financiero)){ ?>  
+                <input type="hidden" name="departamento" value="2"> <!-- 1= Abastecimiento, 2=financiero -->
+          <?php } else { ?>
+            <input type="hidden" name="departamento" value="1">
+           <?php } ?>
             <table width="100%" align="left">
                 <tr><th></th><th></th></tr>
                 <tr>
@@ -211,10 +216,6 @@
 
     $("#categoria").trigger("change");    
         
-    $("#actualizar").click(function(){
-        alertify.alert("En dasarrollo...");  
-    });
-
     $("#aceptar").click(function(){
         $("#sol_aceptar").submit();          
     });
@@ -224,6 +225,10 @@
             content: $("#form_eliminar"),
             scrolling :'no' 
         });   
+    });
+
+    $("#actualizar").click(function(){
+         alertify.alert("Pendiente de programar");
     });
 
     $("#anular").click(function(){
@@ -237,7 +242,6 @@
         $("#motivo").val('');
         $.fancybox.close();
     });
-
     }); // End document ready
 
 </script>

@@ -204,14 +204,14 @@
                     // +'<input type="hidden" name="unidad_med[]" id="unidad_med" value="'+$("#um").val()+'"/>'
                     +'<input type="hidden" name="financiamiento[]" id="financiamiento" value="'+$("#fondo").val()+'"/>'
                     +'<input type="hidden" name="cantidad[]" id="cantidadi'+row+'" value="'+$("#cantidad").val()+'"/>'
-                    +'<input type="hidden" name="precios[]" id="precioi'+row+'" value="'+$("#precio").val()+'"/>'
+                    +'<input type="hidden" name="precios[]" id="precioi'+row+'" value="'+parseFloat($("#precio").val()).toFixed(2)+'"/>'
                     +'<input type="hidden" name="descripcion[]" id="descripcioni'+row+'" value="'+$("#descripcion").val()+'"/>'
-                    +'<input type="hidden" name="total[]" id="totali'+row+'" class="activo" value="'+subtotal+'"/>'
+                    +'<input type="hidden" name="total[]" id="totali'+row+'" class="activo" value="'+parseFloat(subtotal).toFixed(2)+'"/>'
 
                     +'<label name="producto_label" id="productos"/>'+$("#articulo option:selected").text()+'</td>'
                     +'<td><label name="cantidad_label" id="cantidadl'+row+'"/>'+$("#cantidad").val()+'</td>'
-                    +'<td><label name="precio_label" id="preciol'+row+'"/>'+$("#precio").val()+'</td>'
-                    +'<td><label name="total_label" id="totall'+row+'"/>'+$("#precio").val()*$("#cantidad").val()+'</td>'
+                    +'<td><label name="precio_label" id="preciol'+row+'"/>'+parseFloat($("#precio").val()).toFixed(2)+'</td>'
+                    +'<td><label name="total_label" id="totall'+row+'"/>'+parseFloat($("#precio").val()*$("#cantidad").val()).toFixed(2)+'</td>'
                     +'<td><button type="button" id="remove" id_fila="'+numero_fila+'" class="remove" ><span class="glyphicon glyphicon-remove"></span> Anular</button>'
                     /*+'<button type="button" id="editar" name="'+row+'" class="editar" style="width:35px;height:35px;"/></td>*/+'</tr>');
         

@@ -132,6 +132,24 @@ class Regional_model extends CI_Model
         return $result; 
     }
 
+    function detalle_sol_financiero($where=NULL){
+        $query = $this->db->select()
+                    ->from('sol_solicitud')
+                    ->join('dpi_departamento_interno','sol_dpi_id=dpi_id','left')
+                    ->join('ali_almacen_inv','sol_ali_id = ali_id','left')
+                    ->join('des_detalle_solicitud','des_sol_id=sol_id','left')
+                    ->join('ets_estado_solicitud','des_ets_id = ets_id','left')
+                    ->where('sol_estado',1)
+                    ->where_in('des_ets_id',array('6','7')); // Financiero vera nada mas las aprobadas por Abastecimiento
+                    ;
+          if(!empty($where)){
+            $this->db->where($where);
+          }          
+
+        $result = $this->db->get()->result_array();               
+        return $result; 
+    }
+
 	function get_tabla($tabla, $where){
 		$this->db->where($where);
 		$query = $this->db->get($tabla);

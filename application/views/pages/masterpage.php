@@ -310,11 +310,13 @@
            // $(document).ajaxStart(function(){
            //  setTimeout(function(){
            //      $("#wait").css("display", "block");
+           //      //$("#wail").fadeIn();
            //  }, 2000);
      
            //  });
            //  $(document).ajaxComplete(function(){
            //      $("#wait").css("display", "none");
+           //      //$("#wait").delay(900).fadeOut();
            //  });
         // Fin de la prueba
 

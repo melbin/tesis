@@ -85,14 +85,17 @@ th, td {
             var id_fila = $(this).attr('cont');
             var estado = $.trim($('#estado_'+id_fila).text());
             
-             if(estado === 'evaluacion'){
+             if(estado === 'Evaluacion'){
                  $.fancybox("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada.");    
              } else
-             if( estado === 'aprobada'){
+             if( estado === 'Aprobada'){
                  $.fancybox("Su solicitud se encuentra actualmente en <b>Financiero</b>, <br> esperando ser aprobada.");    
              } else
-             if(estado === 'rechazada'){
+             if(estado === 'Rechazada'){
                 cargar_alerta($(this).val());
+             }
+             if(estado === 'Enviada'){
+                $.fancybox("Su solicitud se encuentra actualmente en <b>San Salvador</b>, <br> Esperando liberación de efectivo.");    
              }
         });
 

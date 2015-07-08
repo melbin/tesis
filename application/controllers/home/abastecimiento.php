@@ -286,7 +286,13 @@ class Abastecimiento extends CI_Controller {
 
 				$sol = $this->input->post('solicitud');
 				$motivo = $this->input->post('motivo');
-
+				$depto = $this->input->post('departamento');
+				if($depto==1){
+					$motivo .= "<br><br><b>Att: Departamento de Abastecimiento</b>";
+				} else {
+					$motivo .= "<br><br><b>Att: Departamento Financiero</b>";
+				}
+				
 				$array = array(
 						'res_sol_id' => $sol,
 						'res_descripcion' => $motivo,
@@ -348,11 +354,15 @@ class Abastecimiento extends CI_Controller {
 		}
 	}
 
-	function ver_solicitudes_edit($id=NULL)
+	function ver_solicitudes_edit($id=NULL,$financiero=NULL)
 	{
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
+
+			if($_POST){
+				die(print_r($_POST));
+			}
 
 			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$data['titulo']="Solicitudes pendientes";
@@ -370,7 +380,7 @@ class Abastecimiento extends CI_Controller {
 			$table['info_general'] = $detalle_solicitud;
 			$table['solicitud'] = $this->regional_model->detalle_sol_productos($id);
 			$data['detalle_articulos'] = $this->load->view('solicitudes/cargar_datatable', $table,true);
-
+			$data['financiero'] = $financiero;
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
@@ -400,6 +410,29 @@ class Abastecimiento extends CI_Controller {
 				$this->session->set_flashdata($alerta);       
 
 			redirect('home/abastecimiento/procesar_solicitudes');								
+		}
+	}
+
+	function aprobar_solicitud2()
+	{
+		if($_POST){
+			$sol = $this->input->post('solicitud');
+			$where = array('des_sol_id'=>$sol);
+			$array = array(
+				'des_ets_id'=>7,
+				'des_fecha_mod' => date('Y-m-d H:i:s')
+				);
+			$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
+			if($row_afected>0)
+				{
+					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Aprobación Exitosa",'texto_alerta'=>"Se aprobo la solicitud de manera exitosa.");
+				} else
+				{
+					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"La solicitud no pudo ser aprobada.");
+				}
+				$this->session->set_flashdata($alerta);       
+
+			redirect('home/financiero/procesar_solicitudes');								
 		}
 	}
 
