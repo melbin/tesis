@@ -45,17 +45,22 @@ class Catalogos extends CI_Controller {
 			$crud->set_table('cat_catalogo');
 			$crud->set_subject('Catálogos');
 			$crud->required_fields('cat_nombre');
-			$crud->required_fields('cat_codigo ');
-			$crud->columns('cat_nombre','cat_codigo','cat_fecha','cat_estado');
+			$crud->required_fields('cat_codigo');
+			$crud->required_fields('cat_esp_id');
+			$crud->columns('cat_nombre','cat_esp_id','cat_codigo','cat_fecha','cat_estado');
+			$crud->fields('cat_nombre','cat_esp_id','cat_codigo','cat_fecha','cat_estado');
 			$crud->display_as('cat_nombre','Nombre');
 			$crud->display_as('cat_codigo','Código');
+			$crud->display_as('cat_esp_id','Específico');
 			$crud->display_as('cat_descripcion','Descripción');
 			$crud->display_as('cat_fecha','Fecha');
 			$crud->display_as('cat_estado','Estado');			
+
+			$crud->set_relation('cat_esp_id','esp_especifico','esp_nombre');
+
 			$crud->field_type('cat_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('cat_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('cat_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
-
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;

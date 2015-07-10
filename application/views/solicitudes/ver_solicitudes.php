@@ -80,22 +80,24 @@ th, td {
             allowClear: true
         });
 
+        
+
         $('[id^=detalle_]').click(function(){
             //alert($(this).val());
             var id_fila = $(this).attr('cont');
             var estado = $.trim($('#estado_'+id_fila).text());
             
              if(estado === 'Evaluacion'){
-                 $.fancybox("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada.");    
+                 alertify.alert("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada.");
              } else
              if( estado === 'Aprobada'){
-                 $.fancybox("Su solicitud se encuentra actualmente en <b>Financiero</b>, <br> esperando ser aprobada.");    
+                 alertify.alert("Su solicitud se encuentra actualmente en <b>Financiero</b>, <br> esperando ser aprobada.");    
              } else
              if(estado === 'Rechazada'){
-                cargar_alerta($(this).val());
+                cargar_alerta($(this).attr('value'));
              }
              if(estado === 'Enviada'){
-                $.fancybox("Su solicitud se encuentra actualmente en <b>San Salvador</b>, <br> Esperando liberación de efectivo.");    
+                alertify.alert("Su solicitud se encuentra actualmente en <b>San Salvador</b>, <br> Esperando liberación de efectivo.");    
              }
         });
 
@@ -127,14 +129,14 @@ th, td {
     
     function cargar_alerta(sol_id)
     {
-
         $.ajax({
             url: urlj+"home/solicitudes/cargar_alerta_rechazada",
             type: 'POST',
             dataType: 'json',
             data: {id:sol_id},
             success:function(data) {
-                $.fancybox(data.drop);    
+                alertify.alert(data.drop);    
+                //$.fancybox(data.drop);    
             }
         });
     }
