@@ -123,25 +123,27 @@ class Solicitudes extends CI_Controller {
 			// All your code goes here.
 			if($_POST){
 				//die(print_r($_POST));
-				$fecha_inicio = $this->input->post('fecha_inicio');
-				$fecha_fin = $this->input->post('fecha_hasta');
-				$depto = $this->input->post('depto');
-				$estado = $this->input->post('estado');
-				$where = array();
-
-				if(!empty($fecha_inicio) && !empty($fecha_fin)){
-					$where['sol_fecha >='] = $fecha_inicio;
-					$where['sol_fecha <='] = $fecha_fin;
+				
+				$where= array();
+				if(!empty($_POST['tipo_req'])){
+					$where['des_ets_id'] = $this->input->post('tipo_req');	
 				}
-				if(!empty($depto)){
-					$where['sol_dpi_id'] = $depto;
+				if($this->input->post('filtro')=='sol_dpi_id'){
+					$where['sol_dpi_id'] = $this->input->post('valor');
+				} else 
+					if($this->input->post('filtro')=='sol_ali_id'){
+						$where['sol_ali_id'] = $this->input->post('valor');
+					}
+				 else {
+					if($this->input->post('filtro')=='sol_fecha'){
+						$fechas = explode('#', $this->input->post('valor'));
+						$where['sol_fecha >='] = $fechas[0];
+						$where['sol_fecha <='] = $fechas[1];
+					}
 				}
-				if(!empty($estado)){
-					$where['ets_id'] = $estado;
-				}
+				//die(print_r($where));
 				$data['solicitudes'] = $this->regional_model->detalle_solicitud($where);
 				$html =  $this->load->view('solicitudes/cargar_tabla',$data,true);	
-
 			 	echo json_encode(array('drop'=>$html));
 			}
 		}	
@@ -171,9 +173,10 @@ class Solicitudes extends CI_Controller {
 				// All your code goes here
 			$data['solicitudes'] = $this->regional_model->detalle_solicitud();
 			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
-			
+
 			$data['departamentos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','{dpi_nombre}','',array('dpi_estado'=>1),null,'','dpi_id',true);
 			$data['estado'] = $this->regional_model->get_dropdown('ets_estado_solicitud','{ets_nombre}','',array('ets_estado'=>1),null,'','ets_id',true);
+			$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv','{ali_nombre}','',array('ali_estado'=>1),null,'','ali_id',true);
 			//print_r($this->db->last_query()); die();
 			//print_r($data['html']); die();
 

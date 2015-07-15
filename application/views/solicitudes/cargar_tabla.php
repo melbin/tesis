@@ -64,5 +64,8 @@
             </td>
         </tr>
     <?php } ?>    
+    <?php if(empty($solicitudes)){ ?>
+    <tr><td colspan="6" align="center">No hay registros...</td></tr>
+    <?php } ?>
 </tbody>
 </table>

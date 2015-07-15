@@ -2,7 +2,7 @@
 $login = array(
 	'name'	=> 'login',
 	'id'	=> 'username',
-	'placeholder' => 'Correo o Nombre de Usuario',
+	'placeholder' => 'Usuario o correo',
 	'value' => set_value('login'),
 	'maxlength'	=> 80,
 	'size'	=> 30,
