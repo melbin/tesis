@@ -7,6 +7,7 @@ class Solicitudes extends CI_Controller {
 		$this->load->database();
 		$this->load->library('grocery_CRUD');
 		$this->load->library('masterpage');
+		$this->load->library('enLetras');
 		$this->load->model('regional_model');
 		$this->load->model('sistema/sistema_model');
 		$this->load->model('inventario/productos_model');
@@ -158,6 +159,48 @@ class Solicitudes extends CI_Controller {
 			$etiqueta = $this->sistema_model->get_registro('res_rechazo_solicitud', array('res_sol_id'=>$id_sol, 'res_estado'=>1));	
 			echo json_encode(array('drop'=>$etiqueta['res_descripcion']));
 		}	
+	}
+
+	function imprimir_pdf($id_sol)
+	{
+		$data['id'] = $id_sol;
+
+		$html = $this->load->view('solicitudes/imprimir_solicitud_pdf',$data,true);
+
+		$this->load->library('pdf'); //libreria pdf
+	  	$this->pdf->printPDF($html);
+	}
+
+	function imprimir_excel($id_sol)
+	{
+
+	  // prueba de fecha en spanish
+
+	  $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+	  $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+	  //die(print_r($dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y')));	 
+	//Salida: Viernes 24 de Febrero del 2012
+	   $detalle_sol = $this->regional_model->detalle_sol($id_sol);
+	   $data['detalle_sol'] = $detalle_sol[0];
+	   $data["valor_letras"] = strtoupper($this->enletras->ValorEnLetras($detalle_sol[0]['des_total'],'DÓLARES')) . ' DE LOS ESTADOS UNIDOS DE AMÉRICA'; 	
+	   $fecha = $detalle_sol[0]['sol_fecha'];
+
+	  $data['dia'] = date('d', strtotime($fecha));
+	  $data['mes'] = $meses[date('n', strtotime($fecha))-1];
+	  $data['anio'] = date('Y', strtotime($fecha));
+	
+		// Aca iran los detalles de los articulos a comprar
+	  $productos = $this->regional_model->detalle_sol_productos($id_sol);
+	  $data['productos'] = $productos;
+
+	  $html = $this->load->view('solicitudes/imprimir_solicitud_excel',$data,true);	  	
+//	  die(print_r($html));
+	
+	  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      header("Content-Disposition: attachment;filename=solicitudes_".date('m-d-Y').".xls"); 
+      header("Pragma: no-cache");
+      header("Expires: 0");
+      echo $html;
 	}
 
 	function ver_solicitudes()

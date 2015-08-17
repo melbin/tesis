@@ -22,6 +22,7 @@ class Regional_model extends CI_Model
                     ->join('soe_solicitud_envio','soe_id=sol_soe_id','left')
                     ->join('tps_tipo_solicitud','tps_id=sol_tps_id','left')    
                     ->join('des_detalle_solicitud','des_sol_id=sol_id','left')
+                    ->join('cat_catalogo','cat_id = des_cat_id','left')
                     ->join('ets_estado_solicitud','ets_id=des_ets_id','left')
                     ->join('fon_fondo','fon_id=des_fon_id','left')
                     ->where('sol_id',$id_sol);
@@ -36,6 +37,7 @@ class Regional_model extends CI_Model
         $query = $this->db->select()
                  ->from('pxs_productoxsolicitud')
                  ->join('pro_producto', 'pro_producto.pro_id = pxs_pro_id')
+                 ->join('uni_unidad_medida', 'uni_id = pro_uni_id')
                  ->where('pxs_sol_id',$id_sol);
                  ;
         $result = $this->db->get()->result_array();               

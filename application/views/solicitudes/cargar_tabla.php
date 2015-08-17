@@ -45,10 +45,10 @@
                                 Detalle</a></li>
                             <?php }} ?>
                             <?php if(!empty($financiero) || (!empty($abastecimiento)) ) {?>
-                                <li><a class="" title="PDF" href="#">
+                                <li><a target="_blank" title="PDF" href="<?php echo base_url();?>home/solicitudes/imprimir_pdf/<?php echo $value['sol_id']; ?>">
                                 <span class="fa fa-file-pdf-o"></span>
                                 Generar PDF</a></li>
-                                <li><a class="" title="Excel" href="#">
+                                <li><a target="_blank" title="Excel" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>">
                                 <span class="fa fa-file-excel-o"></span>
                                 Generar Excel</a></li>            
                             <?php }?>    
