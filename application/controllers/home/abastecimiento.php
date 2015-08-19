@@ -361,18 +361,74 @@ class Abastecimiento extends CI_Controller {
 		} else {
 
 			if($_POST){
-				die(print_r($_POST));
-			}
+				//die(print_r($_POST));
+				$id_sol = $this->input->post('id_sol');
+				$act_solicitud = array(
+					'sol_dpi_id'		=> 	$this->input->post('dpi_interno'),
+					'sol_num_entregas'	=> 	$this->input->post('numero_entrega'),
+					'sol_soe_id'		=>	1, // Pendiente
+					'sol_usu_mod'		=>	$this->tank_auth->get_user_id(),
+					'sol_fecha_mod'		=>	date('Y-m-d H:i:s')
+				);
+				$row_affected = $this->regional_model->actualizar_registro('sol_solicitud',$act_solicitud,array('sol_id'=>$id_sol));
+			
+				if($row_affected==1){
+					$detalle = array(
+						'des_total'		=> $this->input->post('total'),
+						'des_fon_id'	=> $this->input->post('fondo'),
+						'des_plazo_entrega'	=>	$this->input->post('plazo_entrega'),
+						'des_direccion'	=> $this->input->post('lugar_entrega'),
+						'des_usu_mod'	=>	$this->tank_auth->get_user_id(),
+						'des_fecha_mod'	=>	date('Y-m-d H:i:s')		
+						);				
+					$this->regional_model->actualizar_registro('des_detalle_solicitud', $detalle, array('des_sol_id'=>$id_sol));
+
+					// Obtener datos del formulario
+					$productos = $this->input->post('productos');
+					$categoria = $this->input->post('categoria');
+					$descripcion = $this->input->post('descripcion');
+					$cantidad = $this->input->post('cantidad');
+					$precios = $this->input->post('precios');
+					
+					// Hacer un borrado general de los detalles
+					$articulos_borrados = $this->regional_model->borrado_general('pxs_productoxsolicitud',$id_sol);	
+					
+					// Ingresar los detalles de los productos
+					if($articulos_borrados>0){
+						foreach ($productos as $key => $value) {
+							$pro_solicitud = array(
+								'pxs_sol_id'	=> $id_sol,
+								'pxs_pro_id'	=> $value,
+								'pxs_cantidad'	=> $cantidad[$key],
+								'pxs_precio'	=> $precios[$key],
+								'pxs_descripcion'=> $descripcion[$key],
+								'pxs_estado'	=> 1,
+								'pxs_usu_mod'	=>	$this->tank_auth->get_user_id(),
+								'pxs_fecha_mod'	=>	date('Y-m-d H:i:s')			 
+							);
+							$pro_sol = $this->regional_model->insertar_registro('pxs_productoxsolicitud', $pro_solicitud);
+					 	}
+					}
+
+					// crear alerta OK
+					$alerta=array('registro'=>$row_affected,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Edición de solicitud exitosa.");
+				} else {
+					// crear alerta FAIL
+					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Solicitud No editada",'texto_alerta'=>"Por favor, revisar datos ingresados.");
+				}
+				$this->session->set_flashdata($alerta);       
+				redirect('home/abastecimiento/ver_solicitudes_edit/'.$id_sol);
+			} // End POST
 
 			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$data['titulo']="Solicitudes pendientes";
 			$data['vista_name'] = "solicitudes/ver_solicitudes_edit";
 
 			// All your code goes here
+			$this->session->set_flashdata('id_sol', $id);
 			// Consulta para obtener todos los detalles de la solicitud
 			$detalle_solicitud = $this->regional_model->detalle_sol($id);
 			$data['detalle_sol'] = $detalle_solicitud;
-			// die(print_r($detalle_solicitud));
 			$data['dep_internos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','dpi_nombre','',array('dpi_estado'=>1),$detalle_solicitud[0]['dpi_id'],'','dpi_id',true);
 			$data['bodega'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),$detalle_solicitud[0]['ali_id'],'','ali_id',true);	
 			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),$detalle_solicitud[0]['des_cat_id'],'','cat_id',true);

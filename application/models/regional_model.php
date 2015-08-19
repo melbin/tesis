@@ -99,6 +99,21 @@ class Regional_model extends CI_Model
     	return $last_id;
 	}
 
+    function actualizar_registro($tabla, $data, $where){
+        $this->db->where($where)
+                 ->update($tabla, $data)
+        ;
+        $rows = $this->db->affected_rows();
+       return $rows;
+    }
+
+    function borrado_general($tabla, $id_sol)
+    {
+        $this->db->delete($tabla, array('pxs_sol_id'=>$id_sol));
+        $rows = $this->db->affected_rows();
+        return $rows;   
+    }
+
     function detalle_solicitud($where=NULL){
         $query = $this->db->select()
                     ->from('sol_solicitud')

@@ -37,7 +37,7 @@
         		<tr>
         		<td width="10%"><h5>Fecha registro:</h5></td>
         			<td colspan="2">
-        				<input id="fecha_entrega" name="fecha_entrega" type="text" value="<?php echo date('d-m-Y', strtotime($detalle_sol[0]['sol_fecha'])); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+        				<input id="fecha_entrega" name="fecha_entrega" disabled="disabled" type="text" value="<?php echo date('d-m-Y', strtotime($detalle_sol[0]['sol_fecha'])); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
         			</td>
         		</tr>
                 <tr>
@@ -153,6 +153,8 @@
         			<td><button id="add" name="add" type="button" class="btn btn-primary"> <span class="fa fa-check">Agregar</span></button></td>
         			<td><button id="cancelar" name="cancelar" type="button" class="btn btn-danger"> <span class="fa fa-times"> Cancelar</span></button></td>
         		</tr>
+                <!-- hidden -->
+                <input type="hidden" name="id_sol" id="id_sol" value="0">
             </table>    
  		</div>
     </div>
@@ -213,7 +215,8 @@
 
     var pathArray = window.location.pathname.split( '/' );
     var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
-
+    
+    $("#id_sol").val(pathArray[pathArray.length-1]);
     $("#categoria").trigger("change");    
         
     $("#aceptar").click(function(){
@@ -225,10 +228,6 @@
             content: $("#form_eliminar"),
             scrolling :'no' 
         });   
-    });
-
-    $("#actualizar").click(function(){
-         alertify.alert("Pendiente de programar");
     });
 
     $("#anular").click(function(){

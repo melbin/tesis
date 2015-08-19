@@ -61,7 +61,7 @@
             <input id="total_suma_hidden" name="total" value="<?php echo $total; ?>" type="hidden">
         </div>    
     <div class="form-actions">
-        <button type="button" class="btn btn-success" id="actualizar"><span class="fa fa-check white"></span> Actualizar</button>
+        <button type="button" class="btn btn-success" id="registrar_solicitud"><span class="fa fa-check white"></span> Actualizar</button>
         <button type="button" class="btn btn-success" id="aceptar"><span class="fa fa-check white"></span> Aceptar</button>
         <button type="button" class="btn btn-danger" onclick="$('#motivo_error').text('');" id="rechazar"><span class="fa fa-times white"></span> Rechazar</button>
         <!-- <button type="button" class="btn btn-danger" id="anular" disabled><span class="icomoon-icon-cancel-3"></span>Anular</button> -->

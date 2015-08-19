@@ -86,7 +86,10 @@ class Auth extends CI_Controller
 						redirect('/auth/send_again/');
 
 					} else {													// fail
-						foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
+
+						foreach ($errors as $k => $v){
+							$data['errors'][$k] = $this->lang->line($v);
+						}	
 					}
 				}
 			}

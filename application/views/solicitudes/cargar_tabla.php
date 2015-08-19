@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+<table class="table table-striped table-bordered table-hover"  id="dataTables-example">
 <thead>
     <tr>
         <th>#</th>
@@ -12,8 +12,9 @@
 <tbody>
     <?php 
     foreach ($solicitudes as $key => $value) {   ?>
+
         <tr>
-            <td><?php echo $key; ?></td>
+            <td><?php echo ++$key; ?></td>
             <td><?php echo $value['dpi_nombre']; ?></td>
             <td><?php echo date('d-m-Y H:i:s', strtotime($value['sol_fecha']));?></td>
             <td><?php echo $value['ali_nombre']; ?></td>
@@ -65,7 +66,14 @@
         </tr>
     <?php } ?>    
     <?php if(empty($solicitudes)){ ?>
-    <tr><td colspan="6" align="center">No hay registros...</td></tr>
+        <tr>
+            <td align="center">No hay registros...</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     <?php } ?>
 </tbody>
 </table>
