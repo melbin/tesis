@@ -353,7 +353,7 @@ class Abastecimiento extends CI_Controller {
 			$this->__cargarVista($data);
 		}
 	}
-
+	
 	function ver_solicitudes_edit($id=NULL,$financiero=NULL)
 	{
 		if (!$this->tank_auth->is_logged_in()) {

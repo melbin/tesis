@@ -77,6 +77,31 @@ class Regional_model extends CI_Model
 		return $query['par_valor'];
 	}
 
+    function get_existencias2()
+    {
+        $query = "
+        SELECT
+        uni_nombre AS UM ,cat_nombre as linea, pro_codigo AS codigo, pro_nombre as nombre, SUM(sar_cantidad) AS cantidad,
+        sar_precio AS precio, (SUM(sar_cantidad) * sar_precio) AS total, ali_nombre AS bodega                     
+      FROM 
+      sar_saldo_articulo
+      INNER JOIN ali_almacen_inv ON ali_id= sar_ali_id
+      INNER JOIN pro_producto ON pro_id=sar_pro_id
+                            INNER JOIN sub_subcatalogo ON sub_id= pro_sub_id
+      INNER JOIN cat_catalogo ON cat_id = sub_cat_id
+      INNER JOIN uni_unidad_medida ON uni_id = pro_uni_id
+    GROUP BY 
+          ali_nombre, pro_codigo, pro_nombre, sar_precio
+    HAVING 
+      SUM(sar_cantidad)>0
+    ORDER BY 
+      linea, codigo
+        ";
+        $detalle=$this->db->query($query)->result_array();
+        //print_r($this->db->last_query());exit()
+        return $detalle;
+    }
+
     function get_existencias($where)
     {
         $this->db->select()
