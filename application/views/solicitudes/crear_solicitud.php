@@ -29,7 +29,7 @@
         		<td width="10%"><h5>Plazo entrega:</h5></td>
         			<td width="">
         				<!-- <textarea id="plazo_entrega" name="plazo_entrega" style="width:100%"></textarea> -->
-                        <input id="plazo_entrega" name="plazo_entrega" type="text"  maxlength="2"  class="datetime-input form-control enteros" >
+                        <input id="plazo_entrega" name="plazo_entrega" type="text" value="15" maxlength="2"  class="datetime-input form-control enteros" >
         			</td>
                     <td><input type="text"  class="datetime-input form-control" value="Dias" disabled="disabled" style="text-align:center;"></td>
         		</tr>

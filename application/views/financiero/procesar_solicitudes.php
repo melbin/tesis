@@ -49,5 +49,12 @@ th, td {
                  $.fancybox("Su solicitud se encuentra actualmente en Abastecimiento, <br> esperando ser aprobada.");    
              }
         });
+
+        $(".ver_modal").on('click', function(){
+            $.fancybox({
+                content: 'En desarrollo...',
+                scrolling :'no' 
+            });               
+        });
     });
     </script>                         

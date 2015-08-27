@@ -65,7 +65,8 @@
             var articulo = $("#articulo").val();
             // Cargando precio, en proceso.
             $.ajax({
-                url: 'obtener_precio',
+                //url: 'obtener_precio',
+                url: urlj+"home/solicitudes/obtener_precio",
                 type: 'POST',
                 dataType: 'json',
                 data: {id:articulo},

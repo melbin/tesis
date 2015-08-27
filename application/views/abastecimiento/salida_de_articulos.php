@@ -70,6 +70,10 @@
                     </td>
                 </tr>
                 <tr>
+                <tr id="unidad_medida" style="display:none;">
+                    <td width="10%"><label>Unidad de medida:</label></td>
+                    <td colspan="2"><input type="text"  class="datetime-input form-control" id="um" name="um" value="prueba" disabled="disabled" style="text-align:center;"></td>
+                </tr>
                 <td width="10%"><label>Descripción:</label></td>
                     <td colspan="2">                        
                         <div class="form-group">    

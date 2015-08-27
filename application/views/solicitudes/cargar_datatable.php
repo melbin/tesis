@@ -64,8 +64,15 @@
         <button type="button" class="btn btn-success" id="registrar_solicitud"><span class="fa fa-check white"></span> Actualizar</button>
         <button type="button" class="btn btn-success" id="aceptar"><span class="fa fa-check white"></span> Aceptar</button>
         <button type="button" class="btn btn-danger" onclick="$('#motivo_error').text('');" id="rechazar"><span class="fa fa-times white"></span> Rechazar</button>
+        <!-- <input type="checkbox" id="check" name="check"><label for="check">NO</label> -->
         <!-- <button type="button" class="btn btn-danger" id="anular" disabled><span class="icomoon-icon-cancel-3"></span>Anular</button> -->
     </div>
 
         </div>
     </div> <!-- Fin del datatable -->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // $("#iButton").iButton({labelOn: "Si",labelOff: "No" });
+    });
+</script>

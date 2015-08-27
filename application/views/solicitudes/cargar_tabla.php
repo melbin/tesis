@@ -33,8 +33,16 @@
                             <li>
                                 <a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'].'/2')?>" >
                                 <span class="fa fa-pencil"></span>
-                                Editar</a></li>      
-                            <?php } else { ?>
+                                Editar</a>
+                            </li>
+                            <?php if($value['ets_id']==7) {?>
+                            <li>
+                                <a class="ver_modal" title="Aprobar" href="#" >
+                                <span class="fa fa-check"></span>
+                               Aprobar</a>
+                            </li>            
+                            <?php }
+                             } else { ?>
                             <?php if(!empty($abastecimiento)) { ?>
                                 <li><a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'])?>" >
                                 <span class="fa fa-pencil"></span>
@@ -46,9 +54,9 @@
                                 Detalle</a></li>
                             <?php }} ?>
                             <?php if(!empty($financiero) || (!empty($abastecimiento)) ) {?>
-                                <li><a target="_blank" title="PDF" href="<?php echo base_url();?>home/solicitudes/imprimir_pdf/<?php echo $value['sol_id']; ?>">
+                                <!-- <li><a target="_blank" title="PDF" href="<?php echo base_url();?>home/solicitudes/imprimir_pdf/<?php echo $value['sol_id']; ?>">
                                 <span class="fa fa-file-pdf-o"></span>
-                                Generar PDF</a></li>
+                                Generar PDF</a></li> -->
                                 <li><a target="_blank" title="Excel" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>">
                                 <span class="fa fa-file-excel-o"></span>
                                 Generar Excel</a></li>            

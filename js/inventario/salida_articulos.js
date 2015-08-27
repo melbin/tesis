@@ -1,6 +1,9 @@
 
 	$(document).ready(function(){
         // Definir mascara
+        var pathArray = window.location.pathname.split( '/' );
+        var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
+
         $("#fecha_salida").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
 		$("#bodega, #categoria, #sub_categoria, #proveedor, #salida, #articulo").select2({
@@ -14,6 +17,22 @@
         $("#articulo").change(function(){
             $("#descripcion").attr('disabled',false);
             $("#articulo_error").text('');
+
+            // // Add Ajax to call UM
+            // var articulo = $("#articulo").val();
+            // if(articulo>0){
+            //     $.ajax({
+            //     //url: 'obtener_precio',
+            //     url: urlj+"home/abastecimiento/obtener_um",
+            //     type: 'POST',
+            //     dataType: 'json',
+            //     data: {id:articulo},
+            //     success: function(data) {
+            //         $("#um").val(data.um);
+            //         $("#unidad_medida").show();
+            //     }
+            // });            
+            // }
         });
 
 		$("#cancelar").live("click", function(){
@@ -151,7 +170,7 @@
     }
       var row=0;
       $("#agregar").on("click",function(){
-            
+         $("#unidad_medida").hide();       
        if($.trim($('#cantidad').val())!='' && $('#articulo').val() !=0){
         $("#validar_datagried").text('');
         

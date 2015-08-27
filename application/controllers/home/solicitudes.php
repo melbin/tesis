@@ -70,7 +70,7 @@ class Solicitudes extends CI_Controller {
 		$precio = '';
 		if($id_pro !=0){
 			//$precio = $this->sistema_model->get_campo('sar_saldo_articulo','sar_cantidad', array('sar_pro_id'=>$id_pro, 'sar_estado'=>1));	
-			$existencias = $this->regional_model->get_existencias(array('sar_pro_id'=>$id_pro));
+			$existencias = $this->regional_model->get_existencias(array('sar_pro_id'=>$id_pro, 'sar_estado'=>1));
 			//die(print_r($existencias));
 			if(!empty($existencias)){
 				$precio = $existencias['sar_precio'];

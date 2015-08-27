@@ -41,7 +41,7 @@ $captcha = array(
 <!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
 <head>
 <meta charset="utf-8">
-<title>Paper Stack</title>
+<title>Regional de Salud</title>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>stylesheet/style.css" />
 </head>
 
@@ -104,8 +104,8 @@ $captcha = array(
 		<td colspan="3">
 			<?php echo form_checkbox($remember); ?>
 			<?php echo form_label('Recordarme', $remember['id']); ?>
-			<?php echo anchor('/auth/forgot_password/', 'Olvido Password'); ?>
-			<?php if ($this->config->item('allow_registration', 'tank_auth')) echo anchor('/auth/register/', 'Registrarse'); ?>
+			<?php echo anchor('/auth/forgot_password/', 'Olvidó su contraseña'); ?>
+		    <!--	<?php if ($this->config->item('allow_registration', 'tank_auth')) echo anchor('/auth/register/', 'Registrarse'); ?> -->
 		</td>
 	</tr>
 </table>
@@ -117,3 +117,9 @@ $captcha = array(
 </body>
 </html>
 
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+	});
+</script>

@@ -170,6 +170,7 @@
 <div>
     <form class="" id="sol_aceptar" name="sol_aceptar" method="POST" action="<?php echo (!isset($financiero))? base_url().'home/abastecimiento/aprobar_solicitud' : base_url().'home/abastecimiento/aprobar_solicitud2'; ?>"> 
         <input type="hidden" name="solicitud" value="<?php echo $detalle_sol[0]['sol_id']; ?>">
+        <input type="hidden" name="tipo_envio" id="tipo_envio" value="0">
     </form>
 </div>
 
@@ -218,7 +219,16 @@
     
     $("#id_sol").val(pathArray[pathArray.length-1]);
     $("#categoria").trigger("change");    
-        
+    
+    // $("#iButton").iButton({labelOn: "Si",labelOff: "No" });
+
+    // $("#iButton").on('change', function(){
+    //     if($("#iButton").checked(true)){
+    //         alert($(this).val());    
+    //     }
+    //     //$("#tipo_envio").val($(this).val());
+    // }); 
+
     $("#aceptar").click(function(){
         $("#sol_aceptar").submit();          
     });

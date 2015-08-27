@@ -472,6 +472,7 @@ class Abastecimiento extends CI_Controller {
 	function aprobar_solicitud2()
 	{
 		if($_POST){
+	
 			$sol = $this->input->post('solicitud');
 			$where = array('des_sol_id'=>$sol);
 			$array = array(
@@ -490,6 +491,16 @@ class Abastecimiento extends CI_Controller {
 
 			redirect('home/financiero/procesar_solicitudes');								
 		}
+	}
+
+	public function obtener_um(){
+		$id_pro = $this->input->post('id');
+
+		// Obtener Unidad de Medida
+		$um = $this->pro_model->get_um(array('pro_id'=>$id_pro));
+
+		$arreglo = array('um'=>$um['uni_valor']);
+		echo json_encode($arreglo);
 	}
 
 

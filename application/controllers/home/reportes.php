@@ -58,6 +58,20 @@ class Reportes extends CI_Controller {
         }
     }// End reporte de Existencias
 
+    function por_departamento()
+    {
+    	if (!$this->tank_auth->is_logged_in()) {
+            redirect('/auth/login/');
+        } else {
+
+			$data["titulo"] ="Inventario por departamento";
+			$data['vista_name'] = "reportes/por_departamento";
+
+
+			$this->__cargarVista($data);
+        }
+    } // End reporte por departamento
+
     function print_existencia($tipo=1)
     {
         //$tipo=1 (excel), $tipo=2 (pdf)
@@ -134,6 +148,13 @@ class Reportes extends CI_Controller {
 
     function __cargarVista($data=0)
 	{	
+	    $data['logo'] = $this->regional_model->get_parametro("logo");
+		
+		// Obtener los link del panel Izquierdo.
+		$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
+		$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+	 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
+
 		$vista=$data['vista_name'];
 		$this->masterpage->setMasterpage('/pages/masterpage');
 		$this->masterpage->addContentPage($vista,'content',$data);

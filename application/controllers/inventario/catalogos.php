@@ -34,7 +34,7 @@ class Catalogos extends CI_Controller {
 		}
 	}
 
-	function catalogo(){
+	function categoria(){
 
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
@@ -43,7 +43,7 @@ class Catalogos extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('cat_catalogo');
-			$crud->set_subject('Catálogos');
+			$crud->set_subject('categoría');
 			$crud->required_fields('cat_nombre');
 			$crud->required_fields('cat_codigo');
 			$crud->required_fields('cat_esp_id');
@@ -55,6 +55,8 @@ class Catalogos extends CI_Controller {
 			$crud->display_as('cat_descripcion','Descripción');
 			$crud->display_as('cat_fecha','Fecha');
 			$crud->display_as('cat_estado','Estado');			
+			$crud->set_rules('cat_codigo', 'Código','trim|required|xss_clean|is_unique[cat_catalogo.cat_codigo]');	
+			$crud->set_rules('cat_nombre', 'Nombre','trim|required|xss_clean|is_unique[cat_catalogo.cat_nombre]');	
 
 			$crud->set_relation('cat_esp_id','esp_especifico','esp_nombre');
 
@@ -65,7 +67,7 @@ class Catalogos extends CI_Controller {
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
 			$data['vista_name']='inventario/index';
-			$data['titulo']="Catalogos";
+			$data['titulo']="Categorías";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>1));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',1);
@@ -80,7 +82,7 @@ class Catalogos extends CI_Controller {
 	 }
 	}
 
-	function subcatalogos(){
+	function subcategoria(){
 
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
@@ -89,7 +91,7 @@ class Catalogos extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('sub_subcatalogo');
-			$crud->set_subject('Subcatalogos');
+			$crud->set_subject('Subcategorias');
 			
 			$columnas = array(
 				'sub_codigo',
@@ -114,6 +116,9 @@ class Catalogos extends CI_Controller {
 					'sub_descripcion'=>'Descripción',
 					'sub_estado'=>'Estado'
 				);
+			
+			$crud->set_rules('sub_codigo', 'Código','trim|required|xss_clean|is_unique[sub_subcatalogo.sub_codigo]');	
+			$crud->set_rules('sub_nombre', 'Nombre','trim|required|xss_clean|is_unique[sub_subcatalogo.sub_nombre]');	
 
 			$crud->required_fields($requeridos);
 			$crud->columns($columnas);
@@ -121,7 +126,6 @@ class Catalogos extends CI_Controller {
 
 			// Relacion de 1 a muchos. Un catalogo puede tener muchos Subcatalogos
 			$crud->set_relation('sub_cat_id','cat_catalogo','cat_nombre');
-			
 			$crud->field_type('sub_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('sub_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('sub_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
@@ -130,7 +134,7 @@ class Catalogos extends CI_Controller {
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
 			$data['vista_name']='inventario/index';
-			$data['titulo']="Subcatalogos";
+			$data['titulo']="Subcategorias";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>1));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',1);
@@ -178,6 +182,7 @@ class Catalogos extends CI_Controller {
 			$crud->required_fields($requeridos);
 			$crud->columns($columnas);
 			$crud->display_as($alias);
+			$crud->set_rules('ali_nombre', 'Nombre','trim|required|xss_clean|is_unique[ali_almacen_inv.ali_nombre]');	
 
 			$crud->field_type('ali_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('ali_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
@@ -221,7 +226,8 @@ class Catalogos extends CI_Controller {
 			$crud->field_type('uni_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('uni_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('uni_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
-
+			$crud->set_rules('uni_nombre', 'Nombre','trim|required|xss_clean|is_unique[uni_unidad_medida.uni_nombre]');
+			$crud->set_rules('uni_valor', 'Valor','trim|required|xss_clean|is_unique[uni_unidad_medida.uni_valor]');
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
@@ -261,7 +267,7 @@ function procesos(){
 			$crud->display_as('pro_salida','Salida');
 			$crud->display_as('pro_estado','Estado');
 			$crud->display_as('pro_fecha','Fecha');
-			
+			$crud->set_rules('pro_nombre', 'Nombre','trim|required|xss_clean|is_unique[pro_proceso.pro_nombre]');	
 			$crud->field_type('pro_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('pro_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('pro_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
@@ -294,13 +300,13 @@ function procesos(){
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('pro_producto');
-			$crud->set_subject('Articulos');
+			$crud->set_subject('Artículos');
 			
 			$columnas = array(
 				'pro_codigo',
 				'pro_nombre',
 				'pro_sub_id',
-				'pro_esp_id',
+				// 'pro_esp_id',
 				'pro_uni_id',
 				'pro_tip_id',
 				'pro_descripcion',
@@ -311,7 +317,7 @@ function procesos(){
 					'pro_codigo',
 					'pro_nombre',
 					'pro_sub_id',
-					'pro_esp_id',
+					// 'pro_esp_id',
 					'pro_tip_id',
 					'pro_saldo'
 				);
@@ -322,7 +328,7 @@ function procesos(){
 					'pro_codigo_nac' => 'Cod. Naciones Unidas',
 					'pro_sub_id' => 'Subcatálogo',
 					'pro_descripcion' => 'Descripción',
-					'pro_esp_id' => 'Específico',
+					// 'pro_esp_id' => 'Específico',
 					'pro_uni_id' => 'Unidad/Medida',
 					'pro_tip_id' => 'Tipo',
 					'pro_estado'  => 'Estado'
@@ -331,13 +337,15 @@ function procesos(){
 			$crud->required_fields($requeridos);
 			$crud->columns($columnas);
 			$crud->display_as($alias);
-			
+			$crud->edit_fields($columnas);
+			$crud->add_fields($columnas);
+			$crud->set_rules('pro_codigo', 'Código','trim|required|xss_clean|is_unique[pro_producto.pro_codigo]');	
 			$crud->field_type('pro_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('pro_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('pro_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
 
 			// Relacion de 1 a muchos. 
-			$crud->set_relation('pro_esp_id','esp_especifico','esp_nombre');
+			// $crud->set_relation('pro_esp_id','esp_especifico','esp_nombre');
 			$crud->set_relation('pro_uni_id','uni_unidad_medida','uni_valor');
 			$crud->set_relation('pro_tip_id','tip_tipo_producto','tip_nombre');
 			$crud->set_relation('pro_sub_id','sub_subcatalogo','sub_nombre');
@@ -345,7 +353,7 @@ function procesos(){
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
 			$data['vista_name']='inventario/index';
-			$data['titulo']="Articulos";
+			$data['titulo']="Artículos";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>1));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',1);

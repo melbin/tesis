@@ -33,13 +33,37 @@ class Financiero extends CI_Controller {
 		}
 	}
 
+	public function presupuesto()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+		 // All your code goes here
+			$data['titulo']="Presupuesto por Departamento";
+			$data['vista_name'] = "financiero/presupuesto_departamento";	
+
+			$this->__cargarVista($data);
+		}	
+	}
+
+		public function congelar_fondos()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+		 // All your code goes here
+			$data['titulo']="Congelar fondos por específico";
+			$data['vista_name'] = "financiero/congelar_fondos";	
+			
+			$this->__cargarVista($data);
+		}	
+	}
+
 	public function procesar_solicitudes()
 	{
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-
-			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$data['titulo']="Solicitudes pendientes";
 			$data['vista_name'] = "financiero/procesar_solicitudes";
 
@@ -47,12 +71,6 @@ class Financiero extends CI_Controller {
 			$data['financiero'] = 1;
 			$data['solicitudes'] = $this->regional_model->detalle_sol_financiero();
 			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
-			// die(print_r($this->db->last_query()));
-				// Obtener los link del panel Izquierdo.
-			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
-		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
-		 	
 			$this->__cargarVista($data);
 		}
 
@@ -60,6 +78,10 @@ class Financiero extends CI_Controller {
 		function __cargarVista($data=0)
 	{	
 		$vista=$data['vista_name'];
+		$data['logo'] = $this->regional_model->get_parametro("logo");
+		$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
+		$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+		 $data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		$this->masterpage->setMasterpage('/pages/masterpage');
 		$this->masterpage->addContentPage($vista,'content',$data);
 		$this->masterpage->show();

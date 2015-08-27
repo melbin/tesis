@@ -20,6 +20,9 @@
     <!-- CSS jQuery_UI -->
     <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>js/jQuery_UI/css/jquery-ui.css" />
 
+    <!-- jQuery iButton CSS -->
+    <!-- <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>stylesheet/jquery.ibutton.css" />     -->
+
     <!-- DataTables CSS -->
     <link type="text/css" href="<?php echo base_url()?>bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
 
@@ -58,14 +61,19 @@
     <link href="<?php echo base_url()?>bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
      <!-- jQuery --> 
-   <!-- <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-2.1.4.js"></script>   -->
+  <!-- <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-2.1.4.js"></script>  -->
+
+    <!-- Probar esta libreria de JQuery, ya que es compatible con la libreria del Checkbox -->
+  <!--  <script src="<?php echo base_url()?>js/jquery-1.11.1.min.js"></script> -->
 
    <!-- jQuery -->
-    <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery.min.js"></script> 
 
    <!-- jQuery UI -->
    <script src="<?php echo base_url()?>js/jQuery_UI/ui/jquery-ui.js"></script>
 
+   <!-- jQuery iButton js -->
+  <!-- <script src="<?php echo base_url()?>js/jquery.ibutton.min.js"></script> -->
 
     <!-- Resuelve problemas de incompatibilidades con jQuerys viejos -->
    <script src="<?php echo base_url()?>bower_components/jquery/dist/jquery-migrate-1.2.1.min.js"></script>  
@@ -269,7 +277,7 @@
     <div id="wait"><img src="<?php echo base_url(); ?>media/sistema/spinner.gif" width="64" height="64" /><br> Cargando.. </div>
     
     <div class="row-fluid" id="pie">              
-        <span style="color: #c0c0c0; font-size: 10pt;">Copyright 2015 ©&nbsp;Regional de Salud. Todos los Derechos Resevados</span>
+        <span style="color: #c0c0c0; font-size: 10pt;">Copyright <?php echo date('Y');?> ©&nbsp;Regional de Salud. Todos los Derechos Resevados</span>
     </div>
 
 </body>
