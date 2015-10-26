@@ -49,33 +49,22 @@ class Especificos extends CI_Controller {
 			$columnas = array(
 				'esp_nombre',
 				'esp_concepto',
-				'esp_presupuesto_votado',
-				'esp_modificaciones',
-				'esp_devengado',
-				'esp_congelado',
-				'esp_saldo',
+				'esp_codigo',
+				'esp_fecha',
+				'esp_lnt_id',
 				'esp_estado'
 				);
 
 			$requeridos = array(
-					'esp_nombre',
-					'esp_concepto',
-					'esp_concepto',
-					'esp_presupuesto_votado',
-					'esp_saldo'
+					'esp_nombre'
 				);
 
 			$alias = array(
 					'esp_nombre'=>'Nombre',
 					'esp_concepto'=>'Concepto',
-					'esp_presupuesto_votado'=>'Presupuesto Votado',
-					'esp_modificaciones'=>'Modificaciones',
-					'esp_devengado'=>'Devengado',
-					'esp_presupuesto_mod'=>'Presupuesto Modificado',
-					'esp_porcentaje_ejecucion'=>'Porcentaje de ejecución',
-					'esp_observaciones'=>'Observaciones',
-					'esp_congelado'=>'Congelado',
-					'esp_saldo'=>'Saldo',
+					'esp_codigo'=>'Código',
+					'esp_fecha'=>'Fecha',
+					'esp_lnt_id'=>'Línea de trabajo',
 					'esp_estado'=>'Estado'
 				);
 
@@ -101,7 +90,7 @@ class Especificos extends CI_Controller {
 		 	$crud->unset_jquery(); // No llama al jQuery del Grocery Crud
 		 	$output = $crud->render();
 		 	//$this->load->view('sistema/pais',$output);
-		 	$data['texto'] = $this->load->view('inventario/especificos/especifico', $output, true); 
+		 	$data['texto'] = $this->load->view('bancos/especificos/especifico', $output, true); 
 		 	$this->__cargarVista($data);	 	 
 	 }
 	}

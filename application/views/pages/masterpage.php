@@ -298,7 +298,11 @@
         else if(tipo_alerta === 'error')
         {
             alertify.error(texto_alerta);
+        } else if(tipo_alerta === 'alert')
+        {
+            alertify.alert(texto_alerta);
         }
+
 
 
         $(window).scroll(function(){

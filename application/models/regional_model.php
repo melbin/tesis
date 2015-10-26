@@ -44,6 +44,31 @@ class Regional_model extends CI_Model
         return $result;                         
     }
 
+    function get_detalle_especificos()
+    {
+        $query = $this->db->select()
+                    ->from('esp_especifico')
+                    ->join('det_detalle_especifico', 'det_esp_id = esp_id','left')
+                    ->join('fon_fondo', 'fon_id = det_fondo_id','left')
+                    ->where('det_estado',1)
+                    ;
+        $result = $this->db->get()->result_array();
+        return $result;            
+    }
+
+    function get_especificos($fondo_id, $saldo_minimo)
+    {
+        $query = $this->db->select('esp_id, esp_nombre, det_saldo')
+                    ->from('esp_especifico')
+                    ->join('det_detalle_especifico', 'det_esp_id = esp_id', 'left')
+                    ->where('det_estado',1)
+                    ->where('det_saldo >=',$saldo_minimo)
+                    ->where('det_fondo_id',$fondo_id)
+                    ;
+        $result = $this->db->get()->result_array();
+        return $result;               
+    }
+
     function get_productosxcategoria($cat_id = NULL)
     {
         $query = "
@@ -198,6 +223,43 @@ class Regional_model extends CI_Model
 
 		return $query->result_array();
 	}
+
+    function get_asignaciones($detalles)
+    {
+        $query = $this->db->select('det_esp_id, det_id, dpi_nombre as depto, SUM(axd_cantidad) as suma, det_saldo as total')
+                    ->from('det_detalle_especifico')
+                    ->join('axd_asignacionxdetalle_especifico', 'axd_det_id = det_id','left')
+                    ->join('dpi_departamento_interno', 'dpi_id = axd_depto_id','left')
+                    ->where('axd_estado',1)
+                    ->where_in('axd_det_id',$detalles)
+                    ;
+        $result = $this->db->get()->result_array();
+        return $result;            
+    }
+
+    function get_detalles_especificos($id_det)
+    {
+        $query = $this->db->select()
+                    ->from('det_detalle_especifico')
+                    ->join('esp_especifico','esp_id = det_esp_id')
+                    ->join('fon_fondo', 'fon_id = det_fondo_id')
+                    ->where('det_id',$id_det)
+                    ;
+        $result = $this->db->get()->row_array();
+        return $result;            
+    }
+
+    function get_asignaciones_detalle($id_det)
+    {
+        $query = $this->db->select()
+                    ->from('axd_asignacionxdetalle_especifico')
+                    ->join('dpi_departamento_interno', 'dpi_id = axd_depto_id')
+                    ->where('axd_det_id', $id_det)
+                    ->where('axd_estado',1)
+                    ;
+        $result = $this->db->get()->result_array();
+        return $result;            
+    }
 
 	function get_dropdown($tabla, $display = '', $name = '', $where = '', $selected = null
                             , $extras = '', $primary = '', $soloOpciones = false)

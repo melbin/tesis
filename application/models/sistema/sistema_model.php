@@ -47,6 +47,8 @@ class Sistema_model extends CI_Model
 		$query = $this->db->get()->row_array();
 		if($query>0){
 			return $query;
+		} else {
+			return 0;
 		}
 	}
 
@@ -57,16 +59,14 @@ class Sistema_model extends CI_Model
 				 	->limit(1)
 				 	;
 
-		$result = $this->db->get($query);
+		$result = $this->db->get()->row_array();
 
-		if($result->num_rows() > 0){
-			$fila = $result->row();
-			foreach ($fila as $key => $value) {
+		if(!empty($result)){
+			foreach ($result as $key => $value) {
 				if($key == $campo){
 					return $value;
 				}
 			}
-
 		} 
 		return null;
 	}

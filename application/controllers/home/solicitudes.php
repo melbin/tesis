@@ -194,7 +194,7 @@ class Solicitudes extends CI_Controller {
 	  $data['productos'] = $productos;
 
 	  $html = $this->load->view('solicitudes/imprimir_solicitud_excel',$data,true);	  	
-//	  die(print_r($html));
+	  die(print_r($html));
 	
 	  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       header("Content-Disposition: attachment;filename=solicitudes_".date('m-d-Y').".xls"); 
