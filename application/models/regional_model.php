@@ -58,7 +58,7 @@ class Regional_model extends CI_Model
 
     function get_especificos($fondo_id, $saldo_minimo)
     {
-        $query = $this->db->select('esp_id, esp_nombre, det_saldo')
+        $query = $this->db->select('esp_id, esp_nombre, det_saldo, det_saldo_congelado')
                     ->from('esp_especifico')
                     ->join('det_detalle_especifico', 'det_esp_id = esp_id', 'left')
                     ->where('det_estado',1)

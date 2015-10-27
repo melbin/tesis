@@ -666,7 +666,101 @@ class Especificos extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			if($_POST){
-				die(print_r("En desarrollo..."));
+				die(print_r($_POST,true));
+
+				/* 
+					-Modificar el det_detalle_especifico
+					-Con el esp_id y el fon_id obtengo el det 
+					- Modificare el det_saldo_congelado
+				*/
+				$esp_id = $this->input->post('especifico');	
+				$fondo_id = $this->input->post('fondo');
+				$cantidad = $this->input->post('cantidad');
+				
+				$det_especifico = $this->sistema_model->get_registro('det_detalle_especifico',array('det_esp_id'=>$esp_id, 'det_fondo_id'=>$fondo_id, 'det_estado'=>1));
+
+				$total_congelado = floatval(!empty($det_especifico['det_saldo_congelado'])?$det_especifico['det_saldo_congelado']:0) + floatval($cantidad);
+				$this->sistema_model->actualizar_registro('det_detalle_especifico',array('det_saldo_congelado'=>$total_congelado), array('det_id'=>$det_especifico['det_id']));
+
+				// Agregar registro a foc_fondo_congelado
+				$foc_array = array(
+					'foc_det_id'		=> $det_especifico['det_id'],
+					'foc_cantidad'		=> (!empty($cantidad))? $cantidad:0,
+					'foc_descripcion' 	=> $this->input->post('descripcion'),
+					'foc_fecha'			=> date('Y-m-d H:i:s'),
+					'foc_estado'		=> 1,
+					'foc_usu_mod'		=> $this->tank_auth->get_user_id(),
+					'foc_fecha_mod'		=> date('Y-m-d H:i:s')
+					);
+
+				$this->regional_model->insertar_registro('foc_fondo_congelado', $foc_array);	
+
+				// Cambiar las solicitudes que hayan sido echas con este fondo y este especifico a estado 2.
+				$this->sistema_model->actualizar_registro('des_detalle_solicitud',array('des_estado'=>2), array('des_fon_id'=>$fondo_id, 'des_esp_id'=>$esp_id));
+
+				// Obtener las solicitudes del des
+				$solicitudes = $this->regional_model->get_tabla('des_detalle_solicitud', array('des_fon_id'=>$fondo_id, 'des_esp_id'=>$esp_id));
+				if($solicitudes>0){
+					foreach ($solicitudes as $key => $value) {
+					$array = array(
+						'soc_sol_id'	=> $value['des_sol_id'],
+						'soc_fecha'		=> date('Y-m-d H:i:s'),
+						'soc_descripcion'	=> $this->input->post('descripcion'),
+						'soc_estado'		=> 1,
+						'soc_usu_mod'		=> $this->tank_auth->get_user_id(),
+						'soc_fecha_mod'		=> date('Y-m-d H:i:s')
+						);
+
+					$this->regional_model->insertar_registro('soc_solicitud_congelada', $array);	
+					}	
+				}
+				
+				// Crear el movimiento financiero
+				$movimiento = array(
+						'fin_fondo_id' => $fondo_id,
+						'fin_pro_id'   => 5,
+						'fin_cantidad' => $cantidad,
+						'fin_fecha'	   => date('Y-m-d H:i:s'),
+						'fin_estado'   => 1,
+						'fin_usu_mod'  => $this->tank_auth->get_user_id(),
+						'fin_fecha_mod'=> date('Y-m-d H:i:s')
+					);
+
+				$mov_id = $this->regional_model->insertar_registro('fin_financiero_movimiento', $movimiento);
+
+				if($mov_id>0){
+					// Insertar el detalle Financiero
+						$det_financiero = array(
+						'fid_fin_id'	  => $mov_id,
+						'fid_esp_id'	  => $esp_id,
+						'fid_cantidad'	  => $cantidad,
+						'fid_descripcion' => $this->input->post('descripcion'),
+						'fid_fecha'		  => date('Y-m-d H:i:s'),
+						'fid_estado'	  => 1,
+						'fid_usu_mod'	  => $this->tank_auth->get_user_id(),
+						'fid_fecha_mod'	  => date('Y-m-d H:i:s')
+					);
+					$this->regional_model->insertar_registro('fid_financiero_detalle_mov', $det_financiero);	
+					}	
+				// Generar la alerta
+				if($solicitudes>0)
+				{
+					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Transacción Exitosa",'texto_alerta'=>"Proceso realizado con éxito.");
+				} else
+				{
+					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"La transacción no pudo ser efectuada.");
+				}				
+
+				$this->session->set_flashdata($alerta);       
+				redirect('bancos/bancos');
+				
+
+				
+				// 0 a N registros en soc_solicitud_congelada
+				// Actualizar el des_detalle solicitud de cada solicitud congelada
+				// Hacer los registros de Movimiento
+
+
 			} else {
 				// All your code goes here
 			$data['titulo']="Congelar fondos";
@@ -690,7 +784,8 @@ class Especificos extends CI_Controller {
 			$opciones="<option value='0' saldo='0' selected>Seleccione</option>";	
 
 			foreach ($especificos as $key => $value) {
-					$opciones .= "<option value=".$value['esp_id']." saldo=".$value['det_saldo']." > ".$value['esp_nombre']."</option>";
+					$saldo = floatval($value['det_saldo']) - floatval(!empty($value['det_saldo_congelado'])? $value['det_saldo_congelado']:0);
+					$opciones .= "<option value=".$value['esp_id']." saldo=".$saldo." > ".$value['esp_nombre']."</option>";
 				}	
 			
 			$result = array('especificos_origen'=>$opciones);	
@@ -706,7 +801,7 @@ class Especificos extends CI_Controller {
 
 		$resultado = array(
 			'det_saldo_votado'	=> $tabla_detalles['det_saldo_votado'],
-			'det_saldo'			=> $tabla_detalles['det_saldo']
+			'det_saldo'			=> ($tabla_detalles['det_saldo'] - $tabla_detalles['det_saldo_congelado']),
 			);
 		echo json_encode($resultado);
 	}

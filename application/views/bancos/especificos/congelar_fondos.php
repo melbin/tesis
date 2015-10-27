@@ -125,8 +125,8 @@
 				$("#cantidad").val('');
 				 alertify.error('Debe especificar una cantidad mayor.');
 			} else {
-                if(parseFloat($(this).val()) > parseFloat($("#especifico_origen option:selected").attr('saldo'))){  
-                 alertify.alert('No hay fondos suficientes.<br>El <b>fondo</b> para el específico seleccionado es de: <b>$'+ $.number($("#especifico_origen option:selected").attr('saldo'),2) +'</b>');  
+                if(parseFloat($(this).val()) > parseFloat($("#especifico option:selected").attr('saldo'))){  
+                 alertify.error('No hay fondos suficientes, favor especificar una cantidad menor.');  
                  $(this).val(''); 
                 }
             }
@@ -148,12 +148,11 @@
                     }
                 });
                 } else {
-                    $("#especifico").html("<option value='0' saldo='0' selected>Seleccione</option>").trigger('change');
+                    $("#especifico").html("<option value='0' saldo='0'>Seleccione</option>").trigger('change');
                 }
 	  	});
 
-        $("#especifico").on('change', function(){   
-                alert();
+        $("#especifico").on('click', function(){   
                 var id_esp = parseInt($(this).val());
                 var id_fondo = $("#fondo").val();
                 if(id_esp>0){
@@ -202,25 +201,15 @@
 			if($("#fondo").val()==0){
 				$("#fondo_error").text('Debe seleccionar un fondo');
 			}
-			if($("#especifico_origen").val()==0){
-				$("#especifico_origen_error").text('Debe seleccionar un específico');
+			if(!$("#especifico").length){
+				$("#especifico_error").text('Debe seleccionar un específico');
 			}
-            if($("#especifico_destino").val()==0){
-                $("#especifico_destino_error").text('Debe seleccionar un específico');
-            }
 			if($("#cantidad").val()==0 || $("#cantidad").val()==''){
 				$("#cantidad_error").text('Debe agregar una cantidad');
 			}
-			if($("#cantidad").val()>0 && $("#especifico_origen").val()>0 && $("#especifico_destino").val()>0 && $("#fondo").val()>0){
-				$("#frm_solicitud").submit();
+			if($("#cantidad").val()>0 && $("#especifico").val()>0 && $("#fondo").val()>0){
+				//$("#frm_solicitud").submit();
 			}
 		});  
-        
-        $(".select2").select2({
-            minimumResultsForSearch: 4,
-            placeholder: "Seleccione",
-            theme: "classic", // bootstrap
-            allowClear: true
-        });
 	});
 </script>
