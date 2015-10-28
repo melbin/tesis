@@ -36,6 +36,11 @@ th, td {
                 emptyTable:     "No data available in table",     
         });
 
+        $(".congelado").on('click', function(event){
+            event.preventDefault();
+            alertify.alert("Este específico posee saldo congelado<br>Por lo tanto, no podrá ser modificado.");
+        });
+
     //    $("input[name^='fecha']").mask('99-99-9999');
     //    $("input[name^='fecha']").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 

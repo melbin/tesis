@@ -51,8 +51,8 @@
         <br>
         <div style="text-align: center;">
             <span><label id="total_restante"><h1>Saldo pendiente: $<?php echo number_format((floatval($total)-$subtotal),2); ?></h1></label></span>
-            <input id="total_restante_hidden" name="total_restante" value="<?php echo number_format((floatval($total)-$subtotal),2); ?>" type="hidden">
-            <input id="monto_asignado_total" name="monto_asignado_total" value="<?php echo number_format($subtotal,2); ?>" type="hidden">
+            <input id="total_restante_hidden" name="total_restante" value="<?php echo round((floatval($total)-$subtotal),2); ?>" type="hidden">
+            <input id="monto_asignado_total" name="monto_asignado_total" value="<?php echo round($subtotal,2); ?>" type="hidden">
         </div>    
     <div class="form-actions">
         <!-- <td><button id="add" name="add" type="submit" class="btn btn-primary"> <span class="fa fa-check">Agregar</span></button></td> -->
@@ -64,9 +64,15 @@
 
     <script type="text/javascript">
     $(document).ready(function(){
+
         $("#saldo").focusout(function(){
             if(parseFloat($(this).val()) < parseFloat($("#monto_asignado_total").val())){
-                $(this).val($("#pre_votado").val());
+                var cantidad = (parseFloat($("#pre_votado").val())).toFixed(2);
+
+                if(parseFloat($("#pre_votado").val()) < parseFloat($("#saldo_origen").val())){
+                    cantidad = (parseFloat($("#saldo_origen").val())).toFixed(2);
+                }
+                $(this).val(cantidad);
                 alertify.error("Ingrese una cantidad mayor.");
             } else {
                 restante(0);

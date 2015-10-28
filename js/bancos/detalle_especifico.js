@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	// Write your code here...
+
 	  $("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
 	  $(".select2").select2({
@@ -18,7 +19,7 @@ $(document).ready(function(){
          var fondo = parseFloat(($("#fondo option:selected").attr('saldo')));
             if(parseFloat($(this).val()) > fondo){
                 alertify.alert("Debe especificar una cantidad menor.");
-                $("#saldo").val('');
+                $("#saldo").val((parseFloat($("#saldo_origen").val())).toFixed(2));
             } else {
                 $("#total_restante_hidden").val($(this).val());
             }
@@ -135,6 +136,7 @@ $(document).ready(function(){
 }); // End document ready
 
     function restante(id){
+
         event.preventDefault();
         var total=parseFloat($("#saldo").val());
         var valor = 0;
@@ -143,18 +145,21 @@ $(document).ready(function(){
                 valor = parseFloat($(this).val());
             }
             total=total-valor;
+            
             if(parseFloat(total)<0){
                 if(parseFloat($('#'+id).attr('saldo_reserva'))>0){
-                    $('#'+id).val($.number($('#'+id).attr('saldo_reserva'),2));                    
+                    $('#'+id).val($.number($('#'+id).attr('saldo_reserva'),2));  // Cuando se edita                  
                 } else {
-                    $('#'+id).val('1.00');    
+                    $('#'+id).val('1.00');                                       // Editar o agregar   
                 }
 
                 setTimeout(function(){ $('#'+id).css('background-color','#FE2E2E'); }, 200);
                 alertify.error("Asignar una cantidad menor."); 
-                restante(0);
+               restante(0);
+               return false;
             }
-        });
+        }); // End foreach
+
             if(total>=0){
                 document.getElementById('total_restante_hidden').value=total;
                 document.getElementById('total_restante').innerHTML = '<h1>Saldo pendiente: $'+$.number(total,2)+'</h1>';    

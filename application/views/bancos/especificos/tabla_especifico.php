@@ -37,7 +37,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="" title="Editar" href="<?=base_url('bancos/especificos/detalle_especifico_editar/'.$value['det_id'])?>" >
+                                <a class="<?php echo ($value['det_saldo_congelado']>0)? 'congelado':''; ?>" title="Editar" id="editar_detalle" href="<?=base_url('bancos/especificos/detalle_especifico_editar/'.$value['det_id'])?>" >
                                 <span class="fa fa-pencil"></span>
                                 Editar</a>
                             </li>

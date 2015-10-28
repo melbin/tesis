@@ -83,6 +83,7 @@
     </div>
 
     <input type="hidden" id="det_id" name="det_id" value="<?php echo $det_detalles['det_id']; ?>">
+    <input type="hidden" id="saldo_origen" value="<?php echo !empty($det_detalles['det_saldo'])? $det_detalles['det_saldo']:''; ?>">
 
 	<div class="panel panel-default">
         <div class="panel-heading">
