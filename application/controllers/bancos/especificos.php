@@ -666,7 +666,7 @@ class Especificos extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			if($_POST){
-				die(print_r($_POST,true));
+			//	die(print_r($_POST,true));
 
 				/* 
 					-Modificar el det_detalle_especifico
@@ -778,7 +778,11 @@ class Especificos extends CI_Controller {
 		} else {
 			//die(print_r("En progreso",true));
 			$fondo_id = $this->input->post('fondo');
+			$reactivar = $this->input->post('reactivar');
 			$saldo_minimo = $this->regional_model->get_parametro('traspasar_saldo');
+			if(!empty($reactivar) && $reactivar==1){
+				$this->db->where('det_saldo_congelado >',0);
+			}
 			$especificos = $this->regional_model->get_especificos($fondo_id, $saldo_minimo);
 
 			$opciones="<option value='0' saldo='0' selected>Seleccione</option>";	
@@ -800,10 +804,107 @@ class Especificos extends CI_Controller {
 		$tabla_detalles = $this->sistema_model->get_registro('det_detalle_especifico',array('det_esp_id'=>$id_esp, 'det_fondo_id'=>$id_fondo, 'det_estado'=>1));
 
 		$resultado = array(
-			'det_saldo_votado'	=> $tabla_detalles['det_saldo_votado'],
-			'det_saldo'			=> ($tabla_detalles['det_saldo'] - $tabla_detalles['det_saldo_congelado']),
+			'det_saldo_votado'	  => $tabla_detalles['det_saldo_votado'],
+			'det_saldo'			  => ($tabla_detalles['det_saldo'] - $tabla_detalles['det_saldo_congelado']),
+			'det_saldo_congelado' => $tabla_detalles['det_saldo_congelado'],
 			);
 		echo json_encode($resultado);
+	}
+
+	function reactivar_fondos()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			if($_POST){
+				//die(print_r($_POST));
+
+				$esp_id = $this->input->post('especifico');	
+				$fondo_id = $this->input->post('fondo');
+				$cantidad = $this->input->post('cantidad');
+				
+				$det_especifico = $this->sistema_model->get_registro('det_detalle_especifico',array('det_esp_id'=>$esp_id, 'det_fondo_id'=>$fondo_id, 'det_estado'=>1));
+
+				$total_congelado = floatval(!empty($det_especifico['det_saldo_congelado'])?$det_especifico['det_saldo_congelado']:0) - floatval($cantidad);
+				$det_id = $this->sistema_model->actualizar_registro('det_detalle_especifico',array('det_saldo_congelado'=>$total_congelado), array('det_id'=>$det_especifico['det_id']));
+
+				if($total_congelado<1){
+					// Todas las actualizaciones aca
+					// Agregar registro a foc_fondo_congelado
+					$foc_array = array(
+						'foc_estado'		=> 0,
+						'foc_usu_mod'		=> $this->tank_auth->get_user_id(),
+						'foc_fecha_mod'		=> date('Y-m-d H:i:s')
+					);
+
+				$this->sistema_model->actualizar_registro('foc_fondo_congelado', $foc_array, array('foc_det_id'=>$det_especifico['det_id']));	
+
+				// Cambiar las solicitudes que hayan sido echas con este fondo y este especifico a estado 1= Activas.
+				$this->sistema_model->actualizar_registro('des_detalle_solicitud',array('des_estado'=>1), array('des_fon_id'=>$fondo_id, 'des_esp_id'=>$esp_id));
+
+				// Obtener las solicitudes del des_detalle_solicitud
+				$solicitudes = $this->regional_model->get_tabla('des_detalle_solicitud', array('des_fon_id'=>$fondo_id, 'des_esp_id'=>$esp_id));
+
+				if(count($solicitudes)>0){
+					foreach ($solicitudes as $key => $value) {
+					$soc_array = array(
+						'soc_estado' => 0,
+						'soc_usu_mod' => $this->tank_auth->get_user_id(),
+						'soc_fecha_mod' => date('Y-m-d H:i:s')
+						);
+					$this->sistema_model->actualizar_registro('soc_solicitud_congelada', $soc_array, array('soc_sol_id'=>$value['des_sol_id']));	
+					}
+				 }	
+				} // Total devuelto
+
+				// Crear el movimiento financiero
+				$movimiento = array(
+					'fin_fondo_id' => $fondo_id,
+					'fin_pro_id'   => 6,
+					'fin_cantidad' => $cantidad,
+					'fin_fecha'	   => date('Y-m-d H:i:s'),
+					'fin_estado'   => 1,
+					'fin_usu_mod'  => $this->tank_auth->get_user_id(),
+					'fin_fecha_mod'=> date('Y-m-d H:i:s')
+				);
+
+				$mov_id = $this->regional_model->insertar_registro('fin_financiero_movimiento', $movimiento);
+
+				if($mov_id>0){
+				// Insertar el detalle Financiero
+					$det_financiero = array(
+						'fid_fin_id'	  => $mov_id,
+						'fid_esp_id'	  => $esp_id,
+						'fid_cantidad'	  => $cantidad,
+						'fid_descripcion' => $this->input->post('descripcion'),
+						'fid_fecha'		  => date('Y-m-d H:i:s'),
+						'fid_estado'	  => 1,
+						'fid_usu_mod'	  => $this->tank_auth->get_user_id(),
+						'fid_fecha_mod'	  => date('Y-m-d H:i:s')
+					);
+					$this->regional_model->insertar_registro('fid_financiero_detalle_mov', $det_financiero);	
+				}	
+
+				// Generar la alerta
+				if($det_id>0)
+				{
+					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Transacción Exitosa",'texto_alerta'=>"Proceso realizado con éxito.");
+				} else
+				{
+					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"La transacción no pudo ser efectuada.");
+				}				
+
+				$this->session->set_flashdata($alerta);       
+				redirect('bancos/bancos');
+
+			} else {
+				// All your code goes here
+				$data['titulo']="Reactivar fondos";
+				$data['vista_name'] = "bancos/especificos/reactivar_fondos";
+				$data['fondo'] = $this->regional_model->get_dropdown('fon_fondo','{fon_nombre}','',array('fon_estado'=>1),null,'','fon_id',true);			
+				$this->__cargarVista($data);
+			}
+		}
 	}
 
 	

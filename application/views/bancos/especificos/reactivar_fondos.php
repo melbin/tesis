@@ -10,7 +10,7 @@
 </style>
 
 <div>
-<form  id="frm_solicitud" name="frm_solicitud" method="POST" action="<?php echo base_url()?>bancos/especificos/congelar_fondos"> 
+<form  id="frm_solicitud" name="frm_solicitud" method="POST" action="<?php echo base_url()?>bancos/especificos/reactivar_fondos"> 
 
 <div class="panel panel-default">
         <div class="panel-heading">
@@ -62,11 +62,12 @@
                 </tr>
 
         		<tr>
-        		<td width="10%"><label>Cantidad:</label><b style="color:red;"> *</b></td>
+        		<td width="10%"><label>Cantidad congelada:</label><b style="color:red;"> *</b></td>
 	        		<td colspan="2">
 	        			<div class="form-group input-group">	
 		        			<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
 		        			<input type="text" class="form-control decimales" placeholder="0.00" id="cantidad" name="cantidad" maxlength="16"  style="width: 392px;">	
+                            <input type="hidden" id="cantididad_congelada" value="0">
 	        			</div>	        			
                         <div id="cantidad_error" style="color:red;font-size:11px;"></div>				
         			</td>
@@ -122,12 +123,12 @@
 		$("#cantidad").blur(function(){
 			$("#cantidad_error").text('');
 			if($(this).val()==0){
-				$("#cantidad").val('');
+				$("#cantidad").val($("#cantididad_congelada").val());
 				 alertify.error('Debe especificar una cantidad mayor.');
 			} else {
-                if(parseFloat($(this).val()) > parseFloat($("#especifico option:selected").attr('saldo'))){  
-                 alertify.error('No hay fondos suficientes, favor especificar una cantidad menor.');  
-                 $(this).val(''); 
+                if(parseFloat($(this).val()) > parseFloat($("#cantididad_congelada").val())){  
+                 alertify.error('El monto asignado excede los fondos congelados.');  
+                 $(this).val($("#cantididad_congelada").val()); 
                 }
             }
 		});
@@ -135,12 +136,13 @@
 		$("#fondo").on('change', function(){
             	
                 var fondo = parseInt($(this).val());
+                
                 if(fondo>0){
                     $.ajax({
                     url: urlj+'bancos/especificos/get_especifico_fondo',
                     type: 'POST',
                     dataType: 'json',
-                    data: {fondo : fondo},
+                    data: {fondo : fondo, reactivar: 1},
                     success:function(data) {
                       $("#especifico").html(data.especificos_origen);
 
@@ -164,6 +166,7 @@
                     success:function(data) {
                       $("#presupuesto_votado").val($.number(data.det_saldo_votado,2));
                       $("#saldo_actual").val($.number(data.det_saldo,2));
+                      $("#cantidad, #cantididad_congelada").val($.number(data.det_saldo_congelado,2,'.',''));
                       //$("#especifico").html(data.especificos_origen).trigger('change');
 
 
@@ -177,7 +180,6 @@
 		    
 		    // Codigo para los select
 		$("#registrar_entrada").on('click', function(){
-
 			if($("#fondo").val()==0){
 				$("#fondo_error").text('Debe seleccionar un fondo');
 			}
@@ -188,6 +190,7 @@
 				$("#cantidad_error").text('Debe agregar una cantidad');
 			}
 			if($("#cantidad").val()>0 && $("#especifico").val()>0 && $("#fondo").val()>0){
+
 				$("#frm_solicitud").submit();
 			}
 		});  
