@@ -25,6 +25,15 @@
             
         	<table width="50%" align="left">
         		<tr><th width="23%"></th><th></th><th></th></tr>
+                <tr>
+                <td width="10%"><label>Fondo:<b style="color:red;">*</b></label></td>
+                    <td colspan="2">
+                        <select onchange="$('#fondo_error').text('');" class="form-control select2" id="fondo" name="fondo">
+                            <?php if(isset($fondo)) {echo $fondo;} ?>
+                        </select>
+                        <div id="fondo_error" style="color:red;font-size:11px;"></div>
+                    </td>
+                </tr>
         		<tr> <!-- <i id="requerido">*</i> -->
         		<td width="10%"><label>Específico:<b style="color:red;">*</b></label></td>
         			<td colspan="2">
@@ -32,15 +41,6 @@
         					<?php if(isset($especificos)) {echo $especificos;} ?>
         				</select>
                         <div id="especifico_error" style="color:red;font-size:11px;"></div>
-        			</td>
-        		</tr>
-        		<tr>
-        		<td width="10%"><label>Fondo:<b style="color:red;">*</b></label></td>
-        			<td colspan="2">
-        				<select onchange="$('#fondo_error').text('');" class="form-control select2" id="fondo" name="fondo">
-        					<?php if(isset($fondo)) {echo $fondo;} ?>
-        				</select>
-                        <div id="fondo_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>
         		<tr>

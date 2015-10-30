@@ -15,23 +15,42 @@
         	<table width="50%" align="left">
         		<tr><th width="23%"></th><th></th><th></th></tr>
         		
+                <!-- Fondos -->
+                <tr>
+                <td width="10%"><h5>Financiamiento:<b style="color:red;">*</b></h5></td>
+                    <td colspan="2">
+                        <select class="form-control select2" id="fondo" name="fondo" placeholder="seleccione" onchange="$('#fondo_error').text('');">
+                            <?php if(isset($fondo)) {echo $fondo;} ?>
+                        </select>
+                        <div id="fondo_error" style="color:red;font-size:11px;"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                <td width="10%"><h5>Específico:<b style="color:red;"> *</b></h5></td>
+                    <td colspan="2">
+                        <select class="form-control select2" id="especifico" name="especifico" placeholder="seleccione" onchange="$('#especifico_error').text('');">
+                        </select>
+                        <div id="especifico_error" style="color:red;font-size:11px;"></div>
+                    </td>
+                </tr>
+
                 <tr> <!-- <i id="requerido">*</i> -->
         		<td width="10%"><h5>Solicitante:<b style="color:red;">*</b></h5></td>
         			<td colspan="2">
-        				<select class="form-control select2" id="dpi_interno" name="dpi_interno" placeholder="seleccione">
-        					<?php if(isset($dep_internos)) {echo $dep_internos;} ?>
+        				<select class="form-control select2" id="dpi_interno" name="dpi_interno" placeholder="seleccione" onchange="$('#dpi_interno_error').text('');">
         				</select>
                         <div id="dpi_interno_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>
-        		
+        		<input type="hidden" id="dpi_monto_asignado" value="0">
                 <tr>
         		<td width="10%"><h5>Plazo entrega:</h5></td>
         			<td width="">
         				<!-- <textarea id="plazo_entrega" name="plazo_entrega" style="width:100%"></textarea> -->
                         <input id="plazo_entrega" name="plazo_entrega" type="text" value="15" maxlength="2"  class="datetime-input form-control enteros" >
         			</td>
-                    <td><input type="text"  class="datetime-input form-control" value="Dias" disabled="disabled" style="text-align:center;"></td>
+                    <td><input type="text"  class="datetime-input form-control" value="Días" disabled="disabled" style="text-align:center;"></td>
         		</tr>
 
         		<tr>
@@ -70,19 +89,6 @@
                         <div id="categoria_error" style="color:red;font-size:11px;"></div>
                     </td>
                 </tr>
-
-                <tr>
-                <td width="10%"><h5>Financiamiento:<b style="color:red;">*</b></h5></td>
-                    <td colspan="2">
-                        <select class="form-control select2" id="fondo" name="fondo" placeholder="seleccione">
-                            <?php if(isset($fondo)) {echo $fondo;} ?>
-                        </select>
-                        <div id="fondo_error" style="color:red;font-size:11px;"></div>
-                    </td>
-                </tr>
-
-        		<tr>
-
         	</table>                                          
        </div>
     </div>
@@ -198,7 +204,7 @@
 </table>
 <div style="text-align: center;">
     <span><label id="total_suma"></label></span>
-    <input id="total_suma_hidden" name="total" type="hidden">
+    <input id="total_suma_hidden" name="total" type="hidden" value="0">
 </div>    
     <div class="form-actions">
         <button type="button" class="btn btn-success" id="registrar_solicitud" disabled><span class="fa fa-check white"></span> Procesar</button>

@@ -62,16 +62,26 @@
                 </tr>
 
         		<tr>
-        		<td width="10%"><label>Cantidad congelada:</label><b style="color:red;"> *</b></td>
+        		<td width="10%"><label>Cantidad congelada:</label></td>
 	        		<td colspan="2">
 	        			<div class="form-group input-group">	
 		        			<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-		        			<input type="text" class="form-control decimales" placeholder="0.00" id="cantidad" name="cantidad" maxlength="16"  style="width: 392px;">	
-                            <input type="hidden" id="cantididad_congelada" value="0">
+		        			<input type="text" class="form-control decimales" placeholder="0.00" id="cantidad_congel_label" maxlength="16" disabled="disabled" style="width: 392px;">	
 	        			</div>	        			
                         <div id="cantidad_error" style="color:red;font-size:11px;"></div>				
         			</td>
         		</tr>
+                <tr>
+                <td width="10%"><label>Cantidad a descongelar:</label><b style="color:red;"> *</b></td>
+                    <td colspan="2">
+                        <div class="form-group input-group">    
+                            <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                            <input type="text" class="form-control decimales" placeholder="0.00" id="cantidad" name="cantidad" maxlength="16"  style="width: 392px;">   
+                            <input type="hidden" id="cantidad_congelada" value="0">
+                        </div>                      
+                        <div id="cantidad_error" style="color:red;font-size:11px;"></div>               
+                    </td>
+                </tr>
         		<tr>
                 <td width="10%"><label>Descripción:</label></td>
                     <td colspan="2">                        
@@ -123,12 +133,12 @@
 		$("#cantidad").blur(function(){
 			$("#cantidad_error").text('');
 			if($(this).val()==0){
-				$("#cantidad").val($("#cantididad_congelada").val());
+				$("#cantidad").val($("#cantidad_congelada").val());
 				 alertify.error('Debe especificar una cantidad mayor.');
 			} else {
-                if(parseFloat($(this).val()) > parseFloat($("#cantididad_congelada").val())){  
+                if(parseFloat($(this).val()) > parseFloat($("#cantidad_congelada").val())){  
                  alertify.error('El monto asignado excede los fondos congelados.');  
-                 $(this).val($("#cantididad_congelada").val()); 
+                 $(this).val($("#cantidad_congelada").val()); 
                 }
             }
 		});
@@ -166,7 +176,7 @@
                     success:function(data) {
                       $("#presupuesto_votado").val($.number(data.det_saldo_votado,2));
                       $("#saldo_actual").val($.number(data.det_saldo,2));
-                      $("#cantidad, #cantididad_congelada").val($.number(data.det_saldo_congelado,2,'.',''));
+                      $("#cantidad, #cantidad_congelada, #cantidad_congel_label").val($.number(data.det_saldo_congelado,2,'.',''));
                       //$("#especifico").html(data.especificos_origen).trigger('change');
 
 

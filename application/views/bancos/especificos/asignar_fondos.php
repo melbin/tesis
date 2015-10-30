@@ -96,7 +96,11 @@
 			if($(this).val()==0){
 				$("#cantidad").val('');
 				 alertify.error('Debe especificar una cantidad mayor');
-			}
+			} else 
+            if(parseFloat($(this).val()) > parseFloat($("#fondo option:selected").attr('saldo'))){
+                alertify.error('Debe especificar una cantidad Menor');
+                $(this).val('');
+            }
 		});
 
 		$("#fondo").on('change', function(){

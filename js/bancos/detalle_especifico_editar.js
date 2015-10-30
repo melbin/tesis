@@ -18,7 +18,8 @@ $(document).ready(function(){
 	  });
 
       $("#saldo").focusout(function(){
-         var fondo = parseFloat(($("#fondo option:selected").attr('saldo')));
+         var fondo = parseFloat(($("#fondo option:selected").attr('saldo'))) + parseFloat($("#saldo_origen").val());
+
             if(parseFloat($(this).val()) > fondo){
                 alertify.alert("Debe especificar una cantidad menor.");
                 if($("#saldo_origen").val()!=null){
@@ -142,27 +143,6 @@ $(document).ready(function(){
             $("#saldo").attr('disabled',false);
             setTimeout(function(){ $("#pro_entrada").submit(); },200);
             
-        }
-     });
-
-     $("#especifico").on('change', function(){
-        var id_esp = $(this).val();
-        var id_fondo = $("#fondo option:selected").val();
-        if(id_esp>0 && id_fondo>0){
-            $.ajax({
-                url: urlj+"bancos/especificos/verificar_detalles",
-                type: 'POST',
-                dataType: 'json',
-                data: {id_esp:id_esp, id_fondo:id_fondo},
-                success: function(data) {
-                    if(data.existe===1){
-                        alertify.alert("Esta combinacion de específico y fondo ya posee un detalle.<br>Favor editar el detalle existente.")
-                        $("#especifico").select2('val','');
-                    } else {
-                        $("#saldo").attr('disabled',false);
-                    }
-                }
-            });        
         }
      });
 

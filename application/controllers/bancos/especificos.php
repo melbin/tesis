@@ -193,6 +193,7 @@ class Especificos extends CI_Controller {
 					$selected = 'selected';
 				}
 				$opciones .= "<option value=".$value['fon_id']." saldo=".$value['fon_cantidad']." $selected > ".$value['fon_nombre']."</option>";
+				$selected='';
 			}
 
 			//$data['fondo'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1), null, '','fon_id',true);
@@ -221,7 +222,8 @@ class Especificos extends CI_Controller {
 				$opciones .= "<option value=".$value['fon_id']." saldo=".$value['fon_cantidad']."> ".$value['fon_nombre']."</option>";
 			}
 
-			//$data['fondo'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1), null, '','fon_id',true);
+
+	
 			$data['fondo'] = $opciones;
 			$data['especificos'] = $this->regional_model->get_dropdown('esp_especifico','{esp_nombre}','',array('esp_estado'=>1),null,'','esp_id',true);		
 			$data['departamentos'] = $this->regional_model->get_dropdown('dpi_departamento_interno', '{dpi_nombre}','',array('dpi_estado'=>1),null, '','dpi_id', true);
@@ -595,7 +597,8 @@ class Especificos extends CI_Controller {
 						'det_usu_mod'		=> $this->tank_auth->get_user_id(),
 						'det_fecha_mod'		=> date('Y-m-d H:i:s'),
 				 	);
-					$this->sistema_model->actualizar_registro('det_detalle_especifico',$det_array, array('det_esp_id'=>$det_destino['det_id']));
+
+					$this->sistema_model->actualizar_registro('det_detalle_especifico',$det_array, array('det_esp_id'=>$det_destino['det_esp_id']));
 				}
 
 				// Crear el movimiento financiero
@@ -631,7 +634,7 @@ class Especificos extends CI_Controller {
 
 			if($mov_id>0)
 			{
-				$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Transacción Exitosa",'texto_alerta'=>"Traspaso realizado con éxito.");
+				$alerta=array('tipo_alerta'=> 'alert','titulo_alerta'=>"Transacción Exitosa",'texto_alerta'=>"Traspaso realizado con éxito. <br>Le suguerimos redistribuir los nuevos fondos.");		
 			} else
 			{
 				$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"El detalle no pudo ser ingresado.");
@@ -797,6 +800,42 @@ class Especificos extends CI_Controller {
 		}
 	}
 
+	function get_departamento_asignaciones()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			$esp_id = $this->input->post('esp_id');
+			$fondo_id = $this->input->post('fondo_id');
+
+			$det_registro = $this->sistema_model->get_registro('det_detalle_especifico',array('det_esp_id'=>$esp_id, 'det_fondo_id'=>$fondo_id, 'det_estado'=>1));
+			if(floatval($det_registro['det_saldo_congelado'])>1){
+				echo json_encode(array('congelado'=>1));
+			} else {
+
+				$asignaciones = $this->regional_model->get_asignaciones_detalle($det_registro['det_id']);
+				//die(print_r($asignaciones,true));
+				$option = "<option value='0'>Seleccione</option>";
+				foreach ($asignaciones as $key => $value) {
+					$option .= "<option value='".$value['axd_depto_id']."' axd_id='".$value['axd_id']."'>".strtolower($value['dpi_nombre'])."</option>";
+				}
+				echo json_encode(array('depto_asignaciones'=>$option));
+			}
+		}
+	}
+
+	function get_saldo_dpi_asignado()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			$axd_id = $this->input->post('axd_id');
+			$axd_cantidad = $this->sistema_model->get_campo('axd_asignacionxdetalle_especifico','axd_cantidad',array('axd_id'=>$axd_id, 'axd_estado'=>1));			
+			echo json_encode(array('monto'=>$axd_cantidad));
+		}
+	}
+
+
 	function get_especifico_detalle()
 	{
 		$id_esp = $this->input->post('id_esp');
@@ -904,6 +943,19 @@ class Especificos extends CI_Controller {
 				$data['fondo'] = $this->regional_model->get_dropdown('fon_fondo','{fon_nombre}','',array('fon_estado'=>1),null,'','fon_id',true);			
 				$this->__cargarVista($data);
 			}
+		}
+	}
+
+	function verificar_detalles()
+	{
+		$id_fondo = $_POST['id_fondo'];
+		$id_esp	  = $_POST['id_esp'];
+		$det_id = $this->sistema_model->get_registro('det_detalle_especifico',array('det_esp_id'=>$id_esp, 'det_fondo_id'=>$id_fondo, 'det_estado'=>1));
+		
+		if(!empty($det_id)){
+			echo json_encode(array('existe'=>1));
+		} else {
+			echo json_encode(array('existe'=>0));
 		}
 	}
 
