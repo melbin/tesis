@@ -33,12 +33,13 @@
         $("#especifico").on('change', function(){
         var esp_id = $(this).val();
         var fondo_id = $("#fondo").val();
+        var dpi_id =  $("#dpi_interno option:selected").val();
         if(esp_id>0){
             $.ajax({
             url: urlj+'bancos/especificos/get_departamento_asignaciones',
             type: 'POST',
             dataType: 'json',
-            data: {esp_id:esp_id, fondo_id:fondo_id},
+            data: {esp_id:esp_id, fondo_id:fondo_id, dpi_id:dpi_id},
             success:function(data) {
                 if(data.congelado){
                     alertify.alert('Este específico posee saldo Congelado<br>por lo tanto, No se pueden crear solicitudes con él.');
@@ -64,6 +65,7 @@
             data: {axd_id:axd_id},
             success:function(json) {
               $("#dpi_monto_asignado").val(json.monto);
+              $(".asignacion_depto").val(json.axd_id);
               alertify.success('Monto asignado: <b>$'+$.number(json.monto,2,'.',',')+'</b>');
             }
         });
@@ -236,6 +238,7 @@
         },
 
         submitHandler: function(form) {
+            $("#fondo, #especifico, #dpi_interno, #categoria").attr('disabled',false);
             form.submit();
         }
 
@@ -247,11 +250,9 @@
             
        if($.trim($('#precio').val())!='' && $.trim($('#cantidad').val())!='' && $('#articulo').val() !=0  && $('#um').val() !=0 ){
         $("#validar_datagried").text('');
-        
+       
         if((parseFloat($("#total_suma_hidden").val()) + parseFloat($("#precio").val()*$("#cantidad").val())) <= parseFloat($("#dpi_monto_asignado").val())){
 
-        $("#registrar_solicitud").attr('disabled',false);
-        $("#anular").attr('disabled',false);
         $('#cabezera').show();
         var N_fila = $("#datagried tbody tr").length + 1;
                 var numero_fila = N_fila + 'F' + $("#articulo").val() ; //id unico del tr
@@ -291,8 +292,13 @@
                 $('#sub_categoria').select2('val',0);
                 $('#articulo').select2('val',0);
 
+                // Todas los seteos aca
+                $("#registrar_solicitud").attr('disabled',false);        
+                $("#anular").attr('disabled',false);
+                $("#fondo, #especifico, #dpi_interno, #categoria").attr('disabled',true);
+
                 } else {
-                    alertify.alert("La suma de los productos solicitados<br>Excede el monto asignado.");
+                    alertify.alert("La suma del costo de los productos solicitados <b>excede</b> el monto asignado.<br>Saldo asignado: <b>$ "+$.number($("#dpi_monto_asignado").val(),2,'.',',')+"</b>.");
                 }
 
                 }else{
@@ -313,10 +319,14 @@
             }
         });
 
-    $("#remove").live("click", function() {
-    $(this).parents("tr").remove();     
-      sumar_total();
-    });//Fin de eliminar
+    // $("#remove").live("click", function() {
+    // $(this).parents("tr").remove();     
+    //   sumar_total();
+      
+    //   if($('#datagried tr').length<=1 ){
+    //         $("#fondo, #especifico, #dpi_interno, #categoria").attr('disabled',false);  
+    //     }    
+    // });//Fin de eliminar
 
     $("#registrar_solicitud").click(function(event){
     event.preventDefault();

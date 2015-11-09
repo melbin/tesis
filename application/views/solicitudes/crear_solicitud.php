@@ -44,6 +44,7 @@
         			</td>
         		</tr>
         		<input type="hidden" id="dpi_monto_asignado" value="0">
+                <input type="hidden" id="axd_id" name="axd_id" value="0">
                 <tr>
         		<td width="10%"><h5>Plazo entrega:</h5></td>
         			<td width="">
@@ -216,3 +217,17 @@
 
     </form>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $("#remove").live("click", function() {
+        $(this).parents("tr").remove();     
+          sumar_total();
+          
+          if($('#datagried tr').length<=1 ){
+                $("#fondo, #especifico, #dpi_interno, #categoria").attr('disabled',false);  
+            }    
+        });//Fin de eliminar
+    });
+</script>

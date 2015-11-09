@@ -24,7 +24,7 @@
             <td><?php echo '$'.number_format($value['det_saldo_votado'],2); ?></td>
             <td><?php echo '$'.number_format($value['det_saldo'],2); ?></td>
             <td><?php echo isset($monto_asignado[$key-1])? number_format(($monto_asignado[$key-1]['suma']*100)/$monto_asignado[$key-1]['total'],1).'%' :'0.0%'; ?></td>
-            <td><?php echo '$'.number_format($value['det_saldo_devengado'],2); ?></td>
+            <td><?php echo ($value['det_saldo_devengado']>0)? number_format(($value['det_saldo_devengado']*100/$monto_asignado[$key-1]['total']),1).'%' :'0.0%'; ?></td>
             <td><?php echo '$'.number_format($value['det_saldo_congelado'],2); ?></td>
             <td><?php echo '$'.number_format($value['det_saldo_ejecutado'],2); ?></td>
             <!-- <td id="estado_<?php echo $key; ?>"><?php echo $value['ets_nombre']; ?></td> -->

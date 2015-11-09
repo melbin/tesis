@@ -286,6 +286,7 @@ class Solicitudes extends CI_Controller {
 					'des_total'		=> $this->input->post('total'),
 					'des_fon_id'	=> $this->input->post('fondo'),
 					'des_cat_id'	=> $this->input->post('categoria'),
+					'des_esp_id'	=> $this->input->post('especifico'),
 					'des_plazo_entrega'	=>	$this->input->post('plazo_entrega'),
 					'des_direccion'	=> $this->input->post('lugar_entrega'),
 					'des_sol_id'	=> $sol_id,
@@ -321,6 +322,27 @@ class Solicitudes extends CI_Controller {
 				);
 				$pro_sol = $this->regional_model->insertar_registro('pxs_productoxsolicitud', $pro_solicitud);
 			}
+		
+			// Actualizar axd_asignacionxdetalle_especifico
+			// Si hay fondos en reserva, obtenerlos
+			$fondo_reserva = $this->sistema_model->get_campo('axd_asignacionxdetalle_especifico', 'axd_reserva', array('axd_id'=>$_POST['axd_id']));
+			$total = floatval($_POST['total']);
+			if(!empty($fondo_reserva)){
+				$total += floatval($fondo_reserva);
+			}
+
+			$this->sistema_model->actualizar_registro('axd_asignacionxdetalle_especifico', array('axd_reserva'=>$total, 'axd_usu_mod'=>$this->tank_auth->get_user_id(), 'axd_fecha_mod'=> date('Y-m-d')), array('axd_id'=>$_POST['axd_id']));	
+
+			// Actualizar el det_detalle_especifico
+			$det_registro = $this->sistema_model->get_registro('det_detalle_especifico', array('det_esp_id'=>$_POST['especifico'], 'det_fondo_id'=>$_POST['fondo']));
+	
+			$total = floatval($_POST['total']);
+			if(!empty($det_registro['det_saldo_devengado']) && $det_registro['det_saldo_devengado']>0){
+				$total += floatval($det_registro['det_saldo_devengado']);
+			}
+
+			$this->sistema_model->actualizar_registro('det_detalle_especifico', array('det_saldo_devengado'=>$total, 'det_usu_mod'=>$this->tank_auth->get_user_id(), 'det_fecha_mod'=> date('Y-m-d')), array('det_id'=>$det_registro['det_id']));	
+
 			// crear alerta OK
 			$alerta=array('registro'=>$registro,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Creación de solicitud exitosa.");
 		} else {

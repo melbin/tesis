@@ -33,7 +33,7 @@
                 $subtotal += floatval($value['axd_cantidad']);
                 ?>
                 
-                <tr id="<?php echo $row; ?>" bgcolor="<?php echo !empty($value['axd_reserva'])? '#00FF7F':''; ?>">
+                <tr id="<?php echo $row; ?>" bgcolor="<?php echo (!empty($value['axd_reserva']) && $value['axd_reserva']>0)? '#00FF7F':''; ?>">
                     <td>
                         <input type="hidden" value="<?php echo $row; ?>" name="ids_filaP[]" />
                         <input type="hidden" name="departamentos[]" class="departamentos" value="<?php echo $value['axd_depto_id']; ?>"/>
@@ -43,7 +43,7 @@
                     <td><label name="esp_label" id="esp_label"><?php echo $especifico; ?></label></td>
                     <td><label name="depto_label" id="depto_label"/><?php echo $value['dpi_nombre']; ?></td>
                     <td><input name="cantidad_depto[]" id="cantidad_depto_<?php echo $row; ?>" class="monto_asignado" style="text-align:center;" value="<?php echo number_format($value['axd_cantidad'],2); ?>" saldo_reserva="<?php echo !empty($value['axd_reserva'])? $value['axd_reserva']:0; ?>" /></td>
-                    <td><button type="button" id="remove" id_fila="<?php echo $row; ?>" class="remove" <?php echo !empty($value['axd_reserva'])? 'disabled':''; ?>><span class="glyphicon glyphicon-remove"></span> Eliminar</button></td>
+                    <td><button type="button" id="remove" id_fila="<?php echo $row; ?>" class="remove" <?php echo (!empty($value['axd_reserva']) && $value['axd_reserva']>0)? 'disabled':''; ?>><span class="glyphicon glyphicon-remove"></span> Eliminar</button></td>
                 </tr>    
                 <?php $row++; } ?>
             </tbody>

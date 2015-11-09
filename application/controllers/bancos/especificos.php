@@ -807,6 +807,8 @@ class Especificos extends CI_Controller {
 		} else {
 			$esp_id = $this->input->post('esp_id');
 			$fondo_id = $this->input->post('fondo_id');
+			$dpi_id = $this->input->post('dpi_id');
+			$selected = '';
 
 			$det_registro = $this->sistema_model->get_registro('det_detalle_especifico',array('det_esp_id'=>$esp_id, 'det_fondo_id'=>$fondo_id, 'det_estado'=>1));
 			if(floatval($det_registro['det_saldo_congelado'])>1){
@@ -817,7 +819,11 @@ class Especificos extends CI_Controller {
 				//die(print_r($asignaciones,true));
 				$option = "<option value='0'>Seleccione</option>";
 				foreach ($asignaciones as $key => $value) {
-					$option .= "<option value='".$value['axd_depto_id']."' axd_id='".$value['axd_id']."'>".strtolower($value['dpi_nombre'])."</option>";
+				if(!empty($dpi_id) && $dpi_id>0 && $dpi_id == $value['axd_depto_id']){
+					$selected='selected';
+				}
+					$option .= "<option value='".$value['axd_depto_id']."' axd_id='".$value['axd_id']."' ".$selected.">".strtolower($value['dpi_nombre'])."</option>";
+					$selected='';
 				}
 				echo json_encode(array('depto_asignaciones'=>$option));
 			}
@@ -830,8 +836,16 @@ class Especificos extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			$axd_id = $this->input->post('axd_id');
-			$axd_cantidad = $this->sistema_model->get_campo('axd_asignacionxdetalle_especifico','axd_cantidad',array('axd_id'=>$axd_id, 'axd_estado'=>1));			
-			echo json_encode(array('monto'=>$axd_cantidad));
+			$axd_registro = $this->sistema_model->get_registro('axd_asignacionxdetalle_especifico', array('axd_id'=>$axd_id, 'axd_estado'=>1));
+			$total = floatval($axd_registro['axd_cantidad']);
+			if(!empty($axd_registro['axd_reserva'])){
+				$total -= floatval($axd_registro['axd_reserva']); 
+			}
+			$respuesta = array(
+				'monto' => $total,
+				'axd_id'=> $axd_registro['axd_id']
+				);			
+			echo json_encode($respuesta);
 		}
 	}
 

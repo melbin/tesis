@@ -313,7 +313,28 @@ class Abastecimiento extends CI_Controller {
 				);
 				
 				$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
+
+				$fondo_reserva = $this->sistema_model->get_campo('axd_asignacionxdetalle_especifico', 'axd_reserva', array('axd_id'=>$_POST['axd_id']));
+				$solicitud = $this->sistema_model->get_registro('des_detalle_solicitud', array('des_sol_id'=>$sol));
+
+				$total_sol = floatval($solicitud['des_total']);
+				$restar = 0;
+				if(!empty($fondo_reserva)){
+					$restar = floatval($fondo_reserva) - $total_sol;
+				}
+				if($restar>=0){
+					$this->sistema_model->actualizar_registro('axd_asignacionxdetalle_especifico', array('axd_reserva'=>$restar, 'axd_usu_mod'=>$this->tank_auth->get_user_id(), 'axd_fecha_mod'=> date('Y-m-d')), array('axd_id'=>$_POST['axd_id']));					
 				
+					// Actualizar el det_detalle_especifico
+					$det_registro = $this->sistema_model->get_registro('det_detalle_especifico', array('det_esp_id'=>$solicitud['des_esp_id'], 'det_fondo_id'=>$solicitud['des_fon_id']));
+					$total_det=0;
+					if(!empty($det_registro['det_saldo_devengado']) && $det_registro['det_saldo_devengado']>0){
+						$total_det = floatval($det_registro['det_saldo_devengado']) - $total_sol;
+					}
+
+					$this->sistema_model->actualizar_registro('det_detalle_especifico', array('det_saldo_devengado'=>$total_det, 'det_usu_mod'=>$this->tank_auth->get_user_id(), 'det_fecha_mod'=> date('Y-m-d')), array('det_id'=>$det_registro['det_id']));	
+				}
+			
 				if($row_afected>0)
 				{
 					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Transacción Exitosa",'texto_alerta'=>"Se rechazo la solicitud de manera exitosa.");
@@ -361,7 +382,7 @@ class Abastecimiento extends CI_Controller {
 		} else {
 
 			if($_POST){
-				//die(print_r($_POST));
+			//	die(print_r($_POST));
 				$id_sol = $this->input->post('id_sol');
 				$act_solicitud = array(
 					'sol_dpi_id'		=> 	$this->input->post('dpi_interno'),
@@ -373,9 +394,11 @@ class Abastecimiento extends CI_Controller {
 				$row_affected = $this->regional_model->actualizar_registro('sol_solicitud',$act_solicitud,array('sol_id'=>$id_sol));
 			
 				if($row_affected==1){
+					$des_saldo_anterior = $this->sistema_model->get_campo('des_detalle_solicitud', 'des_total', array('des_sol_id'=>$id_sol));
 					$detalle = array(
 						'des_total'		=> $this->input->post('total'),
 						'des_fon_id'	=> $this->input->post('fondo'),
+						'des_esp_id'	=> $this->input->post('especifico'),
 						'des_plazo_entrega'	=>	$this->input->post('plazo_entrega'),
 						'des_direccion'	=> $this->input->post('lugar_entrega'),
 						'des_usu_mod'	=>	$this->tank_auth->get_user_id(),
@@ -410,14 +433,36 @@ class Abastecimiento extends CI_Controller {
 					 	}
 					}
 
-					// crear alerta OK
-					$alerta=array('registro'=>$row_affected,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Edición de solicitud exitosa.");
-				} else {
-					// crear alerta FAIL
-					$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Solicitud No editada",'texto_alerta'=>"Por favor, revisar datos ingresados.");
-				}
-				$this->session->set_flashdata($alerta);       
-				redirect('home/abastecimiento/ver_solicitudes_edit/'.$id_sol);
+					// Nuevos cambios
+				// Actualizar axd_asignacionxdetalle_especifico
+				// Si hay fondos en reserva, obtenerlos
+					
+			$fondo_reserva = $this->sistema_model->get_campo('axd_asignacionxdetalle_especifico', 'axd_reserva', array('axd_id'=>$_POST['axd_id']));
+			$total = floatval($_POST['total']);
+			if(!empty($fondo_reserva) && !empty($des_saldo_anterior)){
+				$total += floatval($fondo_reserva) - floatval($des_saldo_anterior);
+			}
+
+			$this->sistema_model->actualizar_registro('axd_asignacionxdetalle_especifico', array('axd_reserva'=>$total, 'axd_usu_mod'=>$this->tank_auth->get_user_id(), 'axd_fecha_mod'=> date('Y-m-d')), array('axd_id'=>$_POST['axd_id']));	
+
+			// Actualizar el det_detalle_especifico
+			$det_registro = $this->sistema_model->get_registro('det_detalle_especifico', array('det_esp_id'=>$_POST['especifico'], 'det_fondo_id'=>$_POST['fondo']));
+			
+			$total = floatval($_POST['total']);
+			if(!empty($det_registro['det_saldo_devengado']) && $det_registro['det_saldo_devengado']>0){
+				$total += floatval($det_registro['det_saldo_devengado']) - floatval($des_saldo_anterior);
+			}
+
+			$this->sistema_model->actualizar_registro('det_detalle_especifico', array('det_saldo_devengado'=>$total, 'det_usu_mod'=>$this->tank_auth->get_user_id(), 'det_fecha_mod'=> date('Y-m-d')), array('det_id'=>$det_registro['det_id']));	
+
+			// crear alerta OK
+			$alerta=array('registro'=>$row_affected,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Edición de solicitud exitosa.");
+			} else {
+			// crear alerta FAIL
+			$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Solicitud No editada",'texto_alerta'=>"Por favor, revisar datos ingresados.");
+		}
+			$this->session->set_flashdata($alerta);       
+			redirect('home/abastecimiento/ver_solicitudes_edit/'.$id_sol);
 			} // End POST
 
 			$data['logo'] = $this->regional_model->get_parametro("logo");
@@ -428,11 +473,27 @@ class Abastecimiento extends CI_Controller {
 			$this->session->set_flashdata('id_sol', $id);
 			// Consulta para obtener todos los detalles de la solicitud
 			$detalle_solicitud = $this->regional_model->detalle_sol($id);
+			
 			$data['detalle_sol'] = $detalle_solicitud;
 			$data['dep_internos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','dpi_nombre','',array('dpi_estado'=>1),$detalle_solicitud[0]['dpi_id'],'','dpi_id',true);
 			$data['bodega'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),$detalle_solicitud[0]['ali_id'],'','ali_id',true);	
 			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),$detalle_solicitud[0]['des_cat_id'],'','cat_id',true);
 			$data['fondo'] = $this->regional_model->get_dropdown('fon_fondo','fon_nombre','',array('fon_estado'=>1),$detalle_solicitud[0]['fon_id'],'','fon_id',true);
+			
+			$especificos = $this->regional_model->get_especificos($detalle_solicitud[0]['des_fon_id']);
+			$opciones="<option value='0' saldo='0'>Seleccione</option>";	
+			$selected = '';
+			
+			foreach ($especificos as $key => $value) {
+					if($value['esp_id'] == $detalle_solicitud[0]['des_esp_id']){
+						$selected='selected';
+					}
+					$saldo = floatval($value['det_saldo']) - floatval(!empty($value['det_saldo_congelado'])? $value['det_saldo_congelado']:0);
+					$opciones .= "<option value=".$value['esp_id']." saldo=".$saldo." ".$selected." > ".$value['esp_nombre']."</option>";
+					$selected='';
+				}	
+
+			$data['especifico'] = $opciones;
 			$table['info_general'] = $detalle_solicitud;
 			$table['solicitud'] = $this->regional_model->detalle_sol_productos($id);
 			$data['detalle_articulos'] = $this->load->view('solicitudes/cargar_datatable', $table,true);
