@@ -172,10 +172,12 @@
                 <li>
                     <a  href="<?php echo base_url(); ?>welcome">Home</a>
                 </li>
+                <?php if(count($accede_sistema)>0){ ?>
                 |
                 <li>
                     <a  href="<?php echo base_url(); ?>admin">Sistema</a>
                 </li>
+                <?php } ?>
             </ul>
             <!-- MENU del panel superior derecho -->
             <ul class="nav navbar-top-links navbar-right">
@@ -224,15 +226,16 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
+                    <!-- Codigo para el Search -->
                         <li class="sidebar-search">
-                            <div class="input-group custom-search-form"> <!-- Codigo para el Search -->
+                            <!-- <div class="input-group custom-search-form"> 
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
-                            </div>
+                            </div> -->
                             <!-- /input-group -->
                         </li>
                          

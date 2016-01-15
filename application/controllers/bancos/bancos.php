@@ -20,7 +20,7 @@ class Bancos extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 
-			$data['user_id']	= $this->tank_auth->get_user_id();
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "bancos/index";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
@@ -29,7 +29,7 @@ class Bancos extends CI_Controller {
 
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>5));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',5);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',5, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		 	
 			$this->__cargarVista($data);

@@ -7,7 +7,7 @@ class Localidad extends CI_Controller {
 		$this->load->database();
 		$this->load->library('grocery_CRUD');
 		$this->load->library('masterpage');
-		$this->load->model('Regional_model');
+		$this->load->model('regional_model');
 		$this->load->model('sistema/sistema_model');
 	}
 	// Al hacer una peticion a esta pagina, es porque se quiere acceder al menu de sistema.
@@ -18,7 +18,7 @@ class Localidad extends CI_Controller {
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-			$data['user_id']	= $this->tank_auth->get_user_id();
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "sistema/index";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
@@ -27,7 +27,7 @@ class Localidad extends CI_Controller {
 
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>2));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 
 			$this->__cargarVista($data);
@@ -53,12 +53,13 @@ class Localidad extends CI_Controller {
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['vista_name']='sistema/index';
 			$data['titulo']="Paises";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>2));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		// 	var_dump($info['info_padre']); die();
 		
@@ -95,11 +96,12 @@ class Localidad extends CI_Controller {
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
-			$data['vista_name']='sistema/index';
+			$user_id	= $this->tank_auth->get_user_id();
+			$data['vista_name']='bancos/index';
 			$data['titulo']="Departamentos";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>2));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 
 		// 	Estas tres lineas son principales cuando se desea imprimir un Grocery Crud en el sistema
@@ -136,11 +138,12 @@ class Localidad extends CI_Controller {
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['vista_name']='sistema/index';
 			$data['titulo']="Municipios";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>2));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 
 		// 	Estas tres lineas son principales cuando se desea imprimir un Grocery Crud en el sistema

@@ -217,7 +217,8 @@ class Regional_model extends CI_Model
         return $result; 
     }
 
-	function get_tabla($tabla, $where){
+	function get_tabla($tabla, $where=null){
+        if($where)
 		$this->db->where($where);
 		$query = $this->db->get($tabla);
 

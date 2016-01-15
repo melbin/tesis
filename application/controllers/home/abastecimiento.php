@@ -20,7 +20,7 @@ class Abastecimiento extends CI_Controller {
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-			$data['user_id']	= $this->tank_auth->get_user_id();
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "sistema/index";
 			$data['logo'] = $this->regional_model->get_parametro("logo");
@@ -29,7 +29,7 @@ class Abastecimiento extends CI_Controller {
 
 		 	// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 
 			$this->__cargarVista($data);
@@ -106,7 +106,8 @@ class Abastecimiento extends CI_Controller {
 
 			} else
 			{
-				$data['user_id']	= $this->tank_auth->get_user_id();
+				
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "abastecimiento/salida_de_articulos";
 			$data['logo'] = $this->regional_model->get_parametro("logo");
@@ -120,7 +121,7 @@ class Abastecimiento extends CI_Controller {
 
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		 	
 			$this->__cargarVista($data);
@@ -201,7 +202,7 @@ class Abastecimiento extends CI_Controller {
 
 			} else {
 
-			$data['user_id']	= $this->tank_auth->get_user_id();
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "abastecimiento/entrada_de_articulos";
 			$data['logo'] = $this->regional_model->get_parametro("logo");
@@ -216,7 +217,7 @@ class Abastecimiento extends CI_Controller {
 
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		 	
 			$this->__cargarVista($data);
@@ -360,7 +361,7 @@ class Abastecimiento extends CI_Controller {
 			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$data['titulo']="Solicitudes pendientes";
 			$data['vista_name'] = "solicitudes/procesar_solicitudes";
-
+			$user_id	= $this->tank_auth->get_user_id();
 				// All your code goes here
 			$data['abastecimiento'] = 1;
 			$data['solicitudes'] = $this->regional_model->detalle_sol_abastecimiento();
@@ -368,7 +369,7 @@ class Abastecimiento extends CI_Controller {
 			// die(print_r($this->db->last_query()));
 				// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		 	
 			$this->__cargarVista($data);
@@ -499,8 +500,9 @@ class Abastecimiento extends CI_Controller {
 			$data['detalle_articulos'] = $this->load->view('solicitudes/cargar_datatable', $table,true);
 			$data['financiero'] = $financiero;
 			// Obtener los link del panel Izquierdo.
+			$user_id	= $this->tank_auth->get_user_id();
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 		 	
 			$this->__cargarVista($data);	

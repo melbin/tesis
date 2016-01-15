@@ -3,7 +3,7 @@
     </div>
     <div class="panel-body">
 
-		<table border="0" width="70%" align="center">
+		<table border="0" align="center">
 			<tr>
 
 			<?php 
@@ -13,7 +13,7 @@
 							<table>
 								<tr>
 									<td>
-									<a class="btn btn-info btn-circle btn-lg botones_maestro" href="<?php echo base_url() . $value['sio_nombre'] .'/'. $value['sio_controlador'] ?>">               
+									<a class="btn btn-info btn-circle btn-lg botones_maestro" href="<?php echo mb_strtolower(base_url() . $value['sio_nombre'] .'/'. $value['sio_controlador'],'UTF-8'); ?>">               
 										<i class="<?php echo $value['sio_icono'];?>"></i>
 									</a>
 									</td>
@@ -21,6 +21,7 @@
 								<tr><td align="justify"><?php echo $value['sio_nombre']; ?></td></tr>
 							</table>
 						</td>
+						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					<?php
 				}
 			 ?>

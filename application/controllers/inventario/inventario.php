@@ -18,7 +18,7 @@ class Inventario extends CI_Controller {
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-			$data['user_id']	= $this->tank_auth->get_user_id();
+			$user_id	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "inventario/index";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
@@ -27,7 +27,7 @@ class Inventario extends CI_Controller {
 
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>1));
-			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',1);
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',1, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
 
 			$this->__cargarVista($data);

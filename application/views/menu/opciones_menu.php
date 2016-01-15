@@ -22,7 +22,7 @@
 						foreach ($menu_principal as $key2 => $value2) {
 							if($value2['sic_padre']==$value['sic_id']){
 								?>
-									<li><a href="<?php echo base_url() . $info_padre['sio_nombre'] .'/'. strtolower($value['sic_valor']) .'/'. strtolower($value2['sic_valor']) ?>" ><?= $value2['sic_nombre']; ?></a></li>
+									<li><a href="<?php echo mb_strtolower(base_url().$info_padre['sio_nombre'] .'/'.$value['sic_valor'].'/'.$value2['sic_valor'],'UTF-8'); ?>" ><?= $value2['sic_nombre']; ?></a></li>
 								<?php
 							} 
 						}

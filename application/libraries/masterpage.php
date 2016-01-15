@@ -50,6 +50,10 @@ class MasterPage {
         if(empty($file)){
             $file="pages/blank";
         }
+        //$this->CI->sistema->cargar_menus($id,0);
+        $id = $this->CI->tank_auth->get_user_id();
+        $content['accede_sistema'] = $this->CI->sistema_model->get_menu_sistema($id);
+
         $this->contentPages[$tag] = $this->CI->load->view ( $file, $content, true );
     }
 
@@ -72,6 +76,7 @@ class MasterPage {
 
    public function getUsuario()
     {
+
         $CI =& get_instance();
         $this->CI->load->model('sistema');
         $id = $this->CI->tank_auth->get_user_id();
@@ -85,6 +90,7 @@ class MasterPage {
         $data['modulo'] =  strtolower($CI->uri->segment(1));
         $data['control'] =$this->CI->router->class;
         $data['funcion'] = strtolower($this->CI->router->fetch_method());
+
         $funcion=$data['funcion'];
         $descripcion=strtolower($CI->uri->segment(1));
         if($funcion=="index")
