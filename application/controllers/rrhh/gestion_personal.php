@@ -35,7 +35,7 @@ class Gestion_personal extends CI_Controller {
 		}
 	}
 
-	public function empleados()
+	public function personas()
 	{
 
 		if (!$this->tank_auth->is_logged_in()) {
@@ -46,7 +46,7 @@ class Gestion_personal extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('per_persona');
-			$crud->set_subject('empleado');
+			$crud->set_subject('persona');
 			
 			$columns = array(
 				'per_nombre',
@@ -100,10 +100,10 @@ class Gestion_personal extends CI_Controller {
 			$crud->field_type('per_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
 
 		// Datos generales de la pagina	
-			$data['titulo']="Gestión de empleados";
+			$data['titulo']="Gestión de personas";
 
 		// Guardar esta persona como un empleado
-			$crud->callback_after_insert(array($this, 'add_empleado'));	
+			// $crud->callback_after_insert(array($this, 'add_empleado'));	
 
 		// 	Estas tres lineas son principales cuando se desea imprimir un Grocery Crud en el sistema
 		 	$crud->unset_jquery(); // No llama al jQuery del Grocery Crud

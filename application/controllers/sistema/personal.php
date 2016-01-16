@@ -64,7 +64,7 @@ class Personal extends CI_Controller {
 					'email'=>'Correo',
 					'activated'=>'Estado',
 					'rol'=>'Rol',
-					'per_id'=>'Empleado'
+					'per_id'=>'Persona'
 				);
 
 			$crud->required_fields($requeridos);
@@ -74,7 +74,7 @@ class Personal extends CI_Controller {
 			$crud->set_rules('email','correo','required|valid_email');
 			
 			$crud->set_relation_n_n('rol', 'uxr_usuarioxrol', 'rol_rol', 'uxr_usuario_id', 'uxr_rol_id', 'rol_nombre');
-			$crud->set_relation('per_id','per_persona','{per_nombre} {per_apellido}', 'per_id IN (SELECT emp_per_id FROM emp_empleado)');
+			$crud->set_relation('per_id','per_persona','{per_nombre} {per_apellido}'); //'per_id IN (SELECT emp_per_id FROM emp_empleado)'
 			
 			//$crud->field_type('per_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('password','hidden');	
