@@ -21,7 +21,7 @@ class Localidad extends CI_Controller {
 			$user_id	= $this->tank_auth->get_user_id();
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "sistema/index";
-			$data['logo'] = $this->Regional_model->get_parametro("logo");
+			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$data['titulo']="Menu de Sistema";
 			$data['menu_sistema']=true;
 
@@ -56,7 +56,7 @@ class Localidad extends CI_Controller {
 			$user_id	= $this->tank_auth->get_user_id();
 			$data['vista_name']='sistema/index';
 			$data['titulo']="Paises";
-			$data['logo'] = $this->Regional_model->get_parametro("logo");
+			$data['logo'] = $this->regional_model->get_parametro("logo");
 			
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>2));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2, $user_id);
@@ -99,7 +99,7 @@ class Localidad extends CI_Controller {
 			$user_id	= $this->tank_auth->get_user_id();
 			$data['vista_name']='bancos/index';
 			$data['titulo']="Departamentos";
-			$data['logo'] = $this->Regional_model->get_parametro("logo");
+			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>2));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
@@ -141,7 +141,7 @@ class Localidad extends CI_Controller {
 			$user_id	= $this->tank_auth->get_user_id();
 			$data['vista_name']='sistema/index';
 			$data['titulo']="Municipios";
-			$data['logo'] = $this->Regional_model->get_parametro("logo");
+			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>2));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',2, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);

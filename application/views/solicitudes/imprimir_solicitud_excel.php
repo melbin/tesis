@@ -18,43 +18,59 @@
 	#detalle_prod th {
 		font-size: 12px;
 	}
+	@media all {
+   div.saltopagina{
+      display: none;
+   }
+}
+   
+@media print{
+   div.saltopagina{ 
+      display:block; 
+      page-break-before:always;
+   }
+}
+
+
 </style>
 
-<table width="100%">
+<table width="100%" border="0">
 	<tr>
+		<th width="22%"></th>
 		<th></th>
 		<th></th>
 		<th></th>
 		<th></th>
 		<th></th>
 		<th></th>
-		<th></th>
-		<th></th>
+	
 	</tr>
 	<tr>
 		<td><img src="<?php echo base_url();?>media/sistema/escudo02.jpg" width="60" height="90" style="float:left;"></td>
 		<td></td>
 		<td></td>
+		<td colspan="2" align="center">
+
+			<b>MINISTERIO DE SALUD</b><br>
+			<b>REGION OCCIDENTAL</b><br>
+			<font size="2">DEPARTAMENTO DE ABASTECIMIENTO</font><br>
+			<b>SOLICITUD DE COMPRA</b><br>	
+
+		</td>
+		
 		<td></td>
 		<td></td>
-		<td></td>
-		<td></td>
-		<td colspan="2"><img src="<?php echo base_url();?>media/sistema/ministerio_salud.jpg" width="120" height="60">	</td>
+		<td colspan="2" align="right"><img src="<?php echo base_url();?>media/sistema/ministerio_salud.jpg" width="120" height="60">	</td>
 	</tr>
 </table>
 
 <!-- Tema -->
-<p id="nombre">
-	<b>MINISTERIO DE SALUD</b><br>
-	<b>REGION OCCIDENTAL</b><br>
-	<font size="2">DEPARTAMENTO DE ABASTECIMIENTO</font><br>
-	<b>SOLICITUD DE COMPRA</b><br>	
-</p>
 
-<div id="table_info">
+
+<div> <!--  id="table_info" -->
 	<table border="0" width="100%">
 		<!-- <tr><th width="5%"></th><th width="30%"></th><th></th><th></th><th></th><th></th></tr> -->
-		<tr><th width="5%"></th><th width="10%"></th><th width="10%"></th><th width="35%"></th><th width="5%"></th><th width="5%"></th><th></th><th></th></tr>
+		<tr><th width="15%"></th><th width="15%"></th><th width="15%"></th><th width="15%"></th><th width="5%"></th><th width="5%"></th><th></th><th></th></tr>
 		<tr>
 			<td colspan="4"></td>
 			<td><b>FECHA:</b></td>
@@ -75,21 +91,21 @@
 			<td colspan="5" class="borde"><?php echo $detalle_sol['des_plazo_entrega'] .' '. 'DIAS DESPUES DE RECIBIDA LA ORDEN DE COMPRA'; ?></td>
 		</tr>
 		<tr>
-			<td colspan="4"><label>NUMERO DE ENTREGAS:</label></td>
+			<td colspan="4"><label>NÚMERO DE ENTREGAS:</label></td>
 			<td class="borde"><label>UNA:  ___X___</label></td>
 			<td class="borde"><label>DOS:  _______</label></td>
-			<td class="borde" colspan="2"><label>MAS:  _______</label></td>
+			<td class="borde" colspan="2"><label>MÁS:  _______</label></td>
 		</tr>
 		<tr>
-			<td colspan="3"><label>ALMACEN O LUGAR DE ENTREGA DE LOS SUMINISTROS SOLICITADOS:</label></td>
-			<td colspan="5" class="borde"><?php echo $detalle_sol['ali_nombre']; ?></td>
+			<td colspan="4"><label>ALMACEN O LUGAR DE ENTREGA DE LOS SUMINISTROS SOLICITADOS:</label></td>
+			<td colspan="4" class="borde"><?php echo $detalle_sol['ali_nombre']; ?></td>
 		</tr>
 		<tr>
-			<td colspan="3"><label>DIRECCION DE ALMACEN O LUGAR DE ENTREGA:</label></td>
+			<td colspan="3"><label>DIRECCIÓN DE ALMACEN O LUGAR DE ENTREGA:</label></td>
 			<td colspan="5" class="borde"><?php echo $detalle_sol['ali_direccion']; ?></td>
 		</tr>
 		<tr>
-			<td colspan="3"><label>PERIODO DE UTILIZACION:</label></td>
+			<td colspan="3"><label>PERIODO DE UTILIZACIÓN:</label></td>
 			<td colspan="5" class="borde"><b>INDEFINIDO</b></td>
 		</tr>
 		<tr>
@@ -110,12 +126,12 @@
 	</table>
 
 	<br><br>
-
+	<div class="saltopagina"></div>
 	<table border="1" width="100%" id="detalle_prod"> 
 		<tr>
 			<th width="5%" rowspan="2">#</th>
 			<th width="10%" rowspan="2">CÓDIGO DEL PRODUCTO</th>
-			<th width="10%" rowspan="2">CODIGO DEL PRODUCTO SEGÚN CATALOGO NACIONES UNIDAS</th>
+			<th width="10%" rowspan="2">CÓDIGO DEL PRODUCTO SEGÚN CATALOGO NACIONES UNIDAS</th>
 			<th width="35%" rowspan="2">DESCRIPCION DE SUMINISTROS O SERVICIO</th>
 			<th width="5%" rowspan="2">UNIDAD DE MEDIDA</th>
 			<th width="5%" rowspan="2">CANTIDAD</th>

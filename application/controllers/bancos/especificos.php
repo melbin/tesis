@@ -159,13 +159,15 @@ class Especificos extends CI_Controller {
 			$data['vista_name'] = "bancos/especificos/detalle_especifico";
 
 				// All your code goes here
-			$data['esp_detalles'] = $esp_detalles = $this->regional_model->get_detalle_especificos();
-			$det_array = array();
-			foreach ($esp_detalles as $key => $value) {
-				$det_array[] = $value['det_id'];
-			}
-			$data['monto_asignado'] = $this->regional_model->get_asignaciones($det_array);
-			//die(print_r($data['monto_asignado'],true));
+			// Suponiendo en este momento que no habran axd_estado = 0.
+			$data['esp_detalles'] = $this->regional_model->get_detalle_especificos();
+			//die(print_r($data['esp_detalles'],true));
+			// $det_array = array();
+			// foreach ($esp_detalles as $key => $value) {
+			// 	$det_array[] = $value['det_id'];
+			// }
+			// $data['monto_asignado'] = $this->regional_model->get_asignaciones($det_array);
+			
 			$data['html'] = $this->load->view('bancos/especificos/tabla_especifico',$data,true);
 			$this->__cargarVista($data);
 		}
@@ -240,7 +242,7 @@ class Especificos extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			// All your code goes here.
-			//die(print_r($_POST,true));
+			// die(print_r($_POST,true));
 
 			$det_especifico = array(
 					'det_esp_id' 		=> $this->input->post('especifico'),
@@ -331,7 +333,7 @@ class Especificos extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			// All your code goes here.
-			//die(var_dump($_POST));	
+		//	die(var_dump($_POST));	
 			$get_detalles = $this->regional_model->get_tabla('det_detalle_especifico', array('det_id'=>$_POST['det_id'], 'det_estado'=>1));
 			//die(print_r($get_detalles[0],true));
 			$det_especifico = array(
@@ -395,49 +397,67 @@ class Especificos extends CI_Controller {
 
 			// Realizar las asignaciones
 			// Arreglar desde aca
+
+			// asignacion = axd_id
+			// cantidades = axd_cantidad
+
 			$cantidades = $this->input->post('cantidad_depto');
-			$get_detalle_asignacion = array();
+			$registros_base = array();
 			$asignacion = $_POST['axd_asignaciones'];
 			$departamentos = $_POST['departamentos'];
+		//	die(print_r($_POST,true));		
 
+			// Actualizar los registros existentes
 			if(!empty($_POST['axd_asignaciones'])){
-				// Actualizar los registros existentes
-				$get_detalle_asignacion = $this->regional_model->get_tabla('axd_asignacionxdetalle_especifico', array('axd_det_id'=>$_POST['det_id'], 'axd_estado'=>1));
+
+				$get_detalle_asignacion = $this->db->query('SELECT axd_id FROM axd_asignacionxdetalle_especifico WHERE axd_det_id = '.$_POST["det_id"].' AND axd_estado = 1')->result_array();
+				
+				foreach ($get_detalle_asignacion as $row => $field) {
+					array_push($registros_base, $field['axd_id']);
+				}
 			} 
 
-				foreach ($_POST['cantidad_depto'] as $key => $value) {
+			$array_mayor = (count($_POST['departamentos']) > count($registros_base))? $_POST['departamentos']: $registros_base;
+			
+			foreach ($array_mayor as $key => $value) {
+
+			// Buscar en get_detalle_asignacion el $value, si existe, editarlo, de lo contrario. Crearlo.
+			$existe = isset($registros_base[$key])? in_array($registros_base[$key], $asignacion):false;
+				
+				if($existe){
+					
+					$indice = array_search($registros_base[$key], $asignacion);
 
 					$detalle = array(
-							'axd_cantidad'  => $cantidades[$key],
-							'axd_usu_mod'	=> $this->tank_auth->get_user_id(),
-							'axd_fecha_mod'	=> date('Y-m-d H:i:s')
-						);
+						'axd_cantidad'  => isset($cantidades[$indice])? $cantidades[$indice]:0,
+						'axd_usu_mod'	=> $this->tank_auth->get_user_id(),
+						'axd_fecha_mod'	=> date('Y-m-d H:i:s')
+					);
 
-					if(!empty($get_detalle_asignacion[$key])){
-						if(isset($asignacion[$key])){
-							$this->sistema_model->actualizar_registro('axd_asignacionxdetalle_especifico', $detalle, array('axd_id'=>$get_detalle_asignacion[$key]['axd_id']));		
-						} else {
-							// eliminar registro  (POSTERIORMENTE ABRA QUE REVALIDAR)
-							$this->sistema_model->actualizar_registro('axd_asignacionxdetalle_especifico', array('axd_estado'=>0,'axd_usu_mod'=>$this->tank_auth->get_user_id(),'axd_fecha_mod'=>date('Y-m-d H:i:s')), array('axd_id'=>$get_detalle_asignacion[$key]['axd_id']));
+					$this->sistema_model->actualizar_registro('axd_asignacionxdetalle_especifico', $detalle, array('axd_id'=>$registros_base[$key]));
+				} else {
 
-							$detalle['axd_det_id'] 		= $get_detalles[0]['det_id'];
-							$detalle['axd_depto_id'] 	= $departamentos[$key];
-							$detalle['axd_fecha']		= date('Y-m-d H:i:s');
-							$detalle['axd_estado'] 		= 1;
+					if(isset($registros_base[$key])){
+						//	Eliminar registro de la base
+						$this->regional_model->borrar_registro('axd_asignacionxdetalle_especifico', array('axd_id'=> $registros_base[$key]));
 
-							$this->regional_model->insertar_registro('axd_asignacionxdetalle_especifico', $detalle);		
-						}	 
 					} else {
 
-							$detalle['axd_det_id'] 		= $get_detalles[0]['det_id'];
-							$detalle['axd_depto_id'] 	= $departamentos[$key];
-							$detalle['axd_fecha']		= date('Y-m-d H:i:s');
-							$detalle['axd_estado'] 		= 1;
-							$this->regional_model->insertar_registro('axd_asignacionxdetalle_especifico', $detalle);		
-					}			
-				} // End foreach
-			
-
+						// Agregalo como nuevo
+						$detalle = array(
+								'axd_cantidad'  => isset($cantidades[$key])? $cantidades[$key]:0,
+								'axd_det_id'	=> $get_detalles[0]['det_id'],
+								'axd_depto_id'  => $departamentos[$key],
+								'axd_fecha'		=> date('Y-m-d H:i:s'),
+								'axd_estado'	=> 1,
+								'axd_usu_mod'	=> $this->tank_auth->get_user_id(),
+								'axd_fecha_mod' => date('Y-m-d H:i:s')
+							);
+					
+						$this->regional_model->insertar_registro('axd_asignacionxdetalle_especifico', $detalle);		
+					}
+				}			
+			} // End foreach
 
 			if($det_esp_id>0)
 			{

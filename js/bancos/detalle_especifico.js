@@ -140,7 +140,9 @@ $(document).ready(function(){
         }
         else{
             $("#saldo").attr('disabled',false);
-            setTimeout(function(){ $("#pro_entrada").submit(); },200);
+            $("#fondo").attr('disabled',false);
+            $("#especifico").attr('disabled',false);
+            setTimeout(function(){ $("#pro_entrada").submit(); },500);
             
         }
      });

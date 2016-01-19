@@ -14,7 +14,7 @@
 					if(!isset($value['sic_padre'])){ 
 						?>
 						<li>
-							<a href="#"><i class="<?php echo $value['sic_icono'];?>"></i> <?php echo $value['sic_nombre']; ?><span class="fa arrow"></span></a>
+							<a href="#"><i class="<?php echo $value['sic_icono'];?>"></i> <b><?php echo $value['sic_nombre']; ?></b><span class="fa arrow"></span></a>
 						<?php
 						// Llamar a los hijos
 						?> <ul class="nav nav-second-level"> <?php

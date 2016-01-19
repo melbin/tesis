@@ -18,7 +18,7 @@
 									</a>
 									</td>
 								</tr>
-								<tr><td align="justify"><?php echo $value['sio_nombre']; ?></td></tr>
+								<tr><td align="justify"><b><?php echo $value['sio_nombre']; ?></b></td></tr>
 							</table>
 						</td>
 						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

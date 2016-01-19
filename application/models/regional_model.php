@@ -46,11 +46,16 @@ class Regional_model extends CI_Model
 
     function get_detalle_especificos()
     {
-        $query = $this->db->select()
+        $query = $this->db->select("*, IFNULL(SUM(axd_cantidad),0) AS suma, det_saldo AS total",false)
                     ->from('esp_especifico')
                     ->join('det_detalle_especifico', 'det_esp_id = esp_id','left')
                     ->join('fon_fondo', 'fon_id = det_fondo_id','left')
+                    ->join('axd_asignacionxdetalle_especifico', 'axd_det_id = det_id', 'left')
+                    ->join('dpi_departamento_interno', 'dpi_id = axd_depto_id', 'left')
                     ->where('det_estado',1)
+                    // ->where('axd_estado',1)
+                    ->group_by('det_id')
+                    ->order_by('esp_nombre')
                     ;
         $result = $this->db->get()->result_array();
         return $result;            
@@ -164,6 +169,14 @@ class Regional_model extends CI_Model
         return $rows;   
     }
 
+    function borrar_registro($tabla, $where)
+    {
+        $this->db->delete($tabla, $where);
+        $rows = $this->db->affected_rows();
+        return $rows;   
+    }
+
+
     function detalle_solicitud($where=NULL){
         $query = $this->db->select()
                     ->from('sol_solicitud')
@@ -233,6 +246,8 @@ class Regional_model extends CI_Model
                     ->join('dpi_departamento_interno', 'dpi_id = axd_depto_id','left')
                     ->where('axd_estado',1)
                     ->where_in('axd_det_id',$detalles)
+                    ->group_by('det_id')
+                    ->order_by('dpi_nombre')
                     ;
         $result = $this->db->get()->result_array();
         return $result;            

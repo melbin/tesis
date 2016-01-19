@@ -138,11 +138,11 @@ class Solicitudes extends CI_Controller {
 				 else {
 					if($this->input->post('filtro')=='sol_fecha'){
 						$fechas = explode('#', $this->input->post('valor'));
-						$where['sol_fecha >='] = $fechas[0];
-						$where['sol_fecha <='] = $fechas[1];
+						$where['sol_fecha >='] = date('Y-m-d', strtotime($fechas[0]));
+						$where['sol_fecha <='] = date('Y-m-d', strtotime($fechas[1]));
 					}
 				}
-				//die(print_r($where));
+				//die(print_r($where,true));
 				$data['solicitudes'] = $this->regional_model->detalle_solicitud($where);
 				$html =  $this->load->view('solicitudes/cargar_tabla',$data,true);	
 			 	echo json_encode(array('drop'=>$html));
@@ -194,7 +194,7 @@ class Solicitudes extends CI_Controller {
 	  $data['productos'] = $productos;
 
 	  $html = $this->load->view('solicitudes/imprimir_solicitud_excel',$data,true);	  	
-	  die(print_r($html));
+	  die(print_r($html,true));
 	
 	  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       header("Content-Disposition: attachment;filename=solicitudes_".date('m-d-Y').".xls"); 
