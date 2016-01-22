@@ -126,7 +126,7 @@
 	</table>
 
 	<br><br>
-	<div class="saltopagina"></div>
+	
 	<table border="1" width="100%" id="detalle_prod"> 
 		<tr>
 			<th width="5%" rowspan="2">#</th>
@@ -167,6 +167,78 @@
    					<td align="center"><label><b><?php echo '$ '. $suma; ?></b></label></td>
    				</tr>
    		 <?php } ?>
+	</table>
+	<div class="saltopagina"></div>
+	<!-- Datos de los Involucrados en el Proceso -->
+	<br><br><br><br><br><br>
+	<table border="0" width="100%">
+		<tr><th width="15%"></th><th width="15%"></th><th width="15%"></th><th width="15%"></th><th width="5%"></th><th width="5%"></th><th></th><th></th></tr>
+		<tr>
+			<td colspan="8"><b><?php echo !empty($coordinador_abastecimiento)? $coordinador_abastecimiento:''; ?></b></td>
+		</tr>
+		<tr>
+			<td colspan="8">Coordinador de Abastecimiento Regional</td>
+		</tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr>
+			<td colspan="4"><b>Unidad Solicitante:</b></td>
+			<td colspan="4"><b>Autoriza:</b></td>
+		</tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr>
+			<td colspan="4">Firma:</td>
+			<td colspan="4">Firma:</td>
+		</tr>
+		<tr>
+			<td>Nombre:</td>
+			<td colspan="3"><b><?php echo !empty($solicitante['per_nombre'])? $solicitante['per_nombre'].' '.$solicitante['per_apellido']:''; ?></b></td>
+			<td>Nombre:</td>
+			<td colspan="3"><b><?php echo !empty($coordinador_primer_nivel)? $coordinador_primer_nivel:''; ?></b></td>
+		</tr>
+		<tr>
+			<td>Cargo:</td>
+			<td colspan="3"><?php echo !empty($solicitante['per_cargo'])? $solicitante['per_cargo']:''; ?></td>
+			<td>Cargo:</td>
+			<td colspan="3">Coordinador División Administrativa Regional de Salud de Primer Nivel, MINSAL</td>
+		</tr>
+		<tr></tr>
+		<tr></tr>
+		<tr>
+			<td colspan="8"><b>Certificación de Fondos:</b></td>
+		</tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+		<tr>
+			<td colspan="4">Firma:</td>
+			<td colspan="4">Firma:</td>
+		</tr>
+		<tr>
+			<td>Nombre:</td>
+			<td colspan="3"><b><?php echo !empty($jefe_ufi)? $jefe_ufi:''; ?></b></td>
+			<td>Nombre:</td>
+			<td colspan="3"><b><?php echo !empty($director_regional)? $director_regional:''; ?></b></td>
+		</tr>
+		<tr>
+			<td>Cargo:</td>
+			<td colspan="3">Jefe UFI, MINSAL</td>
+			<td>Cargo:</td>
+			<td colspan="3">Directora Regional de Salud Occidental</td>
+		</tr>
 	</table>
 </div>	
 <br><br>

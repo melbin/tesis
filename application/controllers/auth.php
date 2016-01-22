@@ -8,6 +8,7 @@ class Auth extends CI_Controller
 
 		//$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
+		$this->load->model('regional_model');
 		//$this->load->library('security');
 		//$this->load->library('tank_auth');
 		$this->lang->load('tank_auth');
@@ -103,6 +104,7 @@ class Auth extends CI_Controller
 				}
 			}
 			//$this->load->view('auth/login_form', $data);
+			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$this->load->view('auth/login_form', $data);
 		}
 	}

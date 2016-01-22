@@ -75,6 +75,16 @@ class Financiero extends CI_Controller {
 		}
 
 	}
+
+	public function aprobar_solicitud()
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			die(print_r($_POST,true));
+		}
+	}
+
 		function __cargarVista($data=0)
 	{	
 		$vista=$data['vista_name'];

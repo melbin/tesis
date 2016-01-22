@@ -100,6 +100,20 @@ class Sistema_model extends CI_Model
 		}
 	}
 
+	function datos_persona($id_persona)
+	{
+		$this->db->select()
+				 ->from('users AS usuario')
+				 ->join('per_persona', 'per_persona.per_id = usuario.per_id')
+		;
+		$query = $this->db->get()->row_array();
+		if($query>0){
+			return $query;
+		} else {
+			return 0;
+		}	
+	}
+
 	function get_campo($tabla, $campo ,$where=NULL){
 		$query = $this->db->select()
 				 	->from($tabla)

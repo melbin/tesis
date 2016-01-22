@@ -30,6 +30,7 @@
         }
         });
 
+        setTimeout(function(){
         $("#especifico").on('change', function(){
         var esp_id = $(this).val();
         var fondo_id = $("#fondo").val();
@@ -43,6 +44,7 @@
             success:function(data) {
                 if(data.congelado){
                     alertify.alert('Este específico posee saldo Congelado<br>por lo tanto, No se pueden crear solicitudes con él.');
+                    $("#dpi_interno").html('');
                 } else {
                     $("#dpi_interno").html(data.depto_asignaciones);      
                 }
@@ -52,6 +54,7 @@
             $("#dpi_interno").html("<option value='0' saldo='0'>Seleccione</option>").trigger('change');
         }
         });
+        }, 500);
 
         $("#dpi_interno").on('change', function(){
         var axd_id = $("#dpi_interno option:selected").attr('axd_id');

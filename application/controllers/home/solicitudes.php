@@ -171,7 +171,7 @@ class Solicitudes extends CI_Controller {
 	  	$this->pdf->printPDF($html);
 	}
 
-	function imprimir_excel($id_sol)
+	function imprimir_excel($id_sol, $imprime=null)
 	{
 
 	  // prueba de fecha en spanish
@@ -193,8 +193,16 @@ class Solicitudes extends CI_Controller {
 	  $productos = $this->regional_model->detalle_sol_productos($id_sol);
 	  $data['productos'] = $productos;
 
+	  	// Parametros de Involucrados en la Solicitud
+	  $data['coordinador_abastecimiento'] 	= $this->regional_model->get_parametro('coordinador_abastecimiento');
+	  $data['coordinador_primer_nivel'] 	= $this->regional_model->get_parametro('coordinador_primer_nivel');
+	  $data['director_regional'] 			= $this->regional_model->get_parametro('director_regional');
+	  $data['jefe_ufi'] 					= $this->regional_model->get_parametro('jefe_ufi');
+	  $data['solicitante']	  				= $this->sistema_model->datos_persona($this->tank_auth->get_user_id());
+	  
 	  $html = $this->load->view('solicitudes/imprimir_solicitud_excel',$data,true);	  	
-	  die(print_r($html,true));
+
+	  if($imprime==1) die(print_r($html,true));
 	
 	  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       header("Content-Disposition: attachment;filename=solicitudes_".date('m-d-Y').".xls"); 

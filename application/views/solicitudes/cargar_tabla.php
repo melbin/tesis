@@ -29,20 +29,36 @@
                         </button>
                         <ul class="dropdown-menu">
 
-                            <?php if(!empty($financiero)) {?>
-                            <li>
-                                <a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'].'/2')?>" >
-                                <span class="fa fa-pencil"></span>
-                                Editar</a>
-                            </li>
+                            <?php if(!empty($financiero) && $value['ets_id']==7) {?>
+                    
                             <?php if($value['ets_id']==7) {?>
                             <li>
                                 <a class="ver_modal" title="Aprobar" href="#" >
                                 <span class="fa fa-check"></span>
                                Aprobar</a>
-                            </li>            
+                            </li>
+                            <li>
+                                <a class="ver_modal2" title="Rechazar" href="#" >
+                                <span class="fa fa-check"></span>
+                               Rechazar</a>
+                            </li>
+                            <li><a target="_blank" title="Imprimir" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>/1">
+                                <span class="glyphicon glyphicon-print"></span>
+                                Imprimir</a></li>            
+                                <li><a target="_blank" title="Excel" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>">
+                                <span class="fa fa-file-excel-o"></span>
+                                Exportar</a></li>                        
                             <?php }
                              } else { ?>
+                             <?php if(!empty($financiero)) && $value['ets_id']!=7 { ?>
+
+                             <li>
+                                <a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'].'/2')?>" >
+                                <span class="fa fa-pencil"></span>
+                                Editar</a>
+                            </li>
+                             
+                             <?php } else { ?>
                             <?php if(!empty($abastecimiento)) { ?>
                                 <li><a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'])?>" >
                                 <span class="fa fa-pencil"></span>
@@ -52,14 +68,12 @@
                                 <li><a  cont="<?php echo $key; ?>" id="detalle_<?php echo $key; ?>" value="<?php echo $value['sol_id']; ?>" href="#">
                                 <span class="glyphicon glyphicon-search"></span>
                                 Detalle</a></li>
-                            <?php }} ?>
-                            <?php if(!empty($financiero) || (!empty($abastecimiento)) ) {?>
+                            <?php } ?>
+                            <!--  || (!empty($abastecimiento))  -->
+                            <?php if(!empty($financiero)) {?> 
                                 <!-- <li><a target="_blank" title="PDF" href="<?php echo base_url();?>home/solicitudes/imprimir_pdf/<?php echo $value['sol_id']; ?>">
                                 <span class="fa fa-file-pdf-o"></span>
                                 Generar PDF</a></li> -->
-                                <li><a target="_blank" title="Excel" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>">
-                                <span class="fa fa-file-excel-o"></span>
-                                Generar Excel</a></li>            
                             <?php }?>    
                              <!-- <li>
                                 <a class="" title="Eliminar información" href="">

@@ -46,10 +46,13 @@ $captcha = array(
 </head>
 
 <body>
+<div id="logo">
+	<img style="height: 30%; position: absolute; padding-left: 46%; top: -118px;>" src="<?php echo base_url(); ?>media/sistema/<?php echo $logo;?>.gif">	
+</div>
+
 <div class="container">
 	<section id="content">
 		
-
 		<?php echo form_open($this->uri->uri_string()); ?>
 		<h1>Regional</h1>
 <table>

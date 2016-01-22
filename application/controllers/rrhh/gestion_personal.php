@@ -62,6 +62,7 @@ class Gestion_personal extends CI_Controller {
 				'per_edad',
 				'per_fecha_nac',
 				'per_telefono',
+				'per_cargo',
 				'per_correo',
 				'per_mun_id',
 				'per_gen_id',
@@ -72,7 +73,9 @@ class Gestion_personal extends CI_Controller {
 
 			$requeridos = array(
 					'per_nombre',
-					'per_apellido'
+					'per_apellido',
+					'per_correo',
+					'per_mun_id'
 				);
 
 			$alias = array(
@@ -84,6 +87,7 @@ class Gestion_personal extends CI_Controller {
 					'per_correo'=>'Correo',
 					'per_mun_id'=>'Municipio',
 					'per_gen_id'=>'Genero',
+					'per_cargo' => 'Cargo',
 					'per_estado'=>'Estado'
 				);
 

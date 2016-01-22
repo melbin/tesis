@@ -207,7 +207,7 @@
             <table width="100%" align="left">
                 <tr><th></th><th></th></tr>
                 <tr>
-                <td width="20%"><label>Describa el motivo:</label></td>
+                <td width="20%" style="vertical-align:top;"><label>Describa el motivo:</label></td>
                     <td colspan="2">                        
                         <div class="form-group">    
                             <textarea id="motivo" name="motivo" placeholder="motivo..." style="width:100%"></textarea>
