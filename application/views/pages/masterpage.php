@@ -128,7 +128,7 @@
     <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>assets/grocery_crud/themes/flexigrid/css/flexigrid.css" />
     <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>assets/grocery_crud/css/jquery_plugins/fancybox/jquery.fancybox.css" />
     <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>assets/grocery_crud/css/ui/simple/jquery-ui-1.10.1.custom.min.css" />
-   <!-- <script src="<?php echo base_url()?>assets/grocery_crud/js/jquery-1.11.1.min.js"></script> -->
+    <script src="<?php echo base_url()?>assets/grocery_crud/js/jquery-1.11.1.min.js"></script> 
    <!-- <script src="<?php echo base_url()?>assets/grocery_crud/js/jquery_plugins/jquery.noty.js"></script> -->
    <!-- <script src="<?php echo base_url()?>assets/grocery_crud/js/jquery_plugins/config/jquery.noty.config.js"></script> -->
     <script src="<?php echo base_url()?>assets/grocery_crud/js/common/lazyload-min.js"></script>

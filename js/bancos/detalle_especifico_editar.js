@@ -153,12 +153,15 @@ $(document).ready(function(){
         event.preventDefault();
         var total=parseFloat($("#saldo").val());
         var valor = 0;
+
         $('.monto_asignado').each(function(){
             if($(this).val()!=='' && $(this).val()!==null){
+                $(this).val().replace(',', '');
                 valor = parseFloat($(this).val());
             }
+
             total=total-valor;
-            
+                
             if(parseFloat(total)<0){
                 if(parseFloat($('#'+id).attr('saldo_reserva'))>0){
                     $('#'+id).val($.number($('#'+id).attr('saldo_reserva'),2));  // Cuando se edita                  

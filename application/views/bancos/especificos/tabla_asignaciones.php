@@ -42,7 +42,7 @@
                     </td>
                     <td><label name="esp_label" id="esp_label"><?php echo $especifico; ?></label></td>
                     <td><label name="depto_label" id="depto_label"/><?php echo $value['dpi_nombre']; ?></td>
-                    <td><input name="cantidad_depto[]" id="cantidad_depto_<?php echo $row; ?>" class="monto_asignado" style="text-align:center;" value="<?php echo number_format($value['axd_cantidad'],2); ?>" saldo_reserva="<?php echo !empty($value['axd_reserva'])? $value['axd_reserva']:0; ?>" /></td>
+                    <td><input name="cantidad_depto[]" id="cantidad_depto_<?php echo $row; ?>" class="monto_asignado" style="text-align:center;" value="<?php echo number_format($value['axd_cantidad'],2,'.',''); ?>" saldo_reserva="<?php echo !empty($value['axd_reserva'])? $value['axd_reserva']:0; ?>" /></td>
                     <td><button type="button" id="remove" id_fila="<?php echo $row; ?>" class="remove" <?php echo (!empty($value['axd_reserva']) && $value['axd_reserva']>0)? 'disabled':''; ?>><span class="glyphicon glyphicon-remove"></span> Eliminar</button></td>
                 </tr>    
                 <?php $row++; } ?>
@@ -50,8 +50,8 @@
         </table>
         <br>
         <div style="text-align: center;">
-            <span><label id="total_restante"><h1>Saldo pendiente: $<?php echo number_format((floatval($total)-$subtotal),2); ?></h1></label></span>
-            <input id="total_restante_hidden" name="total_restante" value="<?php echo round((floatval($total)-$subtotal),2); ?>" type="hidden">
+            <span><label id="total_restante"><h1>Saldo pendiente: $<?php echo number_format((floatval($total)-$subtotal - $det_detalles['det_saldo_ejecutado']),2); ?></h1></label></span>
+            <input id="total_restante_hidden" name="total_restante" value="<?php echo round((floatval($total)-$subtotal - $det_detalles['det_saldo_ejecutado']),2); ?>" type="hidden">
             <input id="monto_asignado_total" name="monto_asignado_total" value="<?php echo round($subtotal,2); ?>" type="hidden">
         </div>    
     <div class="form-actions">

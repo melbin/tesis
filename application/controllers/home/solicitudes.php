@@ -363,6 +363,97 @@ class Solicitudes extends CI_Controller {
 		redirect('welcome');									
 	}
 
+	function registrar_compra($id_solicitud = 0)
+	{
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			if($_POST){
+				// Procesar formulario
+
+				$proveedor 	= $this->input->post('proveedor');
+				$contrato	= $this->input->post('contrato');
+				$monto		= $this->input->post('monto');
+				$retencion	= $this->input->post('retencion');
+				$descripcion= $this->input->post('descripcion');
+				$renta		= $this->input->post('renta');
+				$nit 		= $this->input->post('nit');
+				
+				// Actualizar el estado de la solicitud
+				$this->sistema_model->actualizar_registro('des_detalle_solicitud',array('des_ets_id'=>5, 'des_usu_mod'=> $this->tank_auth->get_user_id(), 'des_fecha_mod'=> date('Y-m-d H:i:s')),array('des_sol_id'=>$_POST['sol_id']));
+
+				foreach ($proveedor as $key => $value) {
+					
+					$array_contratista = array(
+							'con_prv_id'	=> $value,
+							'con_contrato'	=> isset($contrato[$key])? $contrato[$key]:null,
+							'con_monto'		=> isset($monto[$key])? $monto[$key]:null,
+							'con_retencion'	=> isset($retencion[$key])? $retencion[$key]:null,
+							'con_renta'		=> isset($renta[$key])? $renta[$key]: null,
+							'con_nit'		=> isset($nit[$key])? $nit[$key]: null,
+							'con_descripcion'=> isset($descripcion[$key])? $descripcion[$key]:null,
+							'con_estado'	=> 1,
+							'con_usu_mod'	=> $this->tank_auth->get_user_id(),
+							'con_fecha_mod'	=> date('Y-m-d H:i:s')
+						);
+
+					$id_contratista = $this->regional_model->insertar_registro('con_contratista', $array_contratista);	
+
+					if($id_contratista>0){
+						$detalle_array = array(
+								'cxs_con_id'	=> $id_contratista,
+								'cxs_sol_id'	=> $_POST['sol_id'],
+								'cxs_estado'	=> 1,
+								'cxs_usu_mod'	=> $this->tank_auth->get_user_id(),
+								'cxs_fecha_mod'	=> date('Y-m-d H:i:s')
+							);
+						$this->regional_model->insertar_registro('cxs_contratistaxsolicitud', $detalle_array);
+					}
+				}
+
+			if(isset($id_contratista) && $id_contratista>0){	
+				// crear alerta OK
+				$alerta=array('registro'=>$registro,'tipo_alerta'=> 'success','titulo_alerta'=>"Registro ingresado",'texto_alerta'=>"Registro ingresado exitosamente.");
+			} else {
+				// crear alerta FAIL
+				$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Error de ingreso",'texto_alerta'=>"Por favor, revisar datos ingresados.");
+			}
+			$this->session->set_flashdata($alerta);       
+			redirect('home/abastecimiento/entrada_de_articulos');
+
+			} else {
+				// Llenar formulario
+				$sol_array = $this->regional_model->detalle_sol($id_solicitud);
+				$data['sol_array'] = $sol_array[0];
+				$data['user_id']	= $this->tank_auth->get_user_id();
+				$data['username']	= $this->tank_auth->get_username();
+				$data['vista_name'] = "solicitudes/registrar_compra";
+				$data['logo'] = $this->regional_model->get_parametro("logo");
+				$data['titulo']="Registrar compra";
+
+				// Cargar la informacion principal de la solicitud
+				$data['dep_internos'] 		= $this->regional_model->get_dropdown('dpi_departamento_interno','dpi_nombre','',array('dpi_estado'=>1),(!empty($sol_array[0]['sol_dpi_id']))? $sol_array[0]['sol_dpi_id']:null,'','dpi_id',true);
+				$data['clase_suministro'] 	= $this->regional_model->get_dropdown('cat_catalogo','cat_nombre','',array('cat_estado'=>1),(!empty($sol_array[0]['des_cat_id']))? $sol_array[0]['des_cat_id']:null,'','cat_id',true);
+				$data['bodega'] 			= $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),(!empty($sol_array[0]['sol_ali_id']))? $sol_array[0]['sol_ali_id']:null,'','ali_id',true);
+				$data['fondo'] 				= $this->regional_model->get_dropdown('fon_fondo','fon_nombre','',array('fon_estado'=>1),(!empty($sol_array[0]['des_fon_id']))? $sol_array[0]['des_fon_id']:null,'','fon_id',true);
+				$data['proveedor']			= $this->regional_model->get_dropdown('prv_proveedor','{prv_nombre} {prv_apellido}','',array('prv_estado'=>1), null,'','prv_id',true);		
+
+				$datos['contratistas']	= $this->sistema_model->get_contratistas($id_solicitud);
+				$data['html'] = $this->load->view('solicitudes/cargar_tabla_contratistas',$datos,true);
+
+				// Obtener los link del panel Izquierdo.
+				$user_id	= $this->tank_auth->get_user_id();
+				$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
+				$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
+			 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
+
+			 	
+				$this->__cargarVista($data);
+			}
+		}	
+	}
+
+
 	function __cargarVista($data=0)
 	{	
 		$vista=$data['vista_name'];

@@ -113,7 +113,7 @@ class Catalogos extends CI_Controller {
 					'sub_nombre'=>'Nombre',
 					'sub_codigo'=>'Código',
 					'sub_fecha'=>'Fecha',
-					'sub_cat_id'=>'Catálogo',
+					'sub_cat_id'=>'Categoría',
 					'sub_descripcion'=>'Descripción',
 					'sub_estado'=>'Estado'
 				);

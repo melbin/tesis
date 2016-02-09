@@ -132,6 +132,110 @@ class Regional_model extends CI_Model
         return $detalle;
     }
 
+    function get_productos_depto($sub_id=null, $id_bodega=null, $saldo=null)
+    {
+
+        $existencias =  ($saldo==1)? ' >= '.$saldo: ' = 0';
+        $query = "
+            SELECT 
+        pro_id,  uni_nombre AS UM ,cat_nombre as categoria, pro_codigo AS codigo, pro_nombre as nombre,
+                sub_id,
+                (SELECT SUM(dee.dee_cantidad) 
+                        FROM  sar_saldo_articulo sar02
+                        INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id =  sar02.sar_id
+                        INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id AND moi01.moi_pro_id = 1
+                    WHERE sar02.sar_pro_id = sar.sar_pro_id
+                ) AS entradas,
+                (SELECT SUM(dee.dee_cantidad) 
+                        FROM  sar_saldo_articulo sar02
+                        INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id =  sar02.sar_id
+                        INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id AND moi01.moi_pro_id = 2
+                    WHERE sar02.sar_pro_id = sar.sar_pro_id
+                ) AS salidas,
+            SUM(sar.sar_cantidad) AS saldo,
+            sar.sar_precio AS precio                
+      FROM 
+      sar_saldo_articulo sar
+          INNER JOIN dee_detalle_mov ON dee_sar_id = sar.sar_id
+     INNER JOIN moi_movimiento_inv ON moi_id = dee_moi_id
+      INNER JOIN ali_almacen_inv ON ali_id= sar_ali_id
+      INNER JOIN pro_producto ON pro_id=sar_pro_id
+       INNER JOIN sub_subcatalogo ON sub_id= pro_sub_id
+      INNER JOIN cat_catalogo ON cat_id = sub_cat_id
+      INNER JOIN uni_unidad_medida ON uni_id = pro_uni_id
+        WHERE moi_ali_id= ".$id_bodega."
+            AND sub_id = ".$sub_id."
+            AND sar.sar_cantidad ".$existencias."
+    GROUP BY 
+                            pro_id
+    
+    ORDER BY 
+       pro_id ASC
+        ";
+
+      $detalle=$this->db->query($query)->result_array();
+      return $detalle;  
+
+    }
+
+    function get_productos_proveedor($id_proveedor=null)
+    {
+        $query = "
+            SELECT
+    pro_id,
+    uni_nombre AS UM,
+    cat_nombre AS categoria,
+    pro_codigo AS codigo,
+    pro_nombre AS nombre,
+    sub_id,
+prv_nombre AS proveedor,
+    (
+        SELECT
+            SUM(dee.dee_cantidad)
+        FROM
+            sar_saldo_articulo sar02
+        INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id = sar02.sar_id
+        INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id
+        AND moi01.moi_pro_id = 1
+        WHERE
+            sar02.sar_pro_id = sar.sar_pro_id
+    ) AS entradas,
+    (
+        SELECT
+            SUM(dee.dee_cantidad)
+        FROM
+            sar_saldo_articulo sar02
+        INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id = sar02.sar_id
+        INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id
+        AND moi01.moi_pro_id = 2
+        WHERE
+            sar02.sar_pro_id = sar.sar_pro_id
+    ) AS salidas,
+    SUM(sar.sar_cantidad) AS existencias,
+    sar.sar_precio AS precio
+FROM
+    sar_saldo_articulo sar
+INNER JOIN dee_detalle_mov ON dee_sar_id = sar.sar_id
+INNER JOIN moi_movimiento_inv moi ON moi.moi_id = dee_moi_id
+INNER JOIN prv_proveedor prv ON prv.prv_id = moi.moi_prv_id
+INNER JOIN ali_almacen_inv ON ali_id = sar_ali_id
+INNER JOIN pro_producto ON pro_id = sar_pro_id
+INNER JOIN sub_subcatalogo ON sub_id = pro_sub_id
+INNER JOIN cat_catalogo ON cat_id = sub_cat_id
+INNER JOIN uni_unidad_medida ON uni_id = pro_uni_id
+WHERE
+    prv.prv_id = ".$id_proveedor."
+GROUP BY
+    pro_id
+ORDER BY
+    pro_id ASC
+        ";
+    
+    $detalle=$this->db->query($query)->result_array();
+    return $detalle;      
+    
+    }
+
     function get_existencias($where)
     {
         $this->db->select()
@@ -202,7 +306,7 @@ class Regional_model extends CI_Model
                     ->join('des_detalle_solicitud','des_sol_id=sol_id','left')
                     ->join('ets_estado_solicitud','des_ets_id = ets_id','left')
                     ->where('sol_estado',1)
-                    ->where_in('des_ets_id',array('1','2','4'));
+                    ->where_in('des_ets_id',array('1','2','4','5'));
                     ;
           if(!empty($where)){
             $this->db->where($where);
@@ -275,6 +379,23 @@ class Regional_model extends CI_Model
                     ;
         $result = $this->db->get()->result_array();
         return $result;            
+    }
+
+    // Obtener los datos para actualizar
+    function seguimiento_solicitud($id_solicitud=0)
+    {
+
+        $query = $this->db->query('
+            SELECT * 
+            FROM 
+                des_detalle_solicitud AS des
+            INNER JOIN   sol_solicitud sol ON sol_id = des.des_sol_id
+            INNER JOIN det_detalle_especifico det ON  det.det_esp_id = des.des_esp_id AND  det.det_fondo_id = des.des_fon_id
+            INNER JOIN axd_asignacionxdetalle_especifico  axd ON  axd.axd_det_id = det.det_id AND axd.axd_depto_id = sol.sol_dpi_id
+            WHERE des_sol_id = '.$id_solicitud.'
+        ')->row_array();
+
+        return $query;
     }
 
 	function get_dropdown($tabla, $display = '', $name = '', $where = '', $selected = null

@@ -48,7 +48,7 @@
 	        		<td colspan="2">
 	        			<div class="form-group input-group">	
 		        			<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-		        			<input type="text" class="form-control" placeholder="0.00" id="saldo" name="saldo" maxlength="8" value="<?php echo !empty($det_detalles['det_saldo'])? number_format($det_detalles['det_saldo'],2,'.',''):''; ?>">	
+		        			<input type="text" class="form-control" placeholder="0.00" id="saldo" name="saldo" maxlength="8" value="<?php echo !empty($det_detalles['det_saldo'])? number_format(($det_detalles['det_saldo'] - $det_detalles['det_saldo_ejecutado']),2,'.',''):''; ?>">	
 	        			</div>	        			
                         <div id="saldo_error" style="color:red;font-size:11px;"></div>				
         			</td>

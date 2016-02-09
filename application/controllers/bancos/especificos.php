@@ -184,8 +184,9 @@ class Especificos extends CI_Controller {
 			$detalles['det_asignaciones'] = $this->regional_model->get_asignaciones_detalle($id_det);
 			$detalles['especifico'] = $det_detalles['esp_nombre'];
 			$detalles['total'] = $det_detalles['det_saldo'];
+			$detalles['det_detalles'] = $det_detalles;
 			$data['tabla_asignaciones'] = $this->load->view('bancos/especificos/tabla_asignaciones',$detalles, true);
-			//die(print_r($data['tabla_asignaciones'],true));
+			// die(print_r($data['tabla_asignaciones'],true));
 
 			$opciones="<option value='0' saldo='0'>Seleccione</option>";	
 			$fondos = $this->regional_model->get_tabla('fon_fondo', array('fon_estado'=>1));
@@ -336,8 +337,9 @@ class Especificos extends CI_Controller {
 		//	die(var_dump($_POST));	
 			$get_detalles = $this->regional_model->get_tabla('det_detalle_especifico', array('det_id'=>$_POST['det_id'], 'det_estado'=>1));
 			//die(print_r($get_detalles[0],true));
+			$saldo = ($get_detalles[0]['det_saldo_ejecutado']>0)? floatval($this->input->post('saldo')) + floatval($get_detalles[0]['det_saldo_ejecutado']) : $this->input->post('saldo');
 			$det_especifico = array(
-					'det_saldo'			=> $this->input->post('saldo'),
+					'det_saldo'			=> $saldo,
 					'det_descripcion'	=> $this->input->post('descripcion'),
 					'det_estado' 		=> 1,
 					'det_usu_mod' 		=> $this->tank_auth->get_user_id(),
@@ -348,11 +350,11 @@ class Especificos extends CI_Controller {
 			// Actualizar fondo
 			$fondo_saldo = 0;
 
-			if(floatval($get_detalles[0]['det_saldo']) > floatval($_POST['saldo'])){
-				$fondo_saldo = (floatval($get_detalles[0]['det_saldo']) - floatval($_POST['saldo']));
+			if(floatval($get_detalles[0]['det_saldo']) > floatval($saldo)){
+				$fondo_saldo = (floatval($get_detalles[0]['det_saldo']) - floatval($saldo));
 			} else 
-			if(floatval($get_detalles[0]['det_saldo']) < floatval($_POST['saldo'])){
-				$fondo_saldo = (floatval($_POST['saldo']) - floatval($get_detalles[0]['det_saldo']))*(-1);
+			if(floatval($get_detalles[0]['det_saldo']) < floatval($saldo)){
+				$fondo_saldo = (floatval($saldo) - floatval($get_detalles[0]['det_saldo']))*(-1);
 			}	
 			
 			$cantidad_fondo = $this->sistema_model->get_campo('fon_fondo','fon_cantidad',array('fon_id'=>$get_detalles[0]['det_fondo_id']));

@@ -138,7 +138,7 @@ class Personal extends CI_Controller {
 		// 	Estas tres lineas son principales cuando se desea imprimir un Grocery Crud en el sistema
 		 	$crud->unset_jquery(); // No llama al jQuery del Grocery Crud
 		 	$output = $crud->render();
-
+		 	$data['titulo']="Roles";
 		 	$data['vista_name']='bancos/index';
 		 	$data['texto'] = $this->load->view('sistema/personal/roles', $output, true); 
 

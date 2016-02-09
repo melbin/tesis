@@ -357,13 +357,14 @@ class Abastecimiento extends CI_Controller {
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-
+			
 			$data['logo'] = $this->regional_model->get_parametro("logo");
 			$data['titulo']="Solicitudes pendientes";
 			$data['vista_name'] = "solicitudes/procesar_solicitudes";
 			$user_id	= $this->tank_auth->get_user_id();
 				// All your code goes here
 			$data['abastecimiento'] = 1;
+			
 			$data['solicitudes'] = $this->regional_model->detalle_sol_abastecimiento();
 			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
 			// die(print_r($this->db->last_query()));
@@ -565,6 +566,85 @@ class Abastecimiento extends CI_Controller {
 		$arreglo = array('um'=>$um['uni_valor']);
 		echo json_encode($arreglo);
 	}
+
+		function anexo_solicitud($id_solicitud=0)
+	{
+
+
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			$crud = new grocery_CRUD();
+			$crud->unset_print();
+			$crud->unset_export();
+			$crud->set_table('axs_anexo_solicitud');
+			$crud->set_subject('anexo');
+			$crud->where('axs_id_sol',$id_solicitud);
+			$columnas = array(
+				'axs_id_sol',
+				'axs_anexo',
+				'axs_nombre',
+				'axs_descripcion',
+				'axs_estado'
+				);
+
+			$add_fields = array(
+				'axs_anexo',
+				'axs_nombre',
+				'axs_descripcion',
+				'axs_estado',
+				'axs_id_sol',
+				'axs_usu_mod',
+				'axs_fecha_mod'
+				);
+
+			$requeridos = array(
+					'axs_anexo'
+				);
+
+			$alias = array(
+					'axs_id_sol'=>'# solicitud',
+					'axs_anexo'=>'Anexo',
+					'axs_nombre'=>'Nombre',
+					'axs_descripcion'=>'Descripción',
+					'axs_estado'=>'Estado'
+				);
+
+			$crud->required_fields($requeridos);
+			$crud->columns($columnas);
+			$crud->fields($add_fields);
+			$crud->display_as($alias);
+
+			$crud->field_type('axs_usu_mod', 'hidden', $this->tank_auth->get_user_id());
+			$crud->field_type('axs_id_sol','hidden', $id_solicitud);
+			$crud->field_type('axs_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
+			$crud->field_type('axs_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
+			//$crud->set_relation('axs_id_sol','sol_solicitud','lnt_nombre');
+			$crud->set_field_upload('axs_anexo','assets/uploads/files');
+
+			// Datos generales de la pagina	
+			
+			$data['menu_sistema']=true;
+			$user_id	= $this->tank_auth->get_user_id();
+			$data['vista_name']='inventario/index'; // Cuando se necesite usar javascript, venir aca.
+			$data['titulo']="Anexo por solicitud";
+			$data['logo'] = $this->regional_model->get_parametro("logo");
+			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
+			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
+		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
+
+
+		// 	Estas tres lineas son principales cuando se desea imprimir un Grocery Crud en el sistema
+		 	$crud->unset_jquery(); // No llama al jQuery del Grocery Crud
+		 	$output = $crud->render();
+		 	//$this->load->view('sistema/pais',$output);
+
+		 	$data['texto'] = $this->load->view('abastecimiento/anexo_solicitud', $output, true); 
+		 	$this->__cargarVista($data);	 	 
+	 }
+	
+	}
+
 
 
 	function __cargarVista($data=0)

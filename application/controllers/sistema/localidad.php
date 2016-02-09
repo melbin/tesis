@@ -45,7 +45,7 @@ class Localidad extends CI_Controller {
 			$crud->set_subject('Paises');
 			$crud->required_fields('pai_nombre');
 			$crud->columns('pai_nombre','pai_estado');
-			$crud->display_as('pai_nombre','pais');
+			$crud->display_as('pai_nombre','país');
 			$crud->display_as('pai_estado','estado');			
 			$crud->field_type('pai_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('pai_fecha_mod', 'hidden', date('Y-m-d H:i:s'));

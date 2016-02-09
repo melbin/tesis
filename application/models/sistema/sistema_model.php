@@ -87,6 +87,22 @@ class Sistema_model extends CI_Model
     	return $rows;
 	}
 
+	function get_contratistas($id_solicitud)
+	{
+		$this->db->select()
+				->from('cxs_contratistaxsolicitud')
+				->join('con_contratista','con_id = cxs_con_id','left')
+				->join('prv_proveedor', 'prv_id = con_prv_id', 'left')
+				->join('sol_solicitud',' sol_id = cxs_sol_id','left')
+				->join('des_detalle_solicitud', 'des_sol_id = cxs_sol_id','left')		
+				->where('cxs_sol_id',$id_solicitud)
+		;
+
+		$query = $this->db->get()->result_array();
+		return $query;
+				
+	}
+
 	function get_registro($tabla, $where){
 		$this->db->select();
 		$this->db->from($tabla);

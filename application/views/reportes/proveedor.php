@@ -8,8 +8,8 @@ th, td {
 }
 </style>
 <script type="text/javascript">
-	var accion_excel="<?php echo base_url('home/reportes/imprimir_productos_depto/1'); ?>";
- 	var accion_pdf="<?php echo base_url('home/reportes/imprimir_productos_depto/2'); ?>";
+	var accion_excel="<?php echo base_url('home/reportes/imprimir_proveedor/1'); ?>";
+ 	var accion_pdf="<?php echo base_url('home/reportes/imprimir_proveedor/2'); ?>";
 </script>
 <div class="panel panel-default">
         <div class="panel-heading">
@@ -22,22 +22,12 @@ th, td {
         	<table width="50%" align="left" border="0">
         		<tr><th width="23%"></th><th></th><th></th></tr>
         		<tr> <!-- <i id="requerido">*</i> -->
-        		<td width="10%"><label>Bodega:<b style="color:red;">*</b></label></td>
+        		<td width="10%"><label>Proveedor:<b style="color:red;">*</b></label></td>
         			<td colspan="2">
-        				<select class="form-control select2" id="bodega" name="bodega" placeholder="seleccione">
-        					<?php echo (isset($bodegas))? $bodegas:null; ?>
+        				<select class="form-control select2" id="proveedor" name="proveedor" placeholder="seleccione">
+        					<?php echo (isset($proveedor))? $proveedor:null; ?>
         				</select>	
-                        <div id="bodega_error" style="color:red;font-size:11px;"></div>
-        			</td>
-        		</tr>
-        		<tr> 
-        		<td width="10%"><label>Tipo:<b style="color:red;">*</b></label></td>
-        			<td colspan="2">
-        				<select class="form-control select2" id="tipo" name="tipo" placeholder="seleccione">
-        					<option value="1">Con saldo</option>
-        					<option value="2">Sin saldo</option>
-        				</select>
-                        <div id="bodega_error" style="color:red;font-size:11px;"></div>
+                        <div id="proveedor_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>
         		<tr>
@@ -59,8 +49,7 @@ th, td {
         <div class="panel-body">
             <!-- All your code here -->
             <form target="_blank" id="frm-descarga" method="POST">
-                <input type="hidden" name="id_bodega" id="id_bodega">
-                <input type="hidden" name="id_tipo" id="id_tipo">
+                <input type="hidden" name="id_proveedor" id="id_proveedor">
                 <div class="form-actions">
                     <button type="button"  onclick="javascript: this.form.action=accion_excel; this.form.submit(); " class="btn btn-info" title="Exportar a excel" id="" ><strong><span class="icomoon-icon-file-excel white"></span>Exportar a excel</strong></button>
                     <button type="button"  onclick="javascript: this.form.action=accion_pdf; this.form.submit(); " class="btn btn-info" title="Exportar a PDF" id="" ><strong><span class="icomoon-icon-file-pdf white"></span>Exportar PDF</strong></button>
@@ -91,34 +80,33 @@ th, td {
 
 		$("#buscar").on('click',function(){
 			
-			if( $.trim($("#bodega").val())!='' && $.trim($("#bodega").val())>0 )
+			if( $.trim($("#proveedor").val())!='' && $.trim($("#proveedor").val())>0 )
 			{	
 
 			$.ajax({
-	            url: urlj+'home/reportes/get_productos_depto',
+	            url: urlj+'home/reportes/imprimir_proveedor',
 	            type: 'POST',
 	            dataType: 'json',
-	            data: {id_bodega : $("#bodega").val(), id_tipo: $("#tipo").val()},
+	            data: { id_proveedor : $("#proveedor").val() },
 	            success:function(data) {
-	            	$("#id_bodega").val($("#bodega").val());
-	            	$("#id_tipo").val($("#tipo").val());
+	               $("#id_proveedor").val($("#proveedor").val());
 	               $("#contenedor_informe").show("slide", { direction: "left" }, 1000);
 	               $("#div_detalle").html('').hide("slide", {direction: "right"}, 1000);
-                   $("#div_detalle").html(data.drop).show("slide", { direction: "left" }, 1000);
+                    $("#div_detalle").html(data.drop).show("slide", { direction: "left" }, 1000);
                     $('#dataTables-example').DataTable({
                         responsive: true,
                         emptyTable: "No existen registros",     
                     });
-                    $("#td_temporal").attr("colspan",7);
-                    $(".drop").remove();
+                    $(".dataTables_empty").text("No se encontraron registros...");
+                    // $("#td_temporal").attr("colspan",8);
+                    // $(".drop").remove();
 	            }
 	        });
 
 			} else {
-				alertify.error("Debe de seleccionar una bodega");
+				alertify.error("Debe de seleccionar un proveedor");
 			}
 		});	
 
 	});
 </script>
-

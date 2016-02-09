@@ -2,7 +2,7 @@
 	$logo='<img height="48px" width="auto" src="'.base_url().'media/sistema/'.$this->regional_model->get_parametro("logo").'.gif">';
 	$texto='<b>MINISTERIO DE SALUD<br></b>';
 	$texto.='<b>REGIÓN OCCIDENTAL<br></b>';
-	$texto.='<br>'.date('d/m/Y').' '.date('H:i:s');
+	$texto.='<br>'.date('d/m/Y').' '.date('h:i A');
 	$el_salvador='<img height="48px" width="auto" src="'.base_url().'media/sistema/ministerio_salud.jpg">';
 	
 ?>

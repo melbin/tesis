@@ -64,11 +64,11 @@ class Reportes extends CI_Controller {
     	if (!$this->tank_auth->is_logged_in()) {
             redirect('/auth/login/');
         } else {
+            // Datos para los filtros
 
-			$data["titulo"] ="Inventario por departamento";
+			$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv', '{ali_nombre}','',array('ali_estado'=>1),null, '','ali_id', true);
+            $data["titulo"] ="Inventario por bodega";
 			$data['vista_name'] = "reportes/por_departamento";
-
-
 			$this->__cargarVista($data);
         }
     } // End reporte por departamento
@@ -147,6 +147,102 @@ class Reportes extends CI_Controller {
         }
 	}
 
+    function get_productos_depto()
+    {
+        $id_bodega = $this->input->post('id_bodega');
+        $id_tipo   = (!empty($_POST['id_tipo']))? $this->input->post('id_tipo'):1; // 1= Con Saldo, 2 = Sin saldo
+
+        // Consultar los datos
+        $sub_categoria = $this->regional_model->get_tabla('sub_subcatalogo', array('sub_estado'=>1));
+        $articulos_array = array();
+        foreach ($sub_categoria as $key => $value) {
+            $query  =   $this->regional_model->get_productos_depto($value['sub_id'], $id_bodega, $id_tipo);
+            array_push($articulos_array, $query);
+        }
+        $data['sub_categoria'] = $sub_categoria;
+        $data['articulos_array'] = $articulos_array;
+        $data['html'] = $this->load->view('reportes/reporte_tabla_productos',$data,true);
+
+        echo json_encode(array('drop'=>$data['html']));
+        
+    }
+
+    function imprimir_productos_depto($excel=0)
+    {
+        $id_bodega = $this->input->post('id_bodega');
+        $id_tipo   = (!empty($_POST['id_tipo']))? $this->input->post('id_tipo'):1; // 1= Con Saldo, 2 = Sin saldo
+        $bodega_nombre = $this->sistema_model->get_campo('ali_almacen_inv','ali_nombre',array('ali_id'=>$id_bodega));
+        // Consultar los datos
+        $sub_categoria = $this->regional_model->get_tabla('sub_subcatalogo', array('sub_estado'=>1));
+        $articulos_array = array();
+        foreach ($sub_categoria as $key => $value) {
+            $query  =   $this->regional_model->get_productos_depto($value['sub_id'], $id_bodega, $id_tipo);
+            array_push($articulos_array, $query);
+        }
+        $data['sub_categoria'] = $sub_categoria;
+        $data['articulos_array'] = $articulos_array;
+        $data['html'] = $this->load->view('reportes/reporte_tabla_productos',$data,true);
+        // die(print_r($data['html'],true));
+
+        $filename = 'reporte_existencias_'.date('dmY').'_'.substr(uniqid(md5(rand()), true), 0, 7);
+
+        if($excel==1){
+            header("Content-Type: application/vnd.ms-excel");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("content-disposition: attachment;filename=" . $filename . ".xls");
+
+            echo $data['html'];
+        }
+        else {
+                $this->load->library('pdf'); //libreria pdf
+                $this->pdf->reportePDF('reportes/reporte_por_bodega_pdf', $data, 'Productos por bodega <br> Bodega: '.$bodega_nombre);
+        }
+
+    }
+
+    function proveedores()
+    {
+        if (!$this->tank_auth->is_logged_in()) {
+            redirect('/auth/login/');
+        } else {
+            // Datos para los filtros
+
+            $data['proveedor']  =   $this->regional_model->get_dropdown('prv_proveedor', '{prv_nombre}','',array('prv_estado'=>1),null, '','prv_id', true);
+            $data["titulo"] ="Reporte por proveedor";
+            $data['vista_name'] = "reportes/proveedor";
+            $this->__cargarVista($data);
+        }
+    } // End reporte por departamento
+
+    function imprimir_proveedor($excel=null)
+    {
+        $id_proveedor = $this->input->post('id_proveedor');
+       
+        // Consultar los datos
+        $data['query']  =   $this->regional_model->get_productos_proveedor($id_proveedor);
+        $data['html'] = $this->load->view('reportes/reporte_por_proveedor',$data,true);
+
+        if($excel==1){
+            $filename = 'reporte_existencias_proveedor'.date('dmY').'_'.substr(uniqid(md5(rand()), true), 0, 7);
+            // ob_end_clean();
+            // ob_start();
+            header("Content-Type: application/vnd.ms-excel");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("content-disposition: attachment;filename=" . $filename . ".xls");
+
+            echo $data['html'];
+        }
+        else
+        if($excel==2) {
+                $this->load->library('pdf'); //libreria pdf
+                $this->pdf->reportePDF('reportes/reporte_por_proveedor_pdf', $data, 'Existencias por proveedor');
+        } else {
+            echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
+        }
+    }
+
     function __cargarVista($data=0)
 	{	
 	    $data['logo'] = $this->regional_model->get_parametro("logo");
@@ -163,15 +259,3 @@ class Reportes extends CI_Controller {
 		$this->masterpage->show();
 	}
 } // End class reportes
-
-
-
-
-
-
-
-
-
-
-
-

@@ -81,9 +81,66 @@ class Financiero extends CI_Controller {
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-			die(print_r($_POST,true));
+			//die(print_r($_POST,true));
+			$id_solicitud = $this->input->post('solicitud');
+			$observacion  = $this->input->post('observacion');
+
+			$historial_sol = $this->regional_model->seguimiento_solicitud($id_solicitud);
+			
+			// Actualizar la Solicitud
+			$sol_datos = array(
+					'des_ets_id'		=> 4,
+					'des_fecha_mod' 	=> date('Y-m-d H:i:s'),
+					'des_observacion'	=> (!empty($observacion))? $observacion:null,
+					'des_usu_mod'		=> $this->tank_auth->get_user_id()
+				);
+
+			$sol_registo = $this->regional_model->actualizar_registro('des_detalle_solicitud', $sol_datos, array('des_sol_id'=>$id_solicitud));
+
+			if($sol_registo>0){
+				// Actualizacion del det_detalle_especifico
+			
+				$monto_solicitud = floatval($historial_sol['des_total']);
+				$det_devengado   = floatval($historial_sol['det_saldo_devengado']);
+				$det_saldo_ejecutado = floatval($historial_sol['det_saldo_ejecutado']);
+				$subtotal = 0;
+				if($monto_solicitud <= $det_devengado){
+					$subtotal = $det_devengado - $monto_solicitud; // Nuevo det_saldo_devengado
+				}
+				
+				$total = $det_saldo_ejecutado + $monto_solicitud; // Total saldo ejecutado
+
+				$det_datos = array(
+						'det_saldo_devengado'	=> $subtotal,
+						'det_saldo_ejecutado'	=> $total,
+						'det_usu_mod'			=> $this->tank_auth->get_user_id(),
+						'det_fecha_mod'			=> date('Y-m-d H:i:s')
+					);
+
+				$det_registro = $this->regional_model->actualizar_registro('det_detalle_especifico', $det_datos, array('det_id'=> $historial_sol['det_id']));
+				
+				$cantidad = (floatval($historial_sol['axd_cantidad']) - floatval($historial_sol['des_total']));
+				$reserva  = (floatval($historial_sol['axd_reserva']) - floatval($historial_sol['des_total']));
+				$axd_array = array(
+						'axd_cantidad'	=> ($cantidad>=0)? $cantidad:0,
+						'axd_reserva'	=> ($reserva>=0)? $reserva:0,
+						'axd_usu_mod'	=> $this->tank_auth->get_user_id(),
+						'axd_fecha_mod'	=> date('Y-m-d H:i:s')
+					);					
+
+				$axd_registro = $this->regional_model->actualizar_registro('axd_asignacionxdetalle_especifico', $axd_array, array('axd_id'=> $historial_sol['axd_id']));
+
+				// No llevaria Movimiento financiero. 
+			$alerta=array('registro'=>$registro,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Se envió la solicitud a abastecimiento.");	
+			} else {  // Solicitud actualizada 
+				$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Acción no procesada",'texto_alerta'=>"No se pudo efectuar la tarea anterior.");
+			}
+
+			$this->session->set_flashdata($alerta);       
+			redirect('home/financiero/procesar_solicitudes');										
 		}
-	}
+	} // End aprobar solicitud
+
 
 		function __cargarVista($data=0)
 	{	

@@ -29,28 +29,32 @@
                         </button>
                         <ul class="dropdown-menu">
 
-                            <?php if(!empty($financiero) && $value['ets_id']==7) {?>
-                    
-                            <?php if($value['ets_id']==7) {?>
+                            <?php if(!empty($financiero)) {
+                                if($value['ets_id']==7){ ?>
+                            
                             <li>
-                                <a class="ver_modal" title="Aprobar" href="#" >
+                                <a class="ver_modal" title="Enviar" href="#" id_sol="<?php echo $value['sol_id']; ?>" >
                                 <span class="fa fa-check"></span>
-                               Aprobar</a>
+                               Abastecimiento</a>
+                            </li>
+                            <li><a target="_blank" title="Anexo" href="<?php echo base_url();?>home/abastecimiento/anexo_solicitud/<?php echo $value['sol_id']; ?>">
+                                <span class="fa fa-file-photo-o"></span>
+                                    Anexo
+                                </a>
                             </li>
                             <li>
-                                <a class="ver_modal2" title="Rechazar" href="#" >
-                                <span class="fa fa-check"></span>
-                               Rechazar</a>
-                            </li>
-                            <li><a target="_blank" title="Imprimir" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>/1">
-                                <span class="glyphicon glyphicon-print"></span>
-                                Imprimir</a></li>            
-                                <li><a target="_blank" title="Excel" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>">
+                                <a target="_blank" title="Imprimir" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>/1">
+                                    <span class="glyphicon glyphicon-print"></span>
+                                    Imprimir
+                                </a>
+                            </li>            
+                            <li><a target="_blank" title="Excel" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>">
                                 <span class="fa fa-file-excel-o"></span>
-                                Exportar</a></li>                        
-                            <?php }
+                                    Exportar
+                                </a>
+                            </li>                        
+                            <?php
                              } else { ?>
-                             <?php if(!empty($financiero)) && $value['ets_id']!=7 { ?>
 
                              <li>
                                 <a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'].'/2')?>" >
@@ -58,13 +62,39 @@
                                 Editar</a>
                             </li>
                              
-                             <?php } else { ?>
-                            <?php if(!empty($abastecimiento)) { ?>
-                                <li><a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'])?>" >
+                             <?php }
+                                 } else
+                                    if(!empty($abastecimiento)) {
+                                        if($value['ets_id']==4 || $value['ets_id']==5){ ?>
+                            <li>
+                                <a target="_blank" title="Imprimir" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>/1">
+                                    <span class="glyphicon glyphicon-print"></span>
+                                    Imprimir
+                                </a>
+                            </li>            
+                            <li><a target="_blank" title="Excel" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>">
+                                <span class="fa fa-file-excel-o"></span>
+                                    Exportar
+                                </a>
+                            </li>
+                            <li><a target="_blank" title="Compra" href="<?php echo base_url();?>home/solicitudes/registrar_compra/<?php echo $value['sol_id']; ?>">
+                                <span class="fa fa-check"></span>
+                                    Registrar compra
+                                </a>
+                            </li>
+                            <li><a target="_blank" title="Anexo" href="<?php echo base_url();?>home/abastecimiento/anexo_solicitud/<?php echo $value['sol_id']; ?>">
+                                <span class="fa fa-file-photo-o"></span>
+                                    Anexo
+                                </a>
+                            </li>
+                            <?php } else { ?>
+                            <li><a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'])?>" >
                                 <span class="fa fa-pencil"></span>
                                 Editar</a></li>     
+                                <li>
 
-                            <?php } else { ?>
+
+                            <?php } } else { ?>
                                 <li><a  cont="<?php echo $key; ?>" id="detalle_<?php echo $key; ?>" value="<?php echo $value['sol_id']; ?>" href="#">
                                 <span class="glyphicon glyphicon-search"></span>
                                 Detalle</a></li>
