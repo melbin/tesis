@@ -196,7 +196,7 @@ class Reportes extends CI_Controller {
         }
         else {
                 $this->load->library('pdf'); //libreria pdf
-                $this->pdf->reportePDF('reportes/reporte_por_bodega_pdf', $data, 'Productos por bodega <br> Bodega: '.$bodega_nombre);
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Productos por bodega <br> Bodega: '.$bodega_nombre);
         }
 
     }
@@ -237,7 +237,7 @@ class Reportes extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
-                $this->pdf->reportePDF('reportes/reporte_por_proveedor_pdf', $data, 'Existencias por proveedor');
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Existencias por proveedor');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
         }

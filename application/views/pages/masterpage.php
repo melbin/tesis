@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title>Regional de Salud</title>
-
+    <link rel="shortcut icon" href="<?php echo base_url(); ?>media/sistema/favicon.ico" />
     <!-- Bootstrap Core CSS -->
     <link href="<?php echo base_url()?>bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -122,6 +122,9 @@
     <script src="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-buttons.js"></script>
     <script src="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-media.js"></script>
     <script src="<?php echo base_url()?>js/fancy_box/helpers/jquery.fancybox-thumbs.js"></script>
+
+    <!-- Init plugins only for page -->
+      <script type="text/javascript" src="<?php echo base_url()?>js/jquery-ui-timepicker-addon.js"></script>
 
     <?php if(isset($texto2)) { ?>
     <!-- CSS y JavaScript del Grocery Crud -->
@@ -319,6 +322,26 @@
         $('.scrollup').click(function(){
             $("html, body").animate({ scrollTop: 0 }, 600);
             return false;
+        });
+        $("input[name*='fecha']").mask("99-99-9999")    
+        $("input[name*='fecha']").datepicker({
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-mm-yy',
+            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            nextText: "Siguiente",
+            prevText: "Anterior",
+            closeText : "Cerrar",
+            currentText: "Ahora"
+        }).click(function() {
+            $('button.ui-datepicker-current')
+            .removeClass('ui-priority-secondary')
+            .addClass('ui-priority-primary');
+        });
+        $('button.ui-datepicker-current').live('click', function() {
+            $.datepicker._curInst.input.datepicker('setDate', new Date()).datepicker('hide').blur();
         });
 
         //  cargar un Wait en cada peticion Ajax

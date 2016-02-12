@@ -495,7 +495,7 @@ ORDER BY
 
 				$form .= '</optgroup>'."\n";
 			}
-			else
+		else
 			{
 				$sel = (in_array($key, $selected)) ? ' selected="selected"' : '';
 
@@ -506,6 +506,65 @@ ORDER BY
         return $form;
         
     }
+
+    function solicitudes_especifico($id_fondo, $id_especifico, $fecha_in, $fecha_out)
+    {
+        $query = "
+        SELECT
+    des.des_id,
+    des.des_sol_id sol_id,
+    dpi.dpi_nombre nombre,
+    cat.cat_nombre categoria,
+    des.des_fecha fecha,
+    des.des_total cantidad,
+    (
+        SELECT
+            det_saldo_votado
+        FROM
+            det_detalle_especifico det2
+        WHERE
+            det2.det_fondo_id = des.des_fon_id
+        AND det2.det_esp_id = des.des_esp_id
+    ) - (
+        SELECT
+            SUM(des_total)
+        FROM
+            des_detalle_solicitud des2
+        WHERE
+            des2.des_id <= des.des_id
+        AND des2.des_fon_id = des.des_fon_id
+        AND des2.des_esp_id = des.des_esp_id
+    ) AS total
+FROM
+    des_detalle_solicitud des
+INNER JOIN sol_solicitud sol ON sol.sol_id = des.des_sol_id
+INNER JOIN dpi_departamento_interno dpi ON dpi.dpi_id = sol.sol_dpi_id
+INNER JOIN cat_catalogo cat ON cat.cat_id = des.des_cat_id
+WHERE
+    des.des_fon_id = ".$id_fondo."
+AND des.des_esp_id = ".$id_especifico."
+AND des.des_fecha BETWEEN '".$fecha_in."'
+AND '".$fecha_out."'
+ORDER BY
+    des_id
+        ";
+        
+      $detalle=$this->db->query($query)->result_array();
+      return $detalle;  
+    }
+
+    function get_especifico_detalle($id_especifico)
+    {
+        $this->db->select()
+                ->from('esp_especifico')
+                ->join('det_detalle_especifico',' esp_id = det_esp_id') 
+                ->where('esp_id',$id_especifico)
+                ; 
+
+        $query = $this->db->get()->row_array();
+        return $query;          
+    }
+
 }
 
 
