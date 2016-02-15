@@ -42,7 +42,8 @@ class Reportes_financiero extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			// All your code goes here
-			$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv', '{ali_nombre}','',array('ali_estado'=>1),null, '','ali_id', true);
+			//$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv', '{ali_nombre}','',array('ali_estado'=>1),null, '','ali_id', true);
+			$data['fondos'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1),null, '','fon_id', true);
             $data["titulo"] ="Reporte de distribución por fondo";
 			$data['vista_name'] = "bancos/reportes_financiero/reporte_fondos";
 			$this->__cargarVista($data);
@@ -80,6 +81,46 @@ class Reportes_financiero extends CI_Controller {
 	function imprimir_especifico()
 	{
 		die(print_r("En desarollo..."));
+	}
+
+	function get_detalle_fondo($excel=null)
+	{
+		$id_fondo = $this->input->post('id_fondo');
+		$fecha_in = !empty($_POST['fecha_in'])? date('Y-m-d', strtotime($_POST['fecha_in'])) : date('Y-m-01');
+		$fecha_out= !empty($_POST['fecha_out'])? date('Y-m-d', strtotime($_POST['fecha_out'])) : date('Y-m-t');
+
+        $especifico = $this->regional_model->get_especifico_saldo($id_fondo);
+        $fondo = $this->sistema_model->get_registro('fon_fondo', array('fon_id'=>$id_fondo));
+        
+        $asignacion_array = array();
+        foreach ($especifico as $key => $value) { //get_productos_depto
+            $query  =   $this->regional_model->get_especifico_fondo($value['esp_id'], $id_fondo, $fecha_in, $fecha_out);
+            array_push($asignacion_array, $query);
+        }
+        
+        $data['especifico'] = $especifico;
+        $data['asignacion_array'] = $asignacion_array;
+        $data['html'] = $this->load->view('reportes/reporte_tabla_fondos',$data,true);
+
+		if($excel==1){
+            $filename = 'reporte_detalle_fondo'.date('dmY').'_'.substr(uniqid(md5(rand()), true), 0, 7);
+            // ob_end_clean();
+            // ob_start();
+            header("Content-Type: application/vnd.ms-excel");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("content-disposition: attachment;filename=" . $filename . ".xls");
+
+            echo $data['html'];
+        }
+        else
+        if($excel==2) {
+                $this->load->library('pdf'); //libreria pdf
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'detalle por Fondo <br> Fondo: '.strtoupper($fondo['fon_nombre']).'<br> Desde: '.date('d-m-Y', strtotime($_POST['fecha_in'])).'<br>Hasta: '.date('d-m-Y', strtotime($_POST['fecha_out'])));
+        } else {
+            echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
+        }
+
 	}
 
 	function get_detalle_especifico($excel=null)

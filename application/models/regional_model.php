@@ -178,6 +178,49 @@ class Regional_model extends CI_Model
 
     }
 
+    function get_especifico_fondo($esp_id, $fon_id, $fecha_in, $fecha_out)
+    {
+        $query = "
+            SELECT
+                NULL AS entrada,
+                axd.axd_fecha AS fecha_asignacion,
+                dpi.dpi_nombre,
+                fon.fon_nombre,
+                axd.axd_depto_id,
+                axd.axd_id,
+              axd.axd_cantidad AS salida,
+                det.det_saldo - IFNULL(
+                    (
+                        SELECT
+                            SUM(axd_cantidad)
+                        FROM
+                            axd_asignacionxdetalle_especifico axd02
+                        WHERE
+                            axd02.axd_id <= axd.axd_id
+                        AND axd02.axd_det_id = det.det_id
+                    ),
+                    0
+                ) AS total
+            FROM
+                (
+                    (
+                        det_detalle_especifico det
+                        INNER JOIN axd_asignacionxdetalle_especifico axd ON axd.axd_det_id = det.det_id
+                    )
+                    INNER JOIN esp_especifico esp ON det.det_esp_id = esp.esp_id
+                )
+                INNER JOIN dpi_departamento_interno dpi ON dpi.dpi_id = axd.axd_depto_id
+                INNER JOIN fon_fondo fon ON fon.fon_id = det.det_fondo_id
+            WHERE
+                det.det_fondo_id = ".$fon_id."
+            AND det.det_esp_id = ".$esp_id."
+            AND det.det_fecha BETWEEN '".$fecha_in."' AND '".$fecha_out."'
+        ";
+
+        $detalle=$this->db->query($query)->result_array();
+        return $detalle;
+    }
+
     function get_productos_proveedor($id_proveedor=null)
     {
         $query = "
@@ -517,6 +560,7 @@ ORDER BY
     cat.cat_nombre categoria,
     des.des_fecha fecha,
     des.des_total cantidad,
+    ets.ets_nombre,
     (
         SELECT
             det_saldo_votado
@@ -540,7 +584,10 @@ FROM
 INNER JOIN sol_solicitud sol ON sol.sol_id = des.des_sol_id
 INNER JOIN dpi_departamento_interno dpi ON dpi.dpi_id = sol.sol_dpi_id
 INNER JOIN cat_catalogo cat ON cat.cat_id = des.des_cat_id
+INNER JOIN ets_estado_solicitud ets ON ets.ets_id = des.des_ets_id
 WHERE
+    des.des_ets_id != 3 
+AND    
     des.des_fon_id = ".$id_fondo."
 AND des.des_esp_id = ".$id_especifico."
 AND des.des_fecha BETWEEN '".$fecha_in."'
@@ -563,6 +610,17 @@ ORDER BY
 
         $query = $this->db->get()->row_array();
         return $query;          
+    }
+
+    function get_especifico_saldo($id_fondo)
+    {
+        $this->db->select()
+                ->from('esp_especifico')
+                ->join('det_detalle_especifico', 'det_esp_id = esp_id')
+                ->where('det_fondo_id', $id_fondo)
+                ;
+        $query = $this->db->get()->result_array();        
+        return $query;
     }
 
 }
