@@ -623,6 +623,64 @@ ORDER BY
         return $query;
     }
 
+    function get_saldos_congelados($fondo = null, $especifico = null, $fecha_in, $fecha_out)
+    {
+        $this->db->select()
+                ->from('foc_fondo_congelado')
+                ->join('det_detalle_especifico', 'det_id = foc_det_id')
+                ->join('esp_especifico', 'esp_id = det_esp_id')
+                ->join('fon_fondo', 'fon_id = det_fondo_id')
+                ->where('foc_fecha >=',$fecha_in)
+                ->where('foc_fecha <=',$fecha_out)
+                ->where('foc_estado',1)
+            ;
+            if($fondo)      $this->db->where('det_fondo_id', $fondo);
+            if($especifico) $this->db->where('det_esp_id', $especifico);
+
+            $query = $this->db->get()->result_array();
+            return $query;
+    }
+
+    function get_solicitudes_rechazadas($depto =null, $fecha_in, $fecha_out)
+    {
+        $this->db->select()
+            ->from('res_rechazo_solicitud')
+            ->join('sol_solicitud', 'sol_id = res_sol_id')
+            ->join('dpi_departamento_interno', 'dpi_id = sol_dpi_id')
+            ->join('des_detalle_solicitud', 'des_sol_id = sol_id')
+            ->join('esp_especifico', 'esp_id = des_esp_id')
+            ->where('res_estado',1)
+            ->where('res_fecha >=', $fecha_in)
+            ->where('res_fecha <=', $fecha_out)
+        ;
+
+        if($depto) $this->db->where('dpi_id',$depto);
+        
+        $query = $this->db->get()->result_array();
+        return $query;    
+    }
+
+    function get_solicitudes_finalizadas($depto=null, $fecha_in, $fecha_out)
+    {
+
+        $this->db->select()
+            ->from('sol_solicitud')
+            ->join('des_detalle_solicitud', 'des_sol_id = sol_id')
+            ->join('dpi_departamento_interno', 'dpi_id = sol_dpi_id')
+            ->join('esp_especifico', 'esp_id = des_esp_id')
+            ->join('fon_fondo', 'fon_id = des_fon_id')
+            ->where('des_ets_id',5) // Estado finalizado
+            ->where('sol_fecha >=', $fecha_in)
+            ->where('sol_fecha <=', $fecha_out)
+        ;
+
+        if($depto) $this->db->where('dpi_id',$depto);
+        
+        $query = $this->db->get()->result_array();
+        return $query;    
+    
+    }
+
 }
 
 

@@ -64,10 +64,9 @@ class Pdf extends TCPDF
         $this->SetMargins(10,10, 10);
         // add a page
         $this->AddPage($orientacion,$formato);
-
+        
         $this->writeHTML($output, true, false, false, false, '');
 
-        
         if (ob_get_contents()) ob_end_clean();
         $this->Output('Reporte_'.$reporte.'_'.date('Y-m-d_H-i-s').'.pdf', $salida);
     }// End makePDF

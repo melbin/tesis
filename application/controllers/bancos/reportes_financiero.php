@@ -70,7 +70,7 @@ class Reportes_financiero extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			// All your code goes here
-			$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv', '{ali_nombre}','',array('ali_estado'=>1),null, '','ali_id', true);
+			$data['fondos'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1),null, '','fon_id', true);
             $data["titulo"] ="Reporte de saldos congelados";
 			$data['vista_name'] = "bancos/reportes_financiero/reporte_saldos_congelados";
 			$this->__cargarVista($data);
@@ -149,6 +149,37 @@ class Reportes_financiero extends CI_Controller {
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Detalle por específico');
+        } else {
+            echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
+        }
+	}
+
+
+		function get_saldos_congelados($excel=null)
+	{
+		//die(print_r($_POST,true));
+		$id_fondo = !empty($_POST['id_fondo'])? $this->input->post('id_fondo'): null;
+		$id_esp   = !empty($_POST['id_especifico'])? $this->input->post('id_especifico'): null;
+		$fecha_in = !empty($_POST['fecha_in'])? date('Y-m-d', strtotime($_POST['fecha_in'])) : date('Y-m-01');
+		$fecha_out= !empty($_POST['fecha_out'])? date('Y-m-d', strtotime($_POST['fecha_out'])) : date('Y-m-t');
+		$data['saldos_congelados'] = $this->regional_model->get_saldos_congelados($id_fondo, $id_esp, $fecha_in, $fecha_out);
+		$data['html'] = $this->load->view('reportes/reporte_tabla_congelados',$data,true);
+
+		 if($excel==1){
+            $filename = 'reporte_saldos_congelados'.date('dmY').'_'.substr(uniqid(md5(rand()), true), 0, 7);
+            // ob_end_clean();
+            // ob_start();
+            header("Content-Type: application/vnd.ms-excel");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("content-disposition: attachment;filename=" . $filename . ".xls");
+
+            echo $data['html'];
+        }
+        else
+        if($excel==2) {
+                $this->load->library('pdf'); //libreria pdf
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Saldos Congelados');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
         }
