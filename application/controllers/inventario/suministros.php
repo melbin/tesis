@@ -44,7 +44,7 @@ class Suministros extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('rub_rubro');
-			$crud->set_subject('Rubros');
+			$crud->set_subject('Rubro');
 			
 			$columnas = array(
 				'rub_id',
@@ -100,7 +100,7 @@ class Suministros extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('emp_empresa');
-			$crud->set_subject('Empresas');
+			$crud->set_subject('Empresa');
 			
 			$columnas = array(
 				'emp_id',
@@ -169,7 +169,7 @@ class Suministros extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('prv_proveedor');
-			$crud->set_subject('Proveedores');
+			$crud->set_subject('Proveedor');
 			
 			$columnas = array(
 				'prv_id',
@@ -209,7 +209,7 @@ class Suministros extends CI_Controller {
 			$crud->set_relation('prv_empresa_id','emp_empresa','emp_nombre');
 
 			// Reglas para los Formularios
-			$crud->set_rules('prv_correo','correo','required|valid_email|is_unique[users.email]');
+			$crud->set_rules('prv_correo','correo','required|valid_email|campo_unico[users.email]');
 			
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
@@ -312,7 +312,7 @@ class Suministros extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('cct_calificacion_contratista');
-			$crud->set_subject('Calificaciones por pedido');
+			$crud->set_subject('Calificación por pedido');
 
 			// Relacion de 1 a muchos. 
 			$crud->set_relation_n_n('contratista', 'con_contratista', 'prv_proveedor', 'con_id', 'con_prv_id', 'prv_nombre');

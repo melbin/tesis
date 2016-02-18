@@ -23,7 +23,7 @@ $lang['is_natural_no_zero']	= "The %s field must contain a number greater than z
 $lang['decimal']			= "The %s field must contain a decimal number.";
 $lang['less_than']			= "The %s field must contain a number less than %s.";
 $lang['greater_than']		= "The %s field must contain a number greater than %s.";
-
+$lang['campo_unico'] = "El campo %s debe ser único.";
 
 // $lang['required']			= "The %s field is required.";
 // $lang['isset']				= "The %s field must have a value.";

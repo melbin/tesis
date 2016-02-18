@@ -32,7 +32,7 @@ class Personal extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('users');
-			$crud->set_subject('Usuarios');
+			$crud->set_subject('Usuario');
 			
 			$columns = array(
 				'username',
@@ -110,7 +110,7 @@ class Personal extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('rol_rol');
-			$crud->set_subject('Roles');
+			$crud->set_subject('Rol');
 			
 			$columnas = array(
 				'rol_nombre',

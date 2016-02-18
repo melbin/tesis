@@ -55,8 +55,8 @@ class Catalogos extends CI_Controller {
 			$crud->display_as('cat_descripcion','Descripción');
 			$crud->display_as('cat_fecha','Fecha');
 			$crud->display_as('cat_estado','Estado');			
-			$crud->set_rules('cat_codigo', 'Código','trim|required|xss_clean|is_unique[cat_catalogo.cat_codigo]');	
-			$crud->set_rules('cat_nombre', 'Nombre','trim|required|xss_clean|is_unique[cat_catalogo.cat_nombre]');	
+			$crud->set_rules('cat_codigo', 'Código','trim|required|xss_clean|campo_unico[cat_catalogo.cat_codigo]');	
+			$crud->set_rules('cat_nombre', 'Nombre','trim|required|xss_clean|campo_unico[cat_catalogo.cat_nombre]');	
 
 			$crud->set_relation('cat_esp_id','esp_especifico','esp_nombre');
 
@@ -92,7 +92,7 @@ class Catalogos extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('sub_subcatalogo');
-			$crud->set_subject('Subcategorias');
+			$crud->set_subject('Subcategoría');
 			
 			$columnas = array(
 				'sub_codigo',
@@ -118,8 +118,8 @@ class Catalogos extends CI_Controller {
 					'sub_estado'=>'Estado'
 				);
 			
-			$crud->set_rules('sub_codigo', 'Código','trim|required|xss_clean|is_unique[sub_subcatalogo.sub_codigo]');	
-			$crud->set_rules('sub_nombre', 'Nombre','trim|required|xss_clean|is_unique[sub_subcatalogo.sub_nombre]');	
+			$crud->set_rules('sub_codigo', 'Código','trim|required|xss_clean|campo_unico[sub_subcatalogo.sub_codigo]');	
+			$crud->set_rules('sub_nombre', 'Nombre','trim|required|xss_clean|campo_unico[sub_subcatalogo.sub_nombre]');	
 
 			$crud->required_fields($requeridos);
 			$crud->columns($columnas);
@@ -136,7 +136,7 @@ class Catalogos extends CI_Controller {
 			$data['menu_sistema']=true;
 			$user_id	= $this->tank_auth->get_user_id();
 			$data['vista_name']='inventario/index';
-			$data['titulo']="Subcategorias";
+			$data['titulo']="Subcategorías";
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_id'=>1));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',1, $user_id);
@@ -160,7 +160,7 @@ class Catalogos extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('ali_almacen_inv');
-			$crud->set_subject('Almacenes');
+			$crud->set_subject('Almacen');
 			
 			$columnas = array(
 				'ali_id',
@@ -184,7 +184,7 @@ class Catalogos extends CI_Controller {
 			$crud->required_fields($requeridos);
 			$crud->columns($columnas);
 			$crud->display_as($alias);
-			$crud->set_rules('ali_nombre', 'Nombre','trim|required|xss_clean|is_unique[ali_almacen_inv.ali_nombre]');	
+			$crud->set_rules('ali_nombre', 'Nombre','trim|required|xss_clean|campo_unico[ali_almacen_inv.ali_nombre]');	
 
 			$crud->field_type('ali_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('ali_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
@@ -219,7 +219,7 @@ class Catalogos extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('uni_unidad_medida');
-			$crud->set_subject('Unidades de Medida');
+			$crud->set_subject('Unidad de Medida');
 			$crud->required_fields('uni_nombre','uni_valor');
 			
 			$crud->columns('uni_nombre','uni_valor','uni_estado');
@@ -229,8 +229,8 @@ class Catalogos extends CI_Controller {
 			$crud->field_type('uni_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('uni_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('uni_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
-			$crud->set_rules('uni_nombre', 'Nombre','trim|required|xss_clean|is_unique[uni_unidad_medida.uni_nombre]');
-			$crud->set_rules('uni_valor', 'Valor','trim|required|xss_clean|is_unique[uni_unidad_medida.uni_valor]');
+			$crud->set_rules('uni_nombre', 'Nombre','trim|required|xss_clean|campo_unico[uni_unidad_medida.uni_nombre]');
+			$crud->set_rules('uni_valor', 'Valor','trim|required|xss_clean|campo_unico[uni_unidad_medida.uni_valor]');
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
@@ -260,22 +260,69 @@ function procesos(){
 			$crud = new grocery_CRUD();
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
+			$query_padres="SELECT DISTINCT pro_padre FROM pro_proceso";
+		     $padres=$this->db->query($query_padres)->result_array();
+
+		      $cadena_in="";
+		      foreach ($padres as $key => $value) {
+		        if($value['pro_padre'] != ""){
+		          $cadena_in.=$value['pro_padre'].","; 
+		        }
+
+		      }
+		      $cadena_final=substr($cadena_in,0,-1);
+		      if($cadena_final == '')
+		      {
+		        $cadena_final=0;
+		      }
+
 			$crud->set_table('pro_proceso');
-			$crud->set_subject('Procesos');
+			$crud->set_subject('Proceso');
 			$crud->required_fields('pro_nombre');
-			$crud->columns('pro_nombre','pro_descripcion','pro_estado');
-			
+			$crud->columns('pro_nombre','pro_padre','pro_descripcion','pro_estado');
+						
 			$crud->display_as('pro_nombre','Nombre');
 			$crud->display_as('pro_descripcion','Descripción');
 			$crud->display_as('pro_entrada','Entrada');
 			$crud->display_as('pro_salida','Salida');
 			$crud->display_as('pro_estado','Estado');
+			$crud->display_as('pro_padre','Padre');
+			$crud->display_as('pro_financiero','Financiero');
 			$crud->display_as('pro_fecha','Fecha');
-			$crud->set_rules('pro_nombre', 'Nombre','trim|required|xss_clean|is_unique[pro_proceso.pro_nombre]');	
+			$crud->set_rules('pro_nombre', 'Nombre','trim|required|xss_clean|campo_unico[pro_proceso.pro_nombre]');	
 			$crud->field_type('pro_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('pro_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('pro_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
+			$state = $crud->getState();
+			$state_info = $crud->getStateInfo();
 
+			if( $state == 'edit')
+			{
+
+
+			$cadena_final = $state_info->primary_key;
+			$query_no_tienen_hijos="SELECT pro_id FROM pro_proceso WHERE pro_id NOT IN (".$cadena_final.")";
+		      $no_tienen_hijos=$this->db->query($query_no_tienen_hijos)->result_array();
+		      $cadena_in2="";
+		      foreach ($no_tienen_hijos as $key2 => $value2) {
+		        if($value2['pro_id'] != ""){
+		          $cadena_in2.=$value2['pro_id'].","; 
+		        }
+
+		      }
+
+
+		      $cadena_final2=substr($cadena_in2,0,-1);
+		      if($cadena_final2 == '')
+		      {
+		        $cadena_final2=0;
+		      }
+
+		      $crud->set_relation('pro_padre','pro_proceso','pro_nombre', "pro_id IN({$cadena_final2})");
+		    }  else {
+		      $crud->set_relation('pro_padre','pro_proceso','pro_nombre');		
+		    }  
+			
 
 		// Datos generales de la pagina	
 			$data['menu_sistema']=true;
@@ -305,7 +352,7 @@ function procesos(){
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('pro_producto');
-			$crud->set_subject('Artículos');
+			$crud->set_subject('Artículo');
 			
 			$columnas = array(
 				'pro_codigo',
@@ -344,7 +391,7 @@ function procesos(){
 			$crud->display_as($alias);
 			$crud->edit_fields($columnas);
 			$crud->add_fields($columnas);
-			$crud->set_rules('pro_codigo', 'Código','trim|required|xss_clean|is_unique[pro_producto.pro_codigo]');	
+			$crud->set_rules('pro_codigo', 'Código','trim|required|xss_clean|campo_unico[pro_producto.pro_codigo]');	
 			$crud->field_type('pro_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('pro_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('pro_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));

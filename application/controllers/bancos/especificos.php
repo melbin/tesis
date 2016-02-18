@@ -44,7 +44,7 @@ class Especificos extends CI_Controller {
 
 			//$crud->set_theme('datatables'); // Al comentar esta linea, le pones otro estilo a la tabla.
 			$crud->set_table('esp_especifico');
-			$crud->set_subject('Especificos');
+			$crud->set_subject('Especifico');
 			
 			$columnas = array(
 				'esp_nombre',
@@ -72,8 +72,8 @@ class Especificos extends CI_Controller {
 			$crud->columns($columnas);
 			$crud->fields($columnas);
 			$crud->display_as($alias);
-			$crud->set_rules('esp_codigo', 'Código','trim|xss_clean|is_unique[esp_especifico.esp_codigo]');	
-			$crud->set_rules('esp_nombre', 'Nombre','trim|required|xss_clean|is_unique[esp_especifico.esp_nombre]');
+			$crud->set_rules('esp_codigo', 'Código','trim|xss_clean|campo_unico[esp_especifico.esp_codigo]');	
+			$crud->set_rules('esp_nombre', 'Nombre','trim|required|xss_clean|campo_unico[esp_especifico.esp_nombre]');
 			$crud->set_relation('esp_lnt_id','lnt_linea_trabajo','lnt_nombre');
 
 			$crud->field_type('esp_usu_mod', 'hidden', $this->tank_auth->get_user_id());
@@ -129,8 +129,8 @@ class Especificos extends CI_Controller {
 			$crud->columns($columnas);
 			$crud->fields($columnas);
 			$crud->display_as($alias);
-			$crud->set_rules('lnt_codigo', 'Código','trim|xss_clean|is_unique[lnt_linea_trabajo.lnt_codigo]');	
-			$crud->set_rules('lnt_nombre', 'Nombre','trim|required|xss_clean|is_unique[lnt_linea_trabajo.lnt_nombre]');
+			$crud->set_rules('lnt_codigo', 'Código','trim|xss_clean|campo_unico[lnt_linea_trabajo.lnt_codigo]');	
+			$crud->set_rules('lnt_nombre', 'Nombre','trim|required|xss_clean|campo_unico[lnt_linea_trabajo.lnt_nombre]');
 
 			$crud->field_type('lnt_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('lnt_fecha_mod', 'hidden', date('Y-m-d H:i:s'));

@@ -957,6 +957,59 @@ class CI_Form_validation {
 		return $query->num_rows() === 0;
     }
 
+        public function campo_unico($valor,$datos)
+    {
+        
+		if( $valor != '' and $datos !='' and strstr($datos,'.') ) //validar que los parametros sean integros
+      {
+        //$datos[0] = nombre de tabla ($table)
+       //$datos[1] = nombre campo de la tabla  que no debe repetirse ($campo)
+      	//opcionales
+      	//$dato[2] = bandera para verificación del update 1= verifica, 0=no verifica (default 1)
+      	//$datos[3] = si existe bandera=1 y se desea mandar el id en especifico a omitir (default id del url -en grocery crud-)
+      	//este ultimo parametro debe se numerico
+      	$datos=explode('.', $datos);
+      	     $table = $datos[0];
+      	     $campo = $datos[1];
+      	     //las posiciones 2 y 3 seran opcionales si se quiere evitar la validación para el update
+      	     //$datos[2] = 0; //para evitar la actualizacion, default 1 (verifica update)
+      	     //si $datos[2]=1 y tambien $datos[3] no esta vacio el id no se tomará del url sino del parametro ($datos[3])
+      	     $bandera = (@$datos[2]!= null and @$datos[2] !="" )? $datos[2]:1;
+      	     $id_update = (@$datos[3]!= null and @$datos[3] !="" )? $datos[3]:'';
+      	  if($bandera==1 and trim($id_update)=='') { //bandera para saber si permite verificación del update o no.
+    	  	$id = end(explode("/",uri_string())); //obtener el id de url cuando es update	
+          if(!empty($id) && is_numeric($id))
+          {
+            $campo_id=explode("_", $table);
+            $campo_id=$campo_id[0]."_id"; //nombre campo id de tabla (tomando encuenta el estandar de db de satelite)
+           $this->CI->db->where("$campo_id !=",$id); // si es actualización que omita el id del registro en actualización
+          }
+         }
+         elseif ($bandera==1 and trim($id_update) != '' and is_numeric($id_update) ) {
+           $campo_id=explode("_", $table);
+           $campo_id=$campo_id[0]."_id"; //nombre campo id de tabla (tomando encuenta el estandar de db de satelite)
+           $this->CI->db->where("$campo_id !=",$id_update); // si es actualización que omita el id del registro en actualización
+          
+         }
+          
+          $num_row = $this->CI->db->where($campo,$valor)->get($table)->num_rows();
+          
+          if ($num_row >= 1)
+          {
+          // $this->form_validation->set_message('check_campo_repetido', "El campo %s debe ser único");
+           return false;
+          }
+          else
+          {
+           return true;
+          }
+      }
+      else
+      {
+        return true;
+      }
+    }
+
 	// --------------------------------------------------------------------
 
 	/**
