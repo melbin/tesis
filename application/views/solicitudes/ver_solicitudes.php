@@ -122,21 +122,27 @@ th, td {
         });
 
         $(document).on("click",'[id^=detalle_]',function(){
+
             var id_fila = $(this).attr('cont');
-            var estado = $.trim($('#estado_'+id_fila).text());
-            
-             if(estado === 'Evaluacion'){
-                 alertify.alert("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada.");
-             } else
-             if( estado === 'Aprobada'){
-                 alertify.alert("Su solicitud se encuentra actualmente en <b>Financiero</b>, <br> esperando ser aprobada.");    
-             } else
-             if(estado === 'Rechazada'){
-                cargar_alerta($(this).attr('value'));
-             }
-             if(estado === 'Enviada'){
-                alertify.alert("Su solicitud se encuentra actualmente en <b>San Salvador</b>, <br> Esperando liberación de efectivo.");    
-             }
+            var estado =  $(this).attr('estado');
+
+            switch(estado){
+              case "1":   alertify.alert("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada para enviarse a Financiero.");
+                break;
+              case "2":   alertify.alert("Los fondos para esta solicitud ya fueron <b>Aprobados</b> por San Salvaodr");
+                break; 
+              case "3":   cargar_alerta($(this).attr('value'));
+                break;
+              case "4":   alertify.alert("Esta solicitud se encuentra en <b>Negociación</b> con los Proveedores.");          
+                break;
+              case "5":   alertify.alert("Esta solicitud <b>ya fue procesada</b> satisfactoriamente.");          
+                break;
+              case "6":   alertify.alert("Su solicitud se encuentra actualmente en <b>Financiero</b>, <br> esperando ser aprobada.");
+                break;
+              case "7":   alertify.alert("Su solicitud se encuentra actualmente en <b>San Salvador</b>, <br> Esperando liberación de efectivo.");
+                break;
+              default:  alertify.alert("Esta solicitud no cuenta con un estado. Favor notificar al Administrador del Sistema.");
+            }
         });
 
         $("#consultar").click(function(event){  // Ya no se esta ocupando

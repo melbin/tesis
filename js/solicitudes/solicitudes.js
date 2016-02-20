@@ -1,9 +1,9 @@
     
     $(document).ready(function(){
         $(".unidad_medida").hide();
-        $("#fecha_entrega").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
+        //$("#fecha_entrega").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
         $(".select2-selection__clear").live('click',function(){
-            alert();
+            
         });
 
         if($("#lugar_entrega").text()!=''){
@@ -14,6 +14,8 @@
         var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
 
         $("#fondo").on('change', function(){
+        $("#especifico, #dpi_interno").select2("val", "");
+            
         var fondo = parseInt($(this).val());
         if(fondo>0){
             $.ajax({
@@ -69,6 +71,7 @@
             success:function(json) {
               $("#dpi_monto_asignado").val(json.monto);
               $(".asignacion_depto").val(json.axd_id);
+              $("#categoria").prop('disabled', false);
               alertify.success('Monto asignado: <b>$'+$.number(json.monto,2,'.',',')+'</b>');
             }
         });
@@ -153,6 +156,7 @@
         $("#categoria").change(function(){
          
             var id_cat = $("#categoria").val();
+            $("#sub_categoria, #articulo").select2("val", "");
             $("#sub_categoria").attr('disabled',false);
             $(".unidad_medida").hide();
 
@@ -173,33 +177,39 @@
         $("#sub_categoria").change(function(){
             var id_sub = $("#sub_categoria").val();
             $(".unidad_medida").hide();
-
-            $.ajax({
-                url: urlj+"home/solicitudes/cargar_productosxsubcategoria",
-                type: 'POST',
-                dataType: 'json',
-                data: {id : id_sub},
-                success:function(data) {
-                   //alert(data.drop);
-                   $("#articulo").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
-                   $("#precio").val('');
-                }
-            });
+            $("#articulo").select2("val", "");
+            if($.isNumeric(id_sub) && id_sub>0){
+                $.ajax({
+                    url: urlj+"home/solicitudes/cargar_productosxsubcategoria",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {id : id_sub},
+                    success:function(data) {
+                       //alert(data.drop);
+                       $("#articulo").select2('destroy').html(data.drop).select2({theme: "classic", allowClear: true});
+                       $("#precio").val('');
+                    }
+                });
+            }   
         });
 
         $("#bodega").change(function(){
-            id_bod=$("#bodega").val();
+            var id_bod=$("#bodega").val();
+            $("#lugar_entrega").val('');
             $("#lugar_entrega").attr('disabled',false);    
-
-            $.ajax({
-                url: urlj+"home/solicitudes/cargar_direccion",
-                type: 'POST',
-                dataType: 'json',
-                data: {id : id_bod},
-                success:function(data) {
-                    $("#lugar_entrega").text(data.drop['ali_direccion']);
-                }
-            });
+            if($.isNumeric(id_bod) && id_bod>0){
+                $.ajax({
+                    url: urlj+"home/solicitudes/cargar_direccion",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {id : id_bod},
+                    success:function(data) {
+                        $("#lugar_entrega").val(data.drop['ali_direccion']);
+                    }
+                });
+            } else {
+                $("#lugar_entrega").val('').attr('disabled',true);
+            }    
         });
 
         jQuery.validator.addMethod("selectNone",function(value, element) { 
@@ -216,10 +226,26 @@
             ignore: "",
         rules: {
             fecha_entrega: "required",
-            bodega: {selectNone: true},    
-            dpi_interno: {selectNone: true},
-            categoria: {selectNone: true},
-            fondo: {selectNone: true},
+            fondo: {
+                required: true,
+                min: 1
+            },
+            bodega: {
+                required: true,
+                min: 1
+            },    
+            dpi_interno: {
+                required: true,
+                min: 1
+            },
+            categoria: {
+                required: true,
+                min: 1
+            },
+            especifico : {
+              required: true,
+                min: 1  
+            }, 
             lugar_entrega: {
                 required: true,
                 minlength: 5
@@ -233,13 +259,17 @@
             bodega: "Seleccione una bodega",      
             categoria: "Seleccione una categoría",      
             dpi_interno: "Seleccione un departamento",
+            especifico: "Seleccione un especifico",
             fondo: "Seleccione un fondo",
             lugar_entrega: {
                  required: "Ingrese un lugar de entrega",
                  minlength: "Debe colocar al menos 5 caracteres"
             },
         },
-
+        errorPlacement: function (error, element) {
+            var nombre=$(element).attr("id");
+            $('#'+nombre+'_error').html(error);
+        },
         submitHandler: function(form) {
             $("#fondo, #especifico, #dpi_interno, #categoria").attr('disabled',false);
             form.submit();

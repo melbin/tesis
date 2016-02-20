@@ -272,12 +272,12 @@ class Solicitudes extends CI_Controller {
 	function entrada_solicitud()
 	{
 		if($_POST){
-			//print_r($_POST); die();
+			print_r($_POST); die();
 
 		// Regristar la solicitud
 		$solicitud = array(
 				'sol_dpi_id'		=> 	$this->input->post('dpi_interno'),
-				'sol_fecha'			=> 	date('Y-m-d H:i:s',strtotime($_POST['fecha_entrega'].date('H:i:s'))),
+				'sol_fecha'			=> 	date('Y-m-d H:i:s'), //date('Y-m-d H:i:s',strtotime($_POST['fecha_entrega'].date('H:i:s'))),
 				'sol_num_entregas'	=> 	$this->input->post('numero_entrega'),
 				'sol_ali_id'		=>	$this->input->post('bodega'),
 				'sol_soe_id'		=>	1,

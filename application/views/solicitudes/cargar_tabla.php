@@ -16,7 +16,7 @@
         <tr>
             <td><?php echo ++$key; ?></td>
             <td><?php echo $value['dpi_nombre']; ?></td>
-            <td><?php echo date('d-m-Y H:i:s', strtotime($value['sol_fecha']));?></td>
+            <td><?php echo date('d-m-Y g:i a', strtotime($value['sol_fecha']));?></td>
             <td><?php echo $value['ali_nombre']; ?></td>
             <td id="estado_<?php echo $key; ?>"><?php echo $value['ets_nombre']; ?></td>
             
@@ -29,7 +29,7 @@
                         </button>
                         <ul class="dropdown-menu">
 
-                            <?php if(!empty($financiero)) {
+                            <?php if(isset($financiero) && !empty($financiero)) {
                                 if($value['ets_id']==7){ ?>
                             
                             <li>
@@ -64,7 +64,7 @@
                              
                              <?php }
                                  } else
-                                    if(!empty($abastecimiento)) {
+                                    if(isset($abastecimiento) && !empty($abastecimiento)) {
                                         if($value['ets_id']==4 || $value['ets_id']==5){ ?>
                             <li>
                                 <a target="_blank" title="Imprimir" href="<?php echo base_url();?>home/solicitudes/imprimir_excel/<?php echo $value['sol_id']; ?>/1">
@@ -94,8 +94,9 @@
                                 <li>
 
 
-                            <?php } } else { ?>
-                                <li><a  cont="<?php echo $key; ?>" id="detalle_<?php echo $key; ?>" value="<?php echo $value['sol_id']; ?>" href="#">
+                            <?php } 
+                            } else { ?>
+                                <li><a  cont="<?php echo $key; ?>" id="detalle_<?php echo $key; ?>" estado="<?php echo $value['des_ets_id']; ?>" value="<?php echo $value['sol_id']; ?>" href="#">
                                 <span class="glyphicon glyphicon-search"></span>
                                 Detalle</a></li>
                             <?php } ?>

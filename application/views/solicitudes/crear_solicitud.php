@@ -57,7 +57,7 @@
         		<tr>
         		<td width="10%"><h5>Fecha registro:</h5></td>
         			<td colspan="2">
-        				<input id="fecha_entrega" name="fecha_entrega" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+        				<input id="fecha_entrega" disabled="disabled" name="fecha_entrega" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__-__-____" class="datetime-input form-control">
         			</td>
         		</tr>
                 <tr>
@@ -79,12 +79,13 @@
                 <td width="10%"><h5>Dirección Lugar de Entrega:</h5></td>
                     <td colspan="2">
                         <textarea id="lugar_entrega" name="lugar_entrega" style="width:100%" disabled="disabled"></textarea>
+                        <div id="lugar_entrega_error" style="color:red;font-size:11px;"></div>
                     </td>
                 </tr>
                 <tr>
                 <td width="10%"><h5>Categoría:<b style="color:red;">*</b></h5></td>
                     <td colspan="2">
-                        <select class="form-control select2" id="categoria" name="categoria" placeholder="seleccione">
+                        <select class="form-control select2" disabled="disabled" id="categoria" name="categoria" placeholder="seleccione" style="">
                             <?php if(isset($categoria)) {echo $categoria;} ?>
                         </select>
                         <div id="categoria_error" style="color:red;font-size:11px;"></div>
