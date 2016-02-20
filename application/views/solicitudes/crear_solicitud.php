@@ -1,5 +1,4 @@
 <link href="<?php echo base_url()?>stylesheet/sistema/entrada_articulos.css" rel="stylesheet">
-<script src="<?php echo base_url()?>js/solicitudes/solicitudes.js"></script>  
 
 <div>
 <form class="" id="frm_solicitud" name="frm_solicitud" method="POST" action="<?php echo base_url()?>home/solicitudes/entrada_solicitud"> 
@@ -218,6 +217,8 @@
 
     </form>
 </div>
+
+<script src="<?php echo base_url()?>js/solicitudes/solicitudes.js"></script>  
 
 <script type="text/javascript">
     $(document).ready(function(){

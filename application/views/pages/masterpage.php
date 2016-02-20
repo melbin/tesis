@@ -52,10 +52,13 @@
     <link href="<?php echo base_url()?>bower_components/morrisjs/morris.css" rel="stylesheet">
 
     <!-- Alertas plugin de jQuery -->
-    <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.core.css" /> <!-- centra -->
-    <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.bootstrap.css" /> <!-- centra -->
-    <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.default.css" /> <!--estilo borde -->
-    
+    <!-- <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.core.css" />  --><!-- centra -->
+    <!-- <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.bootstrap.css" /> --> <!-- centra -->
+    <!-- <link rel='stylesheet' href="<?php echo base_url()?>stylesheet/alertify.default.css" /> --> <!--estilo borde -->
+
+    <link rel='stylesheet' type="text/css" href="<?php echo base_url()?>stylesheet/estilo/build/css/alertify.css" />
+    <link rel='stylesheet' type="text/css" href="<?php echo base_url()?>stylesheet/estilo/build/css/themes/bootstrap.css" />
+
     
     <!-- Custom Fonts -->
     <link href="<?php echo base_url()?>bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -91,7 +94,8 @@
     <script src="<?php echo base_url()?>js/select2.min.js"></script>
 
     <!-- Plugin de Alertify -->
-    <script src="<?php echo base_url()?>js/alertify/alertify.js"></script>
+    <!--  <script src="<?php echo base_url()?>js/alertify/alertify.js"></script> -->
+    <script src="<?php echo base_url()?>js/alertify.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="<?php echo base_url()?>bower_components/metisMenu/dist/metisMenu.min.js"></script>
@@ -306,7 +310,7 @@
             alertify.error(texto_alerta);
         } else if(tipo_alerta === 'alert')
         {
-            alertify.alert(texto_alerta);
+            alertify.alert(texto_alerta).setHeader('');
         }
 
 

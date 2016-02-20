@@ -201,7 +201,7 @@
                 if(!$("#cantidad").val()>0) {$('#cantidad_error').text('Campo requerido');} 
                 if($("#articulo").val()==0 || $("#articulo").val()==null) {$('#articulo_error').text('Campo requerido');} 
 
-                alertify.alert("Debe especificar las características del producto");
+                alertify.alert("Debe especificar las características del producto").setHeader('');
             }
         });
     
@@ -231,7 +231,7 @@
 
         if(total<0)
         {
-            alertify.alert("Por favor, ingrese una cantidad menor");
+            alertify.alert("Por favor, ingrese una cantidad menor").setHeader('');
             $("#cantidad").val('').focus();   
         } else
         { $("#cant_real").val(total); }

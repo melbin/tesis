@@ -20,7 +20,7 @@ $(document).ready(function(){
       $("#saldo").focusout(function(){
          var fondo = parseFloat(($("#fondo option:selected").attr('saldo')));
             if(parseFloat($(this).val()) > fondo){
-                alertify.alert("Debe especificar una cantidad menor.");
+                alertify.alert("Debe especificar una cantidad menor.").setHeader('');
                 if($("#saldo_origen").val()!=null){
                     $("#saldo").val((parseFloat($("#saldo_origen").val())).toFixed(2));    
                 } else {
@@ -101,7 +101,7 @@ $(document).ready(function(){
             if($("#depto").val()==0 || $("#depto").val()==null) {$('#depto_error').text('Campo requerido');}
             if($("#especifico").val()==0 || $("#especifico").val()==null) {$('#especifico_error').text('Campo requerido');} 
             if($("#fondo").val()==0) {$('#fondo_error').text('Campo requerido');} 
-            alertify.alert("Debe especificar las características del producto");
+            alertify.alert("Debe especificar las características del producto").setHeader('');
         }
         });
     
@@ -158,7 +158,7 @@ $(document).ready(function(){
                 data: {id_esp:id_esp, id_fondo:id_fondo},
                 success: function(data) {
                     if(data.existe===1){
-                        alertify.alert("Esta combinacion de específico y fondo ya posee un detalle.<br>Favor editar el detalle existente.")
+                        alertify.alert("Esta combinacion de específico y fondo ya posee un detalle.<br>Favor editar el detalle existente.").setHeader('');
                         $("#especifico").select2('val','');
                     } else {
                         $("#saldo").attr('disabled',false);

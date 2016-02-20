@@ -127,21 +127,21 @@ th, td {
             var estado =  $(this).attr('estado');
 
             switch(estado){
-              case "1":   alertify.alert("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada para enviarse a Financiero.");
+              case "1":   alertify.alert("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada para enviarse a Financiero.").setHeader('');
                 break;
-              case "2":   alertify.alert("Los fondos para esta solicitud ya fueron <b>Aprobados</b> por San Salvaodr");
+              case "2":   alertify.alert("Los fondos para esta solicitud ya fueron <b>Aprobados</b> por San Salvaodr").setHeader('');
                 break; 
               case "3":   cargar_alerta($(this).attr('value'));
                 break;
-              case "4":   alertify.alert("Esta solicitud se encuentra en <b>Negociación</b> con los Proveedores.");          
+              case "4":   alertify.alert("Esta solicitud se encuentra en <b>Negociación</b> con los Proveedores.").setHeader('');          
                 break;
-              case "5":   alertify.alert("Esta solicitud <b>ya fue procesada</b> satisfactoriamente.");          
+              case "5":   alertify.alert("Esta solicitud <b>ya fue procesada</b> satisfactoriamente.").setHeader('');          
                 break;
-              case "6":   alertify.alert("Su solicitud se encuentra actualmente en <b>Financiero</b>, <br> esperando ser aprobada.");
+              case "6":   alertify.alert("Su solicitud se encuentra actualmente en <b>Financiero</b>, <br> esperando ser aprobada.").setHeader('');
                 break;
-              case "7":   alertify.alert("Su solicitud se encuentra actualmente en <b>San Salvador</b>, <br> Esperando liberación de efectivo.");
+              case "7":   alertify.alert("Su solicitud se encuentra actualmente en <b>San Salvador</b>, <br> Esperando liberación de efectivo.").setHeader('');
                 break;
-              default:  alertify.alert("Esta solicitud no cuenta con un estado. Favor notificar al Administrador del Sistema.");
+              default:  alertify.alert("Esta solicitud no cuenta con un estado. Favor notificar al Administrador del Sistema.").setHeader('');
             }
         });
 
@@ -217,7 +217,7 @@ th, td {
             dataType: 'json',
             data: {id:sol_id},
             success:function(data) {
-                alertify.alert(data.drop);    
+                alertify.alert(data.drop).setHeader('');    
                 //$.fancybox(data.drop);    
             }
         });

@@ -38,7 +38,7 @@ th, td {
 
         $(".congelado").on('click', function(event){
             event.preventDefault();
-            alertify.alert("Este específico posee saldo congelado<br>Por lo tanto, no podrá ser modificado.");
+            alertify.alert("Este específico posee saldo congelado<br>Por lo tanto, no podrá ser modificado.").setHeader('');
         });
 
     //    $("input[name^='fecha']").mask('99-99-9999');

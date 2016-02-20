@@ -45,7 +45,7 @@
             data: {esp_id:esp_id, fondo_id:fondo_id, dpi_id:dpi_id},
             success:function(data) {
                 if(data.congelado){
-                    alertify.alert('Este específico posee saldo Congelado<br>por lo tanto, No se pueden crear solicitudes con él.');
+                    alertify.alert('Este específico posee saldo Congelado<br>por lo tanto, No se pueden crear solicitudes con él.').setHeader('').setHeader('');
                     $("#dpi_interno").html('');
                 } else {
                     $("#dpi_interno").html(data.depto_asignaciones);      
@@ -96,10 +96,16 @@
         $("#categoria").change(function(){
             $("#categoria_error").text('');
         });
-        // $("#fondo").change(function(){
-        //     $("#fondo_error").text('');
-        //     $("#fondo-error").text('');
-        // });
+        $("#fondo").change(function(){
+            $("#fondo_error").text('');
+            $("#fondo-error").text('');
+        });
+
+        $("#especifico").change(function(){
+            $("#especifico_error").text('');
+            $("#especifico-error").text('');
+        });
+
         $("#cantidad").change(function(){
             $("#cantidad_error").text('');
         });
@@ -149,7 +155,7 @@
 
         $("#categoria").on("select2:open", function(){
             if($('#datagried tr').length>1 ){
-                alertify.alert("Por favor seleccione artículos de una sola categoría.");  
+                alertify.alert("Por favor seleccione artículos de una sola categoría.").setHeader('').setHeader('');  
             }
         });
 
@@ -268,11 +274,15 @@
         },
         errorPlacement: function (error, element) {
             var nombre=$(element).attr("id");
+            console.log(nombre+':: '+error);
             $('#'+nombre+'_error').html(error);
         },
         submitHandler: function(form) {
             $("#fondo, #especifico, #dpi_interno, #categoria").attr('disabled',false);
-            form.submit();
+            setTimeout(function(){ 
+               form.submit();     
+            }, 300);
+            
         }
 
         }); // Fin validar Formulario
@@ -281,7 +291,7 @@
 
       $("#add").on("click",function(){
             
-       if($.trim($('#precio').val())!='' && $.trim($('#cantidad').val())!='' && $('#articulo').val() !=0  && $('#um').val() !=0 ){
+       if($.trim($('#precio').val())!='' && $.trim($('#cantidad').val())!='' && $('#articulo').val() !=0  && $('#um').val() !=0 && $("#fondo").val()>0 && $("#especifico").val()>0 && $("#dpi_interno").val()>0 ){
         $("#validar_datagried").text('');
        
         if((parseFloat($("#total_suma_hidden").val()) + parseFloat($("#precio").val()*$("#cantidad").val())) <= parseFloat($("#dpi_monto_asignado").val())){
@@ -331,11 +341,12 @@
                 $("#fondo, #especifico, #dpi_interno, #categoria").attr('disabled',true);
 
                 } else {
-                    alertify.alert("La suma del costo de los productos solicitados <b>excede</b> el monto asignado.<br>Saldo asignado: <b>$ "+$.number($("#dpi_monto_asignado").val(),2,'.',',')+"</b>.");
+                    alertify.alert("La suma del costo de los productos solicitados <b>excede</b> el monto asignado.<br>Saldo asignado: <b>$ "+$.number($("#dpi_monto_asignado").val(),2,'.',',')+"</b>.").setHeader('');
                 }
 
                 }else{
                 //alert("Debe especificar las características del producto!");
+                var prueba = $("#dpi_interno").val();
                 $('#categoria').addClass('error');
                 $('#articulo').addClass('error');
                 $('#um').addClass('error');
@@ -343,12 +354,13 @@
                 if($("#articulo").val()==0 || $("#articulo").val()==null) {$('#articulo_error').text('Campo requerido');} 
                 if($("#um").val()==0) {$('#um_error').text('Campo requerido');}
                 if($("#precio").val() =='') {$('#precio_error').text('Campo requerido');}
-                if($("#bodega").val()==0) {$('#bodega_error').text('Campo requerido');} 
-                if($("#dpi_interno").val()==0) {$('#dpi_interno_error').text('Campo requerido');} 
-                if($("#fondo").val()==0) {$('#fondo_error').text('Campo requerido');} 
-                if($("#categoria").val()==0) {$('#categoria_error').text('Campo requerido');} 
-
-                alertify.alert("Debe especificar las características del producto");
+                if($("#bodega").val() ==0 || $("#bodega").val()==null) {$('#bodega_error').text('Campo requerido');} 
+                if($("#dpi_interno").val() == 0 || $("#dpi_interno").val() == null ) {$('#dpi_interno_error').text('Campo requerido');} 
+                if($("#fondo").val() == 0 || $("#fondo").val()== null) {$('#fondo_error').text('Campo requerido');} 
+                if($("#categoria").val() == 0 || $("#categoria").val()== null) {$('#categoria_error').text('Campo requerido');} 
+                if($("#especifico").val() ==0 || $("#especifico").val() == null) {$("#especifico_error").text('Campo requerido');}
+                var asterisco = '*';
+                alertify.alert("Los campos con <b><font color='red'>*</font></b> en rojo son requeridos.").setHeader('');
             }
         });
 

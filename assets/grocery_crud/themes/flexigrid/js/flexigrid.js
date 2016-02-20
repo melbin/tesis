@@ -140,31 +140,39 @@ $(function(){
 	});
 
 	$('.ajax_list').on('click','.delete-row', function(){
+		
 		var delete_url = $(this).attr('href');
 
 		var this_container = $(this).closest('.flexigrid');
 
-		if( confirm( message_alert_delete ) )
-		{
-			$.ajax({
-				url: delete_url,
-				dataType: 'json',
-				success: function(data)
-				{
-					if(data.success)
+		alertify.confirm( message_alert_delete, function(e, str){
+			if( e )
+			{
+				$.ajax({
+					url: delete_url,
+					dataType: 'json',
+					success: function(data)
 					{
-						this_container.find('.ajax_refresh_and_loading').trigger('click');
+						if(data.success)
+						{
+							this_container.find('.ajax_refresh_and_loading').trigger('click');
+							alertify.success(data.success_message);
+							//success_message(data.success_message);
+						}
+						else
+						{
+							alertify.error(data.error_message);
+							//error_message(data.error_message);
 
-						success_message(data.success_message);
-					}
-					else
-					{
-						error_message(data.error_message);
-
-					}
-				}
-			});
-		}
+						}
+					},
+					error: function (request, status, error) {
+						 //alertify.set({ delay: 8000 });
+	        			 alertify.error('Este registro posee integridad referencial,<br>Por lo tanto, No podra ser eliminado.');
+	    			}
+				});
+			}
+		}).setHeader('');
 
 		return false;
 	});

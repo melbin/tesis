@@ -57,21 +57,25 @@ $(function(){
 										window.location = data.success_list_url;
 									} else {
 										$(".ui-dialog-content").dialog("close");
-										success_message(data.success_message);
+										//success_message(data.success_message);
+										alertify.success('Sus datos han sido actualizados correctamente.');
 									}
 
 									return true;
 								}
 
-								form_success_message(data.success_message);
+								//form_success_message(data.success_message);
+								alertify.success('Sus datos han sido actualizados correctamente.');
 							}
 							else
 							{
-								form_error_message(message_update_error);
+								//form_error_message(message_update_error);
+								alertify.error(message_update_error);
 							}
 						},
 						error: function(){
-							form_error_message( message_update_error );
+							//form_error_message( message_update_error );
+							alertify.error( message_update_error );
 						}
 					});
 				}
@@ -92,7 +96,8 @@ $(function(){
 				}
 			},
 			error: function(){
-				alert( message_update_error );
+				//alert( message_update_error );
+				alertify.error( message_update_error );
 				$("#FormLoading").hide();
 
 			}
@@ -103,10 +108,17 @@ $(function(){
 	if( $('#cancel-button').closest('.ui-dialog').length === 0 ) {
 
 		$('#cancel-button').click(function(){
-			if( $(this).hasClass('back-to-list') || confirm( message_alert_edit_form ) )
+
+			if( $(this).hasClass('back-to-list') )
 			{
 				window.location = list_url;
+			} 
+			alertify.confirm( message_alert_edit_form, function(e, str){
+			if( e )
+			{
+				window.location = list_url;	
 			}
+			}).setHeader('');
 
 			return false;
 		});

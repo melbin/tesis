@@ -55,7 +55,8 @@ $(function(){
 											window.location = data.success_list_url;
 										} else {
 											$(".ui-dialog-content").dialog("close");
-											success_message(data.success_message);
+											alertify.success('Sus datos han sido guardados correctamente.');
+											//success_message(data.success_message);
 										}
 
 										return true;
@@ -65,15 +66,18 @@ $(function(){
 										$(this).removeClass('field_error');
 									});
 									clearForm();
-									form_success_message(data.success_message);
+									alertify.success('Sus datos han sido guardados correctamente.');
+									//form_success_message(data.success_message);
 								}
 								else
 								{
-									alert( message_insert_error );
+									//alert( message_insert_error );
+									alertify.error( message_insert_error );
 								}
 							},
 							error: function(){
-								alert( message_insert_error );
+								//alert( message_insert_error );
+								alertify.error( message_insert_error );
 								$("#FormLoading").hide();
 							}
 						});
@@ -81,7 +85,8 @@ $(function(){
 					else
 					{
 						$('.field_error').removeClass('field_error');
-						form_error_message(data.error_message);
+						//form_error_message(data.error_message);
+						alertify.error( data.error_message);
 						$.each(data.error_fields, function(index,value){
 							$('input[name='+index+']').addClass('field_error');
 						});
@@ -89,7 +94,8 @@ $(function(){
 					}
 				},
 				error: function(){
-					error_message (message_insert_error);
+					//error_message (message_insert_error);
+					alertify.error( message_insert_error);
 					$("#FormLoading").hide();
 				}
 			});
@@ -99,10 +105,17 @@ $(function(){
 		if( $('#cancel-button').closest('.ui-dialog').length === 0 ) {
 
 			$('#cancel-button').click(function(){
-				if( confirm( message_alert_add_form ) )
-				{
-					window.location = list_url;
-				}
+
+				alertify.confirm( message_alert_add_form, function(e, str){
+					if( e ){
+						window.location = list_url;
+					}
+				}).setHeader('');		
+
+				// if( confirm( message_alert_add_form ) )
+				// {
+				// 	window.location = list_url;
+				// }
 
 				return false;
 			});

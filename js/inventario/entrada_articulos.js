@@ -191,7 +191,7 @@
                 if($("#articulo").val()==0 || $("#articulo").val()==null) {$('#articulo_error').text('Campo requerido');} 
                 if($("#precio").val() =='') {$('#precio_error').text('Campo requerido');}
 
-                alertify.alert("Debe especificar las características del producto");
+                alertify.alert("Debe especificar las características del producto").setHeader('');
             }
         });
     

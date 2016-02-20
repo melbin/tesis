@@ -21,7 +21,7 @@ $(document).ready(function(){
          var fondo = parseFloat(($("#fondo option:selected").attr('saldo'))) + parseFloat($("#saldo_origen").val());
 
             if(parseFloat($(this).val()) > fondo){
-                alertify.alert("Debe especificar una cantidad menor.");
+                alertify.alert("Debe especificar una cantidad menor.").setHeader('');
                 if($("#saldo_origen").val()!=null){
                     $("#saldo").val((parseFloat($("#saldo_origen").val())).toFixed(2));    
                 } else {
@@ -102,7 +102,7 @@ $(document).ready(function(){
             if($("#depto").val()==0 || $("#depto").val()==null) {$('#depto_error').text('Campo requerido');}
             if($("#especifico").val()==0 || $("#especifico").val()==null) {$('#especifico_error').text('Campo requerido');} 
             if($("#fondo").val()==0) {$('#fondo_error').text('Campo requerido');} 
-            alertify.alert("Debe especificar las características del producto");
+            alertify.alert("Debe especificar las características del producto").setHeader('');
         }
         });
     

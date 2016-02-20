@@ -89,7 +89,7 @@
                 $('#proveedor').addClass('error');
                 $('#descripcion').addClass('error');
 
-                alertify.alert("Campos con <b style='color:red;'>*</b> son requeridos");
+                alertify.alert("Campos con <b style='color:red;'>*</b> son requeridos").setHeader('');
             }
         });
 

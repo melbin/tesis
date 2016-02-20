@@ -110,7 +110,7 @@
 				 alertify.error('Debe especificar una cantidad mayor.');
 			} else {
                 if(parseFloat($(this).val()) > parseFloat($("#especifico_origen option:selected").attr('saldo'))){  
-                 alertify.alert('No hay fondos suficientes.<br>El <b>fondo</b> para el específico seleccionado es de: <b>$'+ $.number($("#especifico_origen option:selected").attr('saldo'),2) +'</b>');  
+                 alertify.alert('No hay fondos suficientes.<br>El <b>fondo</b> para el específico seleccionado es de: <b>$'+ $.number($("#especifico_origen option:selected").attr('saldo'),2) +'</b>').setHeader('');  
                  $(this).val(''); 
                 }
             }
