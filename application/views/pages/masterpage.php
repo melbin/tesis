@@ -327,26 +327,6 @@
             $("html, body").animate({ scrollTop: 0 }, 600);
             return false;
         });
-        $("input[name*='fecha']").mask("99-99-9999")    
-        $("input[name*='fecha']").datepicker({
-            showButtonPanel: true,
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'dd-mm-yy',
-            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-            dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-            nextText: "Siguiente",
-            prevText: "Anterior",
-            closeText : "Cerrar",
-            currentText: "Ahora"
-        }).click(function() {
-            $('button.ui-datepicker-current')
-            .removeClass('ui-priority-secondary')
-            .addClass('ui-priority-primary');
-        });
-        $('button.ui-datepicker-current').live('click', function() {
-            $.datepicker._curInst.input.datepicker('setDate', new Date()).datepicker('hide').blur();
-        });
 
         //  cargar un Wait en cada peticion Ajax
            // $(document).ajaxStart(function(){
