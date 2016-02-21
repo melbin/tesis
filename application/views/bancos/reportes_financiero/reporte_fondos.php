@@ -128,6 +128,7 @@ th, td {
                     $('#dataTables-example').DataTable({
                         responsive: true,
                         emptyTable: "No existen registros",     
+                        "aaSorting": []
                     });
                     $("#td_temporal").attr("colspan",6);
                     $(".drop").remove();

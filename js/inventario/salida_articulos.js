@@ -57,7 +57,7 @@
         $("#bodega").change(function(){
             //alert($(this).val());
             var id_bod = $(this).val();
-
+            if($.isNumeric(id_bod) && id_bod >0){
             $.ajax({
                 dataType:'json',
                 type:'post',
@@ -76,6 +76,7 @@
                     $("#articulo_error").text('');
                 }
             })
+          }
         });
 
         // Validar Cantidad

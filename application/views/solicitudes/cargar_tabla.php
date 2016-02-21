@@ -14,7 +14,7 @@
     foreach ($solicitudes as $key => $value) {   ?>
 
         <tr>
-            <td><?php echo ++$key; ?></td>
+            <td><?php echo $value['sol_id']; ?></td>
             <td><?php echo $value['dpi_nombre']; ?></td>
             <td><?php echo date('d-m-Y g:i a', strtotime($value['sol_fecha']));?></td>
             <td><?php echo $value['ali_nombre']; ?></td>

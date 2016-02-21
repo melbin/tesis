@@ -145,12 +145,14 @@ class Regional_model extends CI_Model
                         INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id =  sar02.sar_id
                         INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id AND moi01.moi_pro_id = 1
                     WHERE sar02.sar_pro_id = sar.sar_pro_id
+                    AND  sar02.sar_ali_id = ali_id
                 ) AS entradas,
                 (SELECT SUM(dee.dee_cantidad) 
                         FROM  sar_saldo_articulo sar02
                         INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id =  sar02.sar_id
                         INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id AND moi01.moi_pro_id = 2
                     WHERE sar02.sar_pro_id = sar.sar_pro_id
+                    AND  sar02.sar_ali_id = ali_id
                 ) AS salidas,
             SUM(sar.sar_cantidad) AS saldo,
             sar.sar_precio AS precio                
@@ -239,9 +241,11 @@ prv_nombre AS proveedor,
             sar_saldo_articulo sar02
         INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id = sar02.sar_id
         INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id
-        AND moi01.moi_pro_id = 1
+        
         WHERE
             sar02.sar_pro_id = sar.sar_pro_id
+            AND moi01.moi_pro_id = 1
+            AND moi01.moi_prv_id = prv.prv_id
     ) AS entradas,
     (
         SELECT
@@ -250,9 +254,11 @@ prv_nombre AS proveedor,
             sar_saldo_articulo sar02
         INNER JOIN dee_detalle_mov dee ON dee.dee_sar_id = sar02.sar_id
         INNER JOIN moi_movimiento_inv moi01 ON moi01.moi_id = dee.dee_moi_id
-        AND moi01.moi_pro_id = 2
+        
         WHERE
             sar02.sar_pro_id = sar.sar_pro_id
+            AND moi01.moi_pro_id = 2
+            AND moi01.moi_prv_id = prv.prv_id
     ) AS salidas,
     SUM(sar.sar_cantidad) AS existencias,
     sar.sar_precio AS precio

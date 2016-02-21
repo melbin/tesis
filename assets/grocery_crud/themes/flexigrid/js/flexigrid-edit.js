@@ -112,14 +112,14 @@ $(function(){
 			if( $(this).hasClass('back-to-list') )
 			{
 				window.location = list_url;
+			} else {
+				alertify.confirm( message_alert_edit_form, function(e, str){
+				if( e )
+				{
+					window.location = list_url;	
+				}
+				}).setHeader('');
 			} 
-			alertify.confirm( message_alert_edit_form, function(e, str){
-			if( e )
-			{
-				window.location = list_url;	
-			}
-			}).setHeader('');
-
 			return false;
 		});
 

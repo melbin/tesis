@@ -21,8 +21,8 @@
                         <td style="text-align:center;"><?=$value['nombre']?></td>
                         <td style="text-align:center;"><?=$value['UM']?></td>
                         <td style="text-align:center;"><?=$value['entradas']?></td>
-                        <td style="text-align:center;"><?=$value['salidas']?></td>
-                        <td style="text-align:center;"><?=$value['existencias']?></td>
+                        <td style="text-align:center;"><?= number_format( (floatval($value['entradas']) - floatval($value['existencias'])), 2 ) ?></td>
+                        <td style="text-align:center;"><?= number_format($value['existencias'],2) ?></td>
                     </tr>
                  <?php } ?> 
             </tbody>   

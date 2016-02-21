@@ -34,6 +34,7 @@
 
         setTimeout(function(){
         $("#especifico").on('change', function(){
+        $("#dpi_interno").select2("val", "");    
         var esp_id = $(this).val();
         var fondo_id = $("#fondo").val();
         var dpi_id =  $("#dpi_interno option:selected").val();

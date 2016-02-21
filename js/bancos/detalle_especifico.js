@@ -4,6 +4,9 @@ $(document).ready(function(){
     var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
 
 	  //$("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
+      $("#cancelar").live("click", function(){
+            location.reload();
+        });
 
 	  $(".select2").select2({
             minimumResultsForSearch: 4,
@@ -11,7 +14,7 @@ $(document).ready(function(){
             theme: "classic", // bootstrap
             allowClear: true
         });
-	  $("#saldo, #cantidad").validarCampo('0123456789.,'); 
+	  $("#saldo, #cantidad").numeric("."); 
 
 	  $("#cantidad").blur(function(){
 	  	$("#cantidad_error").text('');
@@ -70,7 +73,8 @@ $(document).ready(function(){
                     +'<td><input name="cantidad_depto[]" id="cantidad_depto_'+row+'" class="monto_asignado" style="text-align:center;" value="'+$("#cantidad").val()+'"/></td>'
                     +'<td><button type="button" id="remove" id_fila="'+numero_fila+'" class="remove" ><span class="glyphicon glyphicon-remove"></span> Eliminar</button></td>'
                     +'</tr>');
-
+                    
+                    $(".monto_asignado").numeric('.');    
                     $("#cantidad").val('');
                     restante(0);
                     row=row+1;

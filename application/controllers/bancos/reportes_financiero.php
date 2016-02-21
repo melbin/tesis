@@ -99,9 +99,10 @@ class Reportes_financiero extends CI_Controller {
         }
         
         $data['especifico'] = $especifico;
+
         $data['asignacion_array'] = $asignacion_array;
         $data['html'] = $this->load->view('reportes/reporte_tabla_fondos',$data,true);
-
+        
 		if($excel==1){
             $filename = 'reporte_detalle_fondo'.date('dmY').'_'.substr(uniqid(md5(rand()), true), 0, 7);
             // ob_end_clean();

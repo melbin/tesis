@@ -116,6 +116,9 @@
     <script src="<?php echo base_url()?>bower_components/morrisjs/morris.min.js"></script>
     <!--<script src="/<?php echo base_url()?>js/morris-data.js"></script> -->
 
+    <!-- Print Plugin -->
+    <script src="<?php echo base_url()?>assets/grocery_crud/themes/flexigrid/js/jquery.printElement.min.js"></script>
+
     <!-- Custom Theme JavaScript -->
     <script src="<?php echo base_url()?>dist/js/sb-admin-2.js"></script>
 
@@ -346,6 +349,11 @@
 
         $(".fecha").mask("99-99-9999");    
         $(".fecha").datepicker({
+              beforeShow: function() {
+                    setTimeout(function(){
+                        $('.ui-datepicker').css('z-index', 101);
+                    }, 0);
+                },
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
@@ -355,6 +363,7 @@
             nextText: "Siguiente",
             prevText: "Anterior",
             closeText : "Cerrar",
+            inline: true,
             currentText: "Ahora"
         }).click(function() {
             $('button.ui-datepicker-current')

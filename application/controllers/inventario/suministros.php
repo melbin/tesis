@@ -315,12 +315,12 @@ class Suministros extends CI_Controller {
 			$crud->set_subject('Calificación por pedido');
 
 			// Relacion de 1 a muchos. 
-			$crud->set_relation_n_n('contratista', 'con_contratista', 'prv_proveedor', 'con_id', 'con_prv_id', 'prv_nombre');
+			//$crud->set_relation_n_n('contratista', 'con_contratista', 'prv_proveedor', 'cct_con_id', 'prv_id', 'prv_nombre');
 			//$crud->unset_columns('cct_con_id');
 
 			$requeridos = array(
-					'contratista',
 					'cct_sol_id', // Dependera de como trabajen en la Regional.
+					'cct_prv_id',	
 					'cct_nota',
 					'cct_fecha'
 				);
@@ -329,12 +329,15 @@ class Suministros extends CI_Controller {
 					'cct_sol_id'=>'Solicitud',
 					'cct_nota'=>'Nota',
 					'cct_descripcion'=>'Descripción',
-					'cct_fecha'=>'Fecha'
+					'cct_fecha'=>'Fecha',
+					'cct_prv_id' => 'Contratista'
 				);
 
-			$crud->add_fields('contratista','cct_sol_id','cct_nota','cct_descripcion','cct_fecha');
-			$crud->edit_fields('cct_sol_id','cct_nota','cct_descripcion','cct_fecha');
+			$crud->add_fields('cct_prv_id','cct_sol_id','cct_nota','cct_descripcion','cct_fecha');
+			$crud->edit_fields('cct_prv_id','cct_sol_id','cct_nota','cct_descripcion','cct_fecha');
+			$crud->set_relation('cct_prv_id','prv_proveedor','prv_nombre');
 			$crud->required_fields($requeridos);
+
 			//$crud->columns($columnas);
 			$crud->display_as($alias);
 			
