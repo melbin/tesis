@@ -3,7 +3,7 @@ $(document).ready(function(){
     var pathArray = window.location.pathname.split( '/' );
     var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
 
-	  $("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
+	  //$("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
 	  $(".select2").select2({
             minimumResultsForSearch: 4,

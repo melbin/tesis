@@ -64,7 +64,7 @@
         		<tr>
         		<td width="10%"><label>Fecha:</label></td>
         			<td colspan="2">
-        				<input id="fecha_registro" name="fecha_registro" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+        				<input id="fecha_registro" name="fecha_registro" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
                         <div id="fecha_registro_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>

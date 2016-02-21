@@ -55,8 +55,8 @@ th, td {
                         <!-- <input style="display:none; width:89%;" onkeyup="$('#validar_valor').text('');" id="sol_dpi_id" name="sol_dpi_id"  placeholder="Departamento" type="text"> -->
                     </div>
                     <div  style="display:none;" id="sol_fecha"> 
-                        <input id="fecha1" name="fecha1" onchange="$('#validar_valor').text('');" style="width:44%;"  placeholder="Fecha desde" type="text">
-                        <input id="fecha2" name="fecha2"  onchange="$('#validar_valor').text('');" style="width:44%;"  placeholder="Fecha hasta" type="text">
+                        <input id="fecha1" name="fecha1" onchange="$('#validar_valor').text('');" style="width:44%;"  placeholder="Fecha desde" type="text" class="fecha">
+                        <input id="fecha2" name="fecha2"  onchange="$('#validar_valor').text('');" style="width:44%;"  placeholder="Fecha hasta" type="text" class="fecha">
                     </div>
                     <div id="sol_ali_id" style="display:none;" >
                         <select name="select_sol_ali_id" id="select_sol_ali_id" onchange="$('#validar_valor').text('');" class="nostyle select2" style="width:340px;" placeholder="Seleccione">

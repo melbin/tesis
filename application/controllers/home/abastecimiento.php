@@ -44,7 +44,7 @@ class Abastecimiento extends CI_Controller {
 		} else {
 
 			if($_POST){
-				// print_r($_POST); exit();
+				 //print_r($_POST); exit();
 
 				$sar_registro = $this->input->post('sar_registro');  // Id del articulo
 				$cantidad_inv = $this->input->post('cantidad');
@@ -66,31 +66,34 @@ class Abastecimiento extends CI_Controller {
 				} // End if 
 
 				foreach ($sar_registro as $key => $value) {
+					$sar_saldo = floatval($this->sistema_model->get_campo('sar_saldo_articulo','sar_cantidad', array('sar_id'=>$value)));
 
 					// Realizar salida de Inventario.
-					$sar_actualizar = array(
-						'sar_cantidad' 	=> $cantidad_inv[$key],
-						'sar_estado' 	=> ($cantidad_inv[$key]==0)? 0:1,
-						'sar_usu_mod'	=> $this->tank_auth->get_user_id(),
-						'sar_fecha_mod' => date('Y-m-d H:i:s', strtotime($_POST['fecha_salida'].date('H:i:s'))),
-					);	
-				
-				$row_afected = $this->pro_model->actualizar_registro('sar_saldo_articulo', $sar_actualizar, $value);	
-				
+					if($sar_saldo>0){
+						$cantidad =  $sar_saldo - floatval($cantidad_salida[$key]);
 
-				// Guardar detalle
-				$detalle = array(
-						'dee_sar_id' => $value, // Este es el id del registro en sar_saldo_articulo
-						'dee_moi_id' => $moi_id,
-						'dee_cantidad' => $cantidad_salida[$key],
-						'dee_descripcion' => $descripcion[$key],
-						'dee_estado' => 1,
-						'dee_fecha_mod' => date("Y-m-d H:i:s"),
-						'dee_usu_mod' => $this->tank_auth->get_user_id()
-					);
+						$sar_actualizar = array(
+							'sar_cantidad' 	=> ($cantidad<0.5)? 0: $cantidad,
+							'sar_estado' 	=> ($cantidad_inv[$key]==0)? 0:1,
+							'sar_usu_mod'	=> $this->tank_auth->get_user_id(),
+							'sar_fecha_mod' => date('Y-m-d H:i:s', strtotime($_POST['fecha_salida'].date('H:i:s'))),
+						);	
+					
+						$row_afected = $this->pro_model->actualizar_registro('sar_saldo_articulo', $sar_actualizar, $value);	
+					
+						// Guardar detalle
+						$detalle = array(
+								'dee_sar_id' => $value, // Este es el id del registro en sar_saldo_articulo
+								'dee_moi_id' => $moi_id,
+								'dee_cantidad' => $cantidad_salida[$key],
+								'dee_descripcion' => $descripcion[$key],
+								'dee_estado' => 1,
+								'dee_fecha_mod' => date("Y-m-d H:i:s"),
+								'dee_usu_mod' => $this->tank_auth->get_user_id()
+							);
 
-				$detalle_id = $this->regional_model->insertar_registro('dee_detalle_mov', $detalle);
-
+						$detalle_id = $this->regional_model->insertar_registro('dee_detalle_mov', $detalle);
+				    }
 				}
 
 				if($row_afected>0 && $moi_id>0 && $detalle_id>0)
@@ -115,7 +118,7 @@ class Abastecimiento extends CI_Controller {
 
 			// Obtenemos los valores de los Select
 			$data['articulos'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),null,'','ali_id',true);
-			$data['procesos'] = $this->regional_model->get_dropdown('pro_proceso','pro_nombre','',array('pro_salida'=>1,'pro_estado'=>1),null,'','pro_id',true);
+			$data['procesos'] = $this->regional_model->get_dropdown('pro_proceso','pro_nombre','',array('pro_entrada'=>0,'pro_salida'=>1,'pro_financiero'=>0,'pro_estado'=>1),null,'','pro_id',true);
 			$data['productos'] = $this->regional_model->get_dropdown('pro_producto','{pro_codigo}::{pro_nombre}','',array('pro_estado'=>1),null,'','pro_id',true);
 			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),null,'','cat_id',true);
 
@@ -211,7 +214,7 @@ class Abastecimiento extends CI_Controller {
 			// Obtenemos los valores de los Select
 			$data['articulos'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),null,'','ali_id',true);
 			$data['proveedores'] = $this->regional_model->get_dropdown('prv_proveedor','prv_nombre','',array('prv_estado'=>1),null,'','prv_id',true);
-			$data['procesos'] = $this->regional_model->get_dropdown('pro_proceso','pro_nombre','',array('pro_entrada'=>1,'pro_estado'=>1),null,'','pro_id',true);
+			$data['procesos'] = $this->regional_model->get_dropdown('pro_proceso','pro_nombre','',array('pro_entrada'=>1,'pro_estado'=>1, 'pro_salida'=>0, 'pro_financiero'=>0),null,'','pro_id',true);
 			$data['productos'] = $this->regional_model->get_dropdown('pro_producto','{pro_codigo}::{pro_nombre}','',array('pro_estado'=>1),null,'','pro_id',true);
 			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),null,'','cat_id',true);
 
@@ -265,9 +268,10 @@ class Abastecimiento extends CI_Controller {
 	{
 		$id_bodega = $this->input->post('id_bod');
 		$articulos = $this->pro_model->get_articulos($id_bodega);
-		$html="";
+		
+		$html="<option>Seleccione</option>";
 		foreach ($articulos as $key => $value) {
-			$html .= '<option value="'.$value['sar_id'].'">'.$value['pro_nombre'].'::'.$value['sar_cantidad'].'</option>';
+			$html .= '<option id_articulo="'.$value['pro_id'].'" cantidad="'.$value['sar_cantidad'].'" value="'.$value['sar_id'].'">'.$value['pro_nombre'].'::'.$value['sar_cantidad'].'</option>';
 		}
 
 		$arreglo = array(
@@ -562,7 +566,6 @@ class Abastecimiento extends CI_Controller {
 
 		// Obtener Unidad de Medida
 		$um = $this->pro_model->get_um(array('pro_id'=>$id_pro));
-
 		$arreglo = array('um'=>$um['uni_valor']);
 		echo json_encode($arreglo);
 	}

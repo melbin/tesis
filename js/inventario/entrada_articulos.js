@@ -4,7 +4,7 @@
         var pathArray = window.location.pathname.split( '/' );
         var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
                 
-        $("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
+        //$("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
         // Codigo para los select
         $("#categoria, #sub_categoria, #bodega ,#proveedor, #entrada, #articulo").select2({
@@ -54,7 +54,7 @@
         });
 
 		// $("#bodega, #proveedor, #entrada, #articulo").selectmenu();
-		$("#cantidad , #precio").validarCampo('0123456789.,'); 
+		$("#cantidad , #precio").numeric('.');
 
 		$("#cancelar").live("click", function(){
 			// alertify.alert("Pendiente de programar");
@@ -62,7 +62,7 @@
  		});
 
 		jQuery.validator.addMethod("selectNone",function(value, element) { 
-	   		if (element.value == "0") { 
+	   		if (element.value == "0" || element.value == '') { 
 	      		return false; 
 	    	} 	    
     			else return true; 
@@ -157,7 +157,7 @@
       var row=0;
       $("#agregar").on("click",function(){
        $("#unidad_medida").hide();         
-       if($.trim($('#precio').val())!='' && $.trim($('#cantidad').val())!='' && $('#articulo').val() !=0){
+       if($.trim($('#precio').val())!='' && $.trim($('#cantidad').val())!='' &&  $('#cantidad').val()>0 && $('#articulo').val() !=0){
         $("#validar_datagried").text('');
         
         $("#registrar_entrada").attr('disabled',false);
@@ -173,8 +173,9 @@
                     +'<input type="hidden" name="descripcion[]" id="descripcioni'+row+'" value="'+$("#descripcion").val()+'"/>'
 
                     +'<label name="producto_label" id="productos"/>'+$("#articulo option:selected").text()+'</td>'
-                    +'<td><label name="cantidad_label" id="cantidadl'+row+'"/>'+$("#cantidad").val()+'</td>'
-                    +'<td><label name="precio_label" id="preciol'+row+'"/>'+$("#precio").val()+'</td>'
+                    +'<td><label name="cantidad_label" id="cantidadl'+row+'"/>'+parseFloat($("#cantidad").val()).toFixed(2)+'</td>'
+                    +'<td><label name="precio_label" id="preciol'+row+'"/>'+ parseFloat($("#precio").val()).toFixed(2)+'</td>'
+                    +'<td><label name="subtotal" id="subtotal'+row+'"/>'+'$ '+parseFloat($("#precio").val() * $("#cantidad").val()).toFixed(2)+ '</td>'
                     +'<td><button type="button" id="remove" id_fila="'+numero_fila+'" class="remove" ><span class="glyphicon glyphicon-remove"></span> Anular</button>'
                     +'</tr>');
 
@@ -187,22 +188,23 @@
 
                 }else{
                 $('#articulo').addClass('error');
-                if(!$("#cantidad").val()>0) {$('#cantidad_error').text('Campo requerido');} 
+                if($("#cantidad").val()<=0) {$('#cantidad_error').text('Campo requerido');} 
                 if($("#articulo").val()==0 || $("#articulo").val()==null) {$('#articulo_error').text('Campo requerido');} 
-                if($("#precio").val() =='') {$('#precio_error').text('Campo requerido');}
+                if($("#precio").val() <= 0) {$('#precio_error').text('Campo requerido');}
 
                 alertify.alert("Debe especificar las características del producto").setHeader('');
             }
         });
     
     $("#remove").live("click", function() {
-    $(this).parents("tr").remove();     
+        $(this).parents("tr").remove();     
+        if($("#datagried tr").length<=1) $("#registrar_entrada").attr('disabled',true);
     });//Fin de eliminar
 
      $("#registrar_entrada").click(function(event){
         event.preventDefault();
         if($('#datagried tr').length<=1 ){
-            $("#datagried").addClass('error');
+           // $("#datagried").addClass('error');
         $("#validar_datagried").text('Seleccione al menos un producto');
         }
         else{

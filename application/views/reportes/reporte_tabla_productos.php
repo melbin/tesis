@@ -7,16 +7,16 @@
                             $salida = 0;
                             $saldo = 0;
                             if( isset($articulos_array[$key]) && count($articulos_array[$key])>0 ){ ?>
-                                <tr><td colspan="7"><label><b>Categoría: <?php echo $value['sub_nombre']; ?></b></label></td></tr>     
+                                <tr><td colspan="6"><label><b>Categoría: <?php echo $value['sub_nombre']; ?></b></label></td></tr>     
 
                                 <tr class="color_fondo titulo">
                                     <th>Código</th>
                                     <th>Nombre</th>
-                                    <th>Precio</th>
+                                   <!--  <th>Precio</th> -->
                                     <th>U.M</th>
                                     <th>Entradas</th>
                                     <th>Salidas</th>
-                                    <th>Saldo</th>
+                                    <th>Existencias</th>
                                 </tr>
                     </thead>
                                 <tbody>
@@ -24,23 +24,23 @@
                                     <tr class="odd gradeX">
                                         <td style="text-align:center;"><?=$value2['codigo']?></td>
                                         <td style="text-align:center;"><?=$value2['nombre']?></td>
-                                        <td style="text-align:center;">$<?=number_format($value2['precio'],2)?></td>
+                                        <!-- <td style="text-align:center;">$<?=number_format($value2['precio'],2)?></td> -->
                                         <td style="text-align:center;"><?=$value2['UM']?></td>
                                         <td style="text-align:center;"><?=$value2['entradas']?></td>
                                         <td style="text-align:center;"><?=$value2['salidas']?></td>
-                                        <td style="text-align:center;"><?=$value2['saldo']?></td>
+                                        <td style="text-align:center;"><?= floatval($value2['entradas']) - floatval($value2['salidas'])?></td>
 
                                         <!-- <td style="text-align:right;">$<?=number_format($sld['precio']*$sld['cantidad'],2)?></td> -->
                                     </tr>
                              <?php   
                                 $entrada += (float) $value2['entradas'];
                                 $salida += (float) $value2['salidas'];
-                                $saldo += (float)   $value2['saldo'];
+                                $saldo += (float)   ($value2['entradas'] - $value2['salidas']);
                                 } ?>
                                 <tr class="color_fondo">
                                     <td><label><b>Total:</b></label></td>
                                     <td></td>
-                                    <td></td>
+                                    <!-- <td></td> -->
                                     <td></td>
                                     <td align="center"><label><b><?php echo $entrada; ?></b></label></td>
                                     <td align="center"><label><b><?php echo $salida; ?></b></label></td>
@@ -54,11 +54,11 @@
                             <tr>
                                 <th>Código</th>
                                 <th>Nombre</th>
-                                <th>Precio</th>
+                                <!-- <th>Precio</th> -->
                                 <th>U.M</th>
                                 <th>Entradas</th>
                                 <th>Salidas</th>
-                                <th>Saldo</th>
+                                <th>Existencias</th>
                             </tr>
                             
                             </thead>
@@ -66,7 +66,7 @@
                                 <tr>
                                     <td id="td_temporal" align="center">No se encontraron registros...</td>
                                     <td class="drop"></td>
-                                    <td class="drop"></td>
+                                    <!-- <td class="drop"></td> -->
                                     <td class="drop"></td>
                                     <td class="drop"></td>
                                     <td class="drop"></td>

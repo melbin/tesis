@@ -11,22 +11,23 @@
             <table width="50%" border="0" align="left">
                 <tr><th width="23%"></th><th></th><th></th></tr>
                 <tr> <!-- <i id="requerido">*</i> -->
-                  <td><label>Bodega:</label><b class="error" style="color:red; display:none;">*</b></label></td>
+                  <td><label>Bodega: <b class="error" style="color:red;">*</b></label></td>
                     <td colspan="2">
                         <select class="form-control" id="bodega" name="bodega">
                             <?php if(isset($articulos)) {echo $articulos;} ?>
                         </select>
+                        <div id="bodega_error" style="color:red;font-size:11px;"></div>
                     </td>
                 </tr>
 
                 <tr>
-                <td width="10%"><label>Fecha de salida:</label></td>
+                <td width="10%"><label>Fecha salida: <b class="error" style="color:red;">*</b></label></td>
                     <td colspan="2">
-                        <input id="fecha_salida" name="fecha_salida" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+                        <input id="fecha_salida" name="fecha_salida" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
                     </td>
                 </tr>
                 <tr>
-                <td width="10%"><label>Tipo de salida:</label></td>
+                <td width="10%"><label>Tipo de salida:<b class="error" style="color:red;">*</b></label></td>
                     <td colspan="2">
                         <select class="form-control" id="salida" name="salida">
                             <?php if(isset($procesos)) {echo $procesos;} ?>
@@ -76,7 +77,7 @@
                 </tr>
                 <td width="10%"><label>Descripción:</label></td>
                     <td colspan="2">                        
-                        <div class="form-group">    
+                        <div class="form-group" style="margin-bottom:0px;">    
                             <textarea id="descripcion" name="descripcion" style="width:100%" disabled="disabled"></textarea>
                         </div>              
                     </td>
@@ -85,7 +86,7 @@
                 <td width="10%"><label>Cantidad:</label></td>
                     <td colspan="2">                        
                         <div class="form-group">    
-                            <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad" onchange="validar_cantidad();">    
+                            <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad" onchange="validar_cantidad();" maxlength="3">    
                             <input type="hidden" id="cant_real" name="cant_real">
                             <div id="cantidad_error" style="color:red;font-size:11px;"></div>
                         </div>              

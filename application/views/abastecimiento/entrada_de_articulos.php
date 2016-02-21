@@ -1,3 +1,10 @@
+<style type="text/css">
+    .error {
+        font-size: 11px;
+        color: red;
+    }
+</style>
+
 <link href="<?php echo base_url()?>stylesheet/sistema/entrada_articulos.css" rel="stylesheet">
 <script src="<?php echo base_url()?>js/inventario/entrada_articulos.js"></script>  
 
@@ -37,7 +44,7 @@
         		<tr>
         		<td width="10%"><label>Fecha de Registro:</label></td>
         			<td colspan="2">
-        				<input id="fecha_registro" name="fecha_registro" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+        				<input id="fecha_registro" name="fecha_registro" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
                         <div id="fecha_registro_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>
@@ -92,7 +99,7 @@
                 <tr>
                 <td width="10%"><label>Descripción:</label></td>
                     <td colspan="2">                        
-                        <div class="form-group">    
+                        <div class="form-group" style="margin-bottom: 0px;">    
                             <textarea id="descripcion" name="descripcion" style="width:100%" disabled="disabled"></textarea>
                         </div>              
                     </td>
@@ -147,6 +154,9 @@
             </th>
             <th style="">
                 Precio ($)
+            </th>
+            <th style="">
+                Subtotal ($)
             </th>
              <th style="">
                 Acción

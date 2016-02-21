@@ -154,6 +154,7 @@ class Reportes extends CI_Controller {
 
         // Consultar los datos
         $sub_categoria = $this->regional_model->get_tabla('sub_subcatalogo', array('sub_estado'=>1));
+        
         $articulos_array = array();
         foreach ($sub_categoria as $key => $value) {
             $query  =   $this->regional_model->get_productos_depto($value['sub_id'], $id_bodega, $id_tipo);

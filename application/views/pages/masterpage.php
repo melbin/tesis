@@ -103,6 +103,8 @@
     <!-- Validar todo tipo de campos -->
     <script src="<?php echo base_url()?>js/validar.js"></script>
 
+    <script src="<?php echo base_url()?>js/jquery.numeric.js"></script>
+
      <!-- Formatos a Numeros -->
     <script src="<?php echo base_url()?>js/jquery.number.js"></script>
 
@@ -341,6 +343,27 @@
            //      //$("#wait").delay(900).fadeOut();
            //  });
         // Fin de la prueba
+
+        $(".fecha").mask("99-99-9999");    
+        $(".fecha").datepicker({
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-mm-yy',
+            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            nextText: "Siguiente",
+            prevText: "Anterior",
+            closeText : "Cerrar",
+            currentText: "Ahora"
+        }).click(function() {
+            $('button.ui-datepicker-current')
+            .removeClass('ui-priority-secondary')
+            .addClass('ui-priority-primary');
+        });
+        $('button.ui-datepicker-current').live('click', function() {
+            $.datepicker._curInst.input.datepicker('setDate', new Date()).datepicker('hide').blur();
+        });
 
     });
 </script>

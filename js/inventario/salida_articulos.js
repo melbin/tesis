@@ -4,7 +4,7 @@
         var pathArray = window.location.pathname.split( '/' );
         var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
 
-        $("#fecha_salida").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
+        //$("#fecha_salida").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 
 		$("#bodega, #categoria, #sub_categoria, #proveedor, #salida, #articulo").select2({
             minimumResultsForSearch: 4,
@@ -12,27 +12,30 @@
             theme: "classic", // bootstrap
             allowClear: true
         });
-		$("#cantidad , #precio").validarCampo('0123456789.,'); 
+		$("#cantidad").numeric('.'); 
 
         $("#articulo").change(function(){
             $("#descripcion").attr('disabled',false);
             $("#articulo_error").text('');
 
             // // Add Ajax to call UM
-            // var articulo = $("#articulo").val();
-            // if(articulo>0){
-            //     $.ajax({
-            //     //url: 'obtener_precio',
-            //     url: urlj+"home/abastecimiento/obtener_um",
-            //     type: 'POST',
-            //     dataType: 'json',
-            //     data: {id:articulo},
-            //     success: function(data) {
-            //         $("#um").val(data.um);
-            //         $("#unidad_medida").show();
-            //     }
-            // });            
-            // }
+            var articulo =  $("#articulo option:selected").attr('id_articulo');
+            if(articulo>0){
+                $.ajax({
+                //url: 'obtener_precio',
+                url: urlj+"home/abastecimiento/obtener_um",
+                type: 'POST',
+                dataType: 'json',
+                data: {id:articulo},
+                success: function(data) {
+                    $("#um").val(data.um);
+                    $("#unidad_medida").show('slow');
+                }
+            });            
+            } else {
+                $("#um").val('');
+                $("#unidad_medida").hide('slow');
+            }
         });
 
 		$("#cancelar").live("click", function(){
@@ -68,6 +71,7 @@
                         theme: "classic",
                         allowClear: true
                     });
+
                     $("#descripcion").attr('disabled',false);
                     $("#articulo_error").text('');
                 }
@@ -76,7 +80,7 @@
 
         // Validar Cantidad
 		jQuery.validator.addMethod("selectNone",function(value, element) { 
-	   		if (element.value == "0") { 
+	   		if (element.value == "0" || element.value == '') { 
 	      		return false; 
 	    	} 	    
     			else return true; 
@@ -90,7 +94,7 @@
         rules: {
             fecha_salida: "required",
             bodega: {selectNone: true},
-            proveedor: {selectNone: true},
+            //proveedor: {selectNone: true},
             salida: {selectNone: true},
             // email: {
             //     required: true,
@@ -171,7 +175,7 @@
       var row=0;
       $("#agregar").on("click",function(){
          $("#unidad_medida").hide();       
-       if($.trim($('#cantidad').val())!='' && $('#articulo').val() !=0){
+       if($.trim($('#cantidad').val())!='' && $("#cantidad").val() > 0 && $('#articulo').val() !=0){
         $("#validar_datagried").text('');
         
         $("#registrar_salida").attr('disabled',false);
@@ -183,11 +187,11 @@
                     
                     +'<input type="hidden" name="sar_registro[]" id="sar_registro" value="'+$("#articulo").val()+'"/>'
                     +'<input type="hidden" name="cantidad[]" id="cantidadi'+row+'" value="'+$("#cant_real").val()+'"/>'
-                    +'<input type="hidden" name="cantidad_salida[]" id="cantidad_salidai'+row+'" value="'+$("#cantidad").val()+'"/>'
+                    +'<input type="hidden" name="cantidad_salida[]" id="cantidad_salidai'+row+'" value="'+parseFloat($("#cantidad").val()).toFixed(1)+'"/>'
                     +'<input type="hidden" name="descripcion[]" id="descripcioni'+row+'" value="'+$("#descripcion").val()+'"/>'
 
                     +'<label name="producto_label" id="productos"/>'+$("#articulo option:selected").text()+'</td>'
-                    +'<td><label name="cantidad_label" id="cantidadl'+row+'"/>'+$("#cantidad").val()+'</td>'
+                    +'<td><label name="cantidad_label" id="cantidadl'+row+'"/>'+parseFloat($("#cantidad").val()).toFixed(1)+'</td>'
                     +'<td><button type="button" id="remove" id_fila="'+numero_fila+'" class="remove" ><span class="glyphicon glyphicon-remove"></span> Anular</button>'
                     +'</tr>');
 
@@ -206,6 +210,23 @@
         });
     
     $("#remove").live("click", function() {
+       var sar_id =  $(this).parents('tr').find("td:first input[name='sar_registro[]']").val();    
+       var cadena_select = $("#articulo option[value='"+sar_id+"']").text();
+       var cadena = cadena_select.split('::');
+
+       var cantidad_actual  =  cadena[1];    
+       var cantidad_salida  =  $(this).parents('tr').find("td:first input[name='cantidad_salida[]']").val();    
+       var saldo = (parseFloat(cantidad_actual) + parseFloat(cantidad_salida)).toFixed(2);
+        
+        $("#articulo option[value='"+sar_id+"']").text(cadena[0]+'::'+saldo);
+
+        $("#articulo").select2({
+            minimumResultsForSearch: 4,
+            placeholder: "Seleccione",
+            theme: "classic", // bootstrap
+            allowClear: true
+        });
+
     $(this).parents("tr").remove();     
     });//Fin de eliminar
 
@@ -227,14 +248,25 @@
         var cantidad_sug = $("#cantidad").val();
         var cadena_select = $("#articulo option:selected").text();
         var cantidad_act = cadena_select.split('::');
-        var total = parseInt(cantidad_act[1]) - parseInt(cantidad_sug);
+        var total = parseFloat(cantidad_act[1]) - parseFloat(cantidad_sug).toFixed(1);
 
         if(total<0)
         {
             alertify.alert("Por favor, ingrese una cantidad menor").setHeader('');
             $("#cantidad").val('').focus();   
         } else
-        { $("#cant_real").val(total); }
+        { 
+            $("#cant_real").val(total); // El saldo que queda
+            $("#articulo option:selected").text(cantidad_act[0]+'::'+total);
+
+            $("#articulo").select2({
+                minimumResultsForSearch: 4,
+                placeholder: "Seleccione",
+                theme: "classic", // bootstrap
+                allowClear: true
+            });
+            
+        }
     };
 	// $("#cancelar").click(function(){
 	// 	alert("Aun en proceso");

@@ -33,11 +33,11 @@ th, td {
         		<tr>
                     <td width="10%"><label>Fecha inicio:<b style="color:red;">*</b></label></td>
                     <td>
-                        <input id="fecha_inicio" name="fecha_inicio" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+                        <input id="fecha_inicio" name="fecha_inicio" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
                     </td>
                     <td width="10%"><label>Fecha fin:<b style="color:red;">*</b></label></td>
                     <td>
-                        <input id="fecha_fin" name="fecha_fin" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+                        <input id="fecha_fin" name="fecha_fin" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
                     </td>
                 </tr>
         		<tr>
