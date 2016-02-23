@@ -153,13 +153,15 @@ class Reportes extends CI_Controller {
         $id_tipo   = (!empty($_POST['id_tipo']))? $this->input->post('id_tipo'):1; // 1= Con Saldo, 2 = Sin saldo
 
         // Consultar los datos
-        $sub_categoria = $this->regional_model->get_tabla('sub_subcatalogo', array('sub_estado'=>1));
+        $sub_categoria = $this->regional_model->get_categorias();
         
         $articulos_array = array();
         foreach ($sub_categoria as $key => $value) {
             $query  =   $this->regional_model->get_productos_depto($value['sub_id'], $id_bodega, $id_tipo);
-            array_push($articulos_array, $query);
+             array_push($articulos_array, $query);
         }
+        
+        $data['tipo'] = $id_tipo;
         $data['sub_categoria'] = $sub_categoria;
         $data['articulos_array'] = $articulos_array;
         $data['html'] = $this->load->view('reportes/reporte_tabla_productos',$data,true);
@@ -174,12 +176,13 @@ class Reportes extends CI_Controller {
         $id_tipo   = (!empty($_POST['id_tipo']))? $this->input->post('id_tipo'):1; // 1= Con Saldo, 2 = Sin saldo
         $bodega_nombre = $this->sistema_model->get_campo('ali_almacen_inv','ali_nombre',array('ali_id'=>$id_bodega));
         // Consultar los datos
-        $sub_categoria = $this->regional_model->get_tabla('sub_subcatalogo', array('sub_estado'=>1));
+        $sub_categoria = $this->regional_model->get_categorias();
         $articulos_array = array();
         foreach ($sub_categoria as $key => $value) {
             $query  =   $this->regional_model->get_productos_depto($value['sub_id'], $id_bodega, $id_tipo);
             array_push($articulos_array, $query);
         }
+        $data['tipo'] = $id_tipo;
         $data['sub_categoria'] = $sub_categoria;
         $data['articulos_array'] = $articulos_array;
         $data['html'] = $this->load->view('reportes/reporte_tabla_productos',$data,true);

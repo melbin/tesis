@@ -3,9 +3,9 @@
                     <table class="table table-striped table-bordered table-hover"  id="dataTables-example">
                         <thead>
                         <?php $cont =0; foreach ($sub_categoria as $key => $value) {
-                            $entrada = 0;
-                            $salida = 0;
-                            $saldo = 0;
+                            $entrada = '';
+                            $salida = '';
+                            $saldo = '';
                             if( isset($articulos_array[$key]) && count($articulos_array[$key])>0 ){ ?>
                                 <tr><td colspan="6"><label><b>Categoría: <?php echo $value['sub_nombre']; ?></b></label></td></tr>     
 
@@ -20,7 +20,10 @@
                                 </tr>
                     </thead>
                                 <tbody>
-                                <?php foreach ($articulos_array[$key] as $key2 => $value2) { ?>
+                                <?php foreach ($articulos_array[$key] as $key2 => $value2) { 
+                                    if( ($tipo == 2 && ($value2['entradas']- $value2['salidas']) < 1) || ( $tipo == 1 && $value2['entradas'] - $value2['salidas'] >= 1 ) ){
+
+                                    ?>
                                     <tr class="odd gradeX">
                                         <td style="text-align:center;"><?=$value2['codigo']?></td>
                                         <td style="text-align:center;"><?=$value2['nombre']?></td>
@@ -32,10 +35,11 @@
 
                                         <!-- <td style="text-align:right;">$<?=number_format($sld['precio']*$sld['cantidad'],2)?></td> -->
                                     </tr>
-                             <?php   
-                                $entrada += (float) $value2['entradas'];
-                                $salida += (float) $value2['salidas'];
-                                $saldo += (float)   ($value2['entradas'] - $value2['salidas']);
+                                <?php   
+                                    $entrada += (float) $value2['entradas'];
+                                    $salida += (float) $value2['salidas'];
+                                    $saldo += (float)   ($value2['entradas'] - $value2['salidas']);
+                                } 
                                 } ?>
                                 <tr class="color_fondo">
                                     <td><label><b>Total:</b></label></td>
@@ -46,6 +50,8 @@
                                     <td align="center"><label><b><?php echo $salida; ?></b></label></td>
                                     <td align="center"><label><b><?php echo $saldo; ?></b></label></td>
                                 </tr>
+                                       
+                                
                             </tbody>
 
                            <?php $cont++; }

@@ -687,6 +687,18 @@ ORDER BY
     
     }
 
+    public function get_categorias()
+    {
+        $this->db->select()
+            ->from('sub_subcatalogo')
+            ->join('cat_catalogo', 'cat_id = sub_cat_id')
+            ->where('sub_estado',1)
+        ;
+        
+        $query = $this->db->get()->result_array();
+        return $query;    
+    }
+
 }
 
 
