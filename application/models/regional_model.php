@@ -63,7 +63,7 @@ class Regional_model extends CI_Model
 
     function get_especificos($fondo_id, $saldo_minimo=0)
     {
-        $query = $this->db->select('esp_id, esp_nombre, det_saldo, det_saldo_congelado')
+        $query = $this->db->select('esp_id, esp_nombre, det_saldo, det_saldo_congelado, det_saldo_ejecutado')
                     ->from('esp_especifico')
                     ->join('det_detalle_especifico', 'det_esp_id = esp_id', 'left')
                     ->where('det_estado',1)
@@ -191,7 +191,7 @@ class Regional_model extends CI_Model
                 axd.axd_depto_id,
                 axd.axd_id,
               axd.axd_cantidad AS salida,
-                det.det_saldo - IFNULL(
+                det.det_saldo - det.det_saldo_ejecutado - IFNULL(
                     (
                         SELECT
                             SUM(axd_cantidad)
@@ -569,7 +569,7 @@ ORDER BY
     ets.ets_nombre,
     (
         SELECT
-            det_saldo_votado
+            det_saldo
         FROM
             det_detalle_especifico det2
         WHERE
@@ -607,7 +607,7 @@ ORDER BY
     }
 
     function get_especifico_detalle($id_especifico)
-    {
+{
         $this->db->select()
                 ->from('esp_especifico')
                 ->join('det_detalle_especifico',' esp_id = det_esp_id') 

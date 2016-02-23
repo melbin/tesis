@@ -9,7 +9,7 @@
                             if( isset($asignacion_array[$key]) && count($asignacion_array[$key])>0 ){ ?>
                                 <tr>
                                     <td colspan="3"><label><b>Específico: <?php echo $value['esp_nombre']; ?></b></label></td>
-                                    <td style="text-align:center;"><label><b><?php echo '$ '.number_format($value['det_saldo'],2); ?></b></label></td>
+                                    <td style="text-align:center;"><label><b><?php echo '$ '.number_format(($value['det_saldo'] - $value['det_saldo_ejecutado']),2); ?></b></label></td>
                                 </tr>     
 
                                 <tr class="color_fondo titulo">

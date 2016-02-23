@@ -9,7 +9,7 @@
 
                     <tr>
                         <td colspan="6" style="text-align:left;"><label><b><?php echo 'Específico: '.$detalle['esp_nombre']; ?></b></label></td>
-                        <td style="text-align:center;"><label><b><?php echo '$ '.number_format($detalle['det_saldo_votado'],2); ?></b></label></td>
+                        <td style="text-align:center;"><label><b><?php echo '$ '.number_format($detalle['det_saldo'],2); ?></b></label></td>
                     </tr>
                 <?php } ?>
 

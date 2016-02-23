@@ -11,7 +11,7 @@ $(document).ready(function(){
             theme: "classic", // bootstrap
             allowClear: true
         });
-	  $("#saldo, #cantidad").validarCampo('0123456789.,'); 
+	  $("#saldo, #cantidad").numeric('.');
 
 	  $("#cantidad").blur(function(){
 	  	$("#cantidad_error").text('');

@@ -813,7 +813,7 @@ class Especificos extends CI_Controller {
 			$opciones="<option value='0' saldo='0' selected>Seleccione</option>";	
 
 			foreach ($especificos as $key => $value) {
-					$saldo = floatval($value['det_saldo']) - floatval(!empty($value['det_saldo_congelado'])? $value['det_saldo_congelado']:0);
+					$saldo = floatval($value['det_saldo']) - floatval($value['det_saldo_ejecutado']) - floatval(!empty($value['det_saldo_congelado'])? $value['det_saldo_congelado']:0);
 					$opciones .= "<option value=".$value['esp_id']." saldo=".$saldo." > ".$value['esp_nombre']."</option>";
 				}	
 			
@@ -880,7 +880,7 @@ class Especificos extends CI_Controller {
 
 		$resultado = array(
 			'det_saldo_votado'	  => $tabla_detalles['det_saldo_votado'],
-			'det_saldo'			  => ($tabla_detalles['det_saldo'] - $tabla_detalles['det_saldo_congelado']),
+			'det_saldo'			  => ($tabla_detalles['det_saldo'] - $tabla_detalles['det_saldo_ejecutado'] - $tabla_detalles['det_saldo_congelado']),
 			'det_saldo_congelado' => $tabla_detalles['det_saldo_congelado'],
 			);
 		echo json_encode($resultado);

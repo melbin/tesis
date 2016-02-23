@@ -72,6 +72,7 @@
             success:function(json) {
               $("#dpi_monto_asignado").val(json.monto);
               $(".asignacion_depto").val(json.axd_id);
+              $("#axd_id").val(axd_id);  // Esta linea es reciente, no se que le paso a la anterior.
               $("#categoria").prop('disabled', false);
               alertify.success('Monto asignado: <b>$'+$.number(json.monto,2,'.',',')+'</b>');
             }

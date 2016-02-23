@@ -7,7 +7,7 @@
                             $salida = '';
                             $saldo = '';
                             if( isset($articulos_array[$key]) && count($articulos_array[$key])>0 ){ ?>
-                                <tr><td colspan="6"><label><b>Categoría: <?php echo $value['sub_nombre']; ?></b></label></td></tr>     
+                                <tr><td colspan="6"><label><b>Categoría: <?php echo $value['cat_nombre']; ?></b></label></td></tr>     
 
                                 <tr class="color_fondo titulo">
                                     <th>Código</th>
@@ -21,7 +21,7 @@
                     </thead>
                                 <tbody>
                                 <?php foreach ($articulos_array[$key] as $key2 => $value2) { 
-                                    if( ($tipo == 2 && ($value2['entradas']- $value2['salidas']) < 1) || ( $tipo == 1 && $value2['entradas'] - $value2['salidas'] >= 1 ) ){
+                                    if( ($tipo == 2 && ($value2['entradas']- $value2['salidas']) < 1) || ( $tipo == 1 && ($value2['entradas'] - $value2['salidas']) >= 1 ) ){
 
                                     ?>
                                     <tr class="odd gradeX">

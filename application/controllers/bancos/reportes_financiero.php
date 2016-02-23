@@ -90,7 +90,7 @@ class Reportes_financiero extends CI_Controller {
 		$fecha_out= !empty($_POST['fecha_out'])? date('Y-m-d', strtotime($_POST['fecha_out'])) : date('Y-m-t');
 
         $especifico = $this->regional_model->get_especifico_saldo($id_fondo);
-        $fondo = $this->sistema_model->get_registro('fon_fondo', array('fon_id'=>$id_fondo));
+        $fondo = $this->sistema_model->get_registro('fon_fondo', array('fon_id'=>$id_fondo)); // Solo por el nombre
         
         $asignacion_array = array();
         foreach ($especifico as $key => $value) { //get_productos_depto

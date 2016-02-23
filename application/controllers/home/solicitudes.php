@@ -272,7 +272,7 @@ class Solicitudes extends CI_Controller {
 	function entrada_solicitud()
 	{
 		if($_POST){
-			print_r($_POST); die();
+	//		print_r($_POST); die();
 
 		// Regristar la solicitud
 		$solicitud = array(

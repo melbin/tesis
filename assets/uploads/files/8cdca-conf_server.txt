@@ -1,0 +1,7 @@
+DO NOT set files or directories to mode 777, even "just to test", even if "it's just a test server". The purpose of a test server is to get things right in a safe environment, not to get away with doing it wrong. All it will tell you is if the problem is with files that actually exist.
+
+chown -R www-data:www-data /var/www/mysite
+chmod -R og-r /var/www/mysite
+After doing this, www-data (the Web server) will have full access to the site's files, while other non-root users will have no access at all.
+
+If you wish to allow select users to access the site, you can make the folder group-readable and add those users to the group www-data.
