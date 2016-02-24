@@ -14,7 +14,8 @@
         });
 
         $(".enteros").validarCampo('0123456789'); 
-        $(".decimales").validarCampo('0123456789.'); 
+        $(".decimales").numeric('.');
+        $("#nit").mask("9999-999999-999-9"); 
 
         $("#cancelar").live("click", function(){
             // alertify.alert("Pendiente de programar");

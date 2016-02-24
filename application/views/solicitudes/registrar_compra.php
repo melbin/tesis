@@ -146,7 +146,7 @@
                             <tr>
                                 <td width="10%"><label>NIT:</label></td>
                                 <td colspan="2">
-                                    <input id="nit" name="nit" type="text"  class="datetime-input form-control" style="width: 95%;">
+                                    <input id="nit" name="nit" type="text"  class="datetime-input form-control" style="width: 95%;" placeholder="____-______-___-_">
                                 </td>
                             </tr>
                             <tr>
