@@ -125,7 +125,11 @@ th, td {
 
             var id_fila = $(this).attr('cont');
             var estado =  $(this).attr('estado');
-
+            var congelado = $(this).attr('congelado');
+            
+            if(congelado>0){
+              alertify.alert("El fondo utilizado para esta solicitud posee saldo congelado<br>Por lo tanto, su solicitud se encuentra detenida.").setHeader('');
+            } else {
             switch(estado){
               case "1":   alertify.alert("Su solicitud se encuentra actualmente en <b>Abastecimiento</b>, <br> esperando ser aprobada para enviarse a Financiero.").setHeader('');
                 break;
@@ -143,6 +147,7 @@ th, td {
                 break;
               default:  alertify.alert("Esta solicitud no cuenta con un estado. Favor notificar al Administrador del Sistema.").setHeader('');
             }
+          }
         });
 
         $("#consultar").click(function(event){  // Ya no se esta ocupando

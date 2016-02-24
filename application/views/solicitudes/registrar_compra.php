@@ -127,7 +127,7 @@
                                 <td width="10%"><label>Descripción:</label></td>
                                 <td colspan="2">                        
                                     <!-- <div class="form-group">     -->
-                                        <textarea id="descripcion" name="descripcion" rows="4" style="width:100%"></textarea>
+                                        <textarea id="descripcion" name="descripcion" rows="4" style="width:95%"></textarea>
                                         <div id="descripcion_error" style="color:red;font-size:11px;"></div>
                                     <!-- </div>               -->
                                 </td>

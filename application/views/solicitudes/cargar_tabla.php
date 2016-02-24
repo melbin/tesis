@@ -30,6 +30,10 @@
                         <ul class="dropdown-menu">
 
                             <?php if(isset($financiero) && !empty($financiero)) {
+                                if(isset($value['saldo_congelado']) && $value['saldo_congelado'] > 0){ ?>
+                                    <li><span>Saldo congelado</span></li>
+                                <?php } else {
+
                                 if($value['ets_id']==7){ ?>
                             
                             <li>
@@ -63,6 +67,7 @@
                             </li>
                              
                              <?php }
+                                  }
                                  } else
                                     if(isset($abastecimiento) && !empty($abastecimiento)) {
                                         if($value['ets_id']==4 || $value['ets_id']==5){ ?>
@@ -87,16 +92,19 @@
                                     Anexo
                                 </a>
                             </li>
-                            <?php } else { ?>
-                            <li><a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'])?>" >
-                                <span class="fa fa-pencil"></span>
-                                Editar</a></li>     
+                            <?php } else { 
+                                if(isset($value['saldo_congelado']) && $value['saldo_congelado'] > 0){ ?>
+                                    <li><span>Saldo congelado</span></li>
+                                <?php } else { ?>
+
+                                <li><a class="" title="Editar" href="<?=base_url('home/abastecimiento/ver_solicitudes_edit/'.$value['sol_id'])?>" >
+                                    <span class="fa fa-pencil"></span>
+                                    Editar</a></li>     
                                 <li>
-
-
+                                <?php } ?>
                             <?php } 
                             } else { ?>
-                                <li><a  cont="<?php echo $key; ?>" id="detalle_<?php echo $key; ?>" estado="<?php echo $value['des_ets_id']; ?>" value="<?php echo $value['sol_id']; ?>" href="#">
+                                <li><a congelado = "<?php echo (isset($value['saldo_congelado']) && $value['saldo_congelado'] > 0 && $value['des_ets_id'] != 4 && $value['des_ets_id'] != 5  )? $value['saldo_congelado']:0; ?>"  cont="<?php echo $key; ?>" id="detalle_<?php echo $key; ?>" estado="<?php echo $value['des_ets_id']; ?>" value="<?php echo $value['sol_id']; ?>" href="#">
                                 <span class="glyphicon glyphicon-search"></span>
                                 Detalle</a></li>
                             <?php } ?>

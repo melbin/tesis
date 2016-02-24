@@ -331,7 +331,15 @@ ORDER BY
 
 
     function detalle_solicitud($where=NULL){
-        $query = $this->db->select()
+        $query = $this->db->select('*, (
+                            SELECT
+                                det_saldo_congelado
+                            FROM
+                                det_detalle_especifico
+                            WHERE
+                                det_esp_id = des_esp_id
+                            AND det_fondo_id = des_fon_id
+                        ) AS saldo_congelado')
                     ->from('sol_solicitud')
                     ->join('dpi_departamento_interno','sol_dpi_id=dpi_id','left')
                     ->join('ali_almacen_inv','sol_ali_id = ali_id','left')
@@ -348,7 +356,15 @@ ORDER BY
     }
 
     function detalle_sol_abastecimiento($where=NULL){
-        $query = $this->db->select()
+        $query = $this->db->select('*, (
+                            SELECT
+                                det_saldo_congelado
+                            FROM
+                                det_detalle_especifico
+                            WHERE
+                                det_esp_id = des_esp_id
+                            AND det_fondo_id = des_fon_id
+                        ) AS saldo_congelado')
                     ->from('sol_solicitud')
                     ->join('dpi_departamento_interno','sol_dpi_id=dpi_id','left')
                     ->join('ali_almacen_inv','sol_ali_id = ali_id','left')
@@ -366,7 +382,15 @@ ORDER BY
     }
 
     function detalle_sol_financiero($where=NULL){
-        $query = $this->db->select()
+        $query = $this->db->select('*, (
+                            SELECT
+                                det_saldo_congelado
+                            FROM
+                                det_detalle_especifico
+                            WHERE
+                                det_esp_id = des_esp_id
+                            AND det_fondo_id = des_fon_id
+                        ) AS saldo_congelado')
                     ->from('sol_solicitud')
                     ->join('dpi_departamento_interno','sol_dpi_id=dpi_id','left')
                     ->join('ali_almacen_inv','sol_ali_id = ali_id','left')

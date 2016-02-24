@@ -223,6 +223,7 @@ class Solicitudes extends CI_Controller {
 
 				// All your code goes here
 			$data['solicitudes'] = $this->regional_model->detalle_solicitud();
+			
 			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
 
 			$data['departamentos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','{dpi_nombre}','',array('dpi_estado'=>1),null,'','dpi_id',true);
