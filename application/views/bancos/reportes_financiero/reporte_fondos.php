@@ -112,7 +112,7 @@ th, td {
             
             if( $.trim($("#fondo").val())!='' && $.trim($("#fondo").val())>0 && $("#fecha_inicio").val()!='' && $("#fecha_fin").val()!='')
             {   
-
+                
             $.ajax({
                 url: urlj+'bancos/reportes_financiero/get_detalle_fondo',
                 type: 'POST',

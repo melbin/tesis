@@ -831,7 +831,7 @@ class Especificos extends CI_Controller {
 			$fondo_id = $this->input->post('fondo_id');
 			$dpi_id = $this->input->post('dpi_id');
 			$selected = '';
-
+			
 			$det_registro = $this->sistema_model->get_registro('det_detalle_especifico',array('det_esp_id'=>$esp_id, 'det_fondo_id'=>$fondo_id, 'det_estado'=>1));
 			if(floatval($det_registro['det_saldo_congelado'])>1){
 				echo json_encode(array('congelado'=>1));

@@ -235,10 +235,10 @@
     
     $("#id_sol").val(pathArray[pathArray.length-1]);
     $("#categoria").trigger("change");    
-    $("#especifico").trigger("change");
+    
     setTimeout(function(){ 
-        $("#dpi_interno").trigger("change");
-     }, 800);
+        $("#especifico").trigger("change");
+     }, 400);
     
     // $("#iButton").iButton({labelOn: "Si",labelOff: "No" });
 
@@ -273,6 +273,11 @@
     });
 
     $("#remove").live("click", function() {
+    //$("#dpi_monto_asignado").val()
+    var fila = $(this).parents("tr");
+    var saldo = fila.find("td input[name='total[]']").val();
+    var subtotal = parseFloat(saldo) + parseFloat($("#dpi_monto_asignado").val());
+    $("#dpi_monto_asignado").val(subtotal);
     $(this).parents("tr").remove();     
       sumar_total();
       

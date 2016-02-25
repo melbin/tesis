@@ -15,8 +15,8 @@
                                 <tr class="color_fondo titulo">
                                     <th style="text-align:center;" width="25%">Nombre departamento</th>
                                     <th style="text-align:center;">Fecha asignación</th>
-                                    <th style="text-align:center;">Salida</th>
-                                    <th style="text-align:center;">Total</th>
+                                    <th style="text-align:center;">Asignado</th>
+                                    <th style="text-align:center;">Disponibilidad</th>
                                 </tr>
                         </thead>
                                 <tbody>

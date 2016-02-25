@@ -71,7 +71,16 @@
     <?php } ?>    
     <?php if(empty($esp_detalles)){ ?>
         <tr>
-            <td align="center" colspan="10">No hay registros...</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td align="center">No hay registros...</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
     <?php } ?>
 </tbody>

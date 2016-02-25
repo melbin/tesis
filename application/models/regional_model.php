@@ -608,6 +608,7 @@ ORDER BY
             des2.des_id <= des.des_id
         AND des2.des_fon_id = des.des_fon_id
         AND des2.des_esp_id = des.des_esp_id
+        AND des2.des_ets_id != 3 
     ) AS total
 FROM
     des_detalle_solicitud des

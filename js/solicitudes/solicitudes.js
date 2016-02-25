@@ -34,9 +34,10 @@
 
         setTimeout(function(){
         $("#especifico").on('change', function(){
-        $("#dpi_interno").select2("val", "");    
+        //$("#dpi_interno").select2("val", "");    
         var esp_id = $(this).val();
         var fondo_id = $("#fondo").val();
+
         var dpi_id =  $("#dpi_interno option:selected").val();
         if(esp_id>0){
             $.ajax({
@@ -49,20 +50,20 @@
                     alertify.alert('Este específico posee saldo Congelado<br>por lo tanto, No se pueden crear solicitudes con él.').setHeader('').setHeader('');
                     $("#dpi_interno").html('');
                 } else {
-                    $("#dpi_interno").html(data.depto_asignaciones);      
+                    $("#dpi_interno").html(data.depto_asignaciones).trigger('change');      
                 }
             }
         });
-        } else {
+        } else {    
             $("#dpi_interno").html("<option value='0' saldo='0'>Seleccione</option>").trigger('change');
         }
         });
-        }, 500);
+        }, 100);
 
         $("#dpi_interno").on('change', function(){
         var axd_id = $("#dpi_interno option:selected").attr('axd_id');
         var dpi_id = $(this).val();
-        
+
         if(dpi_id>0){
             $.ajax({
             url: urlj+'bancos/especificos/get_saldo_dpi_asignado',
@@ -74,7 +75,7 @@
               $(".asignacion_depto").val(json.axd_id);
               $("#axd_id").val(axd_id);  // Esta linea es reciente, no se que le paso a la anterior.
               $("#categoria").prop('disabled', false);
-              alertify.success('Monto asignado: <b>$'+$.number(json.monto,2,'.',',')+'</b>');
+              alertify.success('Monto disponible: <b>$'+$.number(json.monto,2,'.',',')+'</b>');
             }
         });
         }
@@ -295,7 +296,7 @@
             
        if($.trim($('#precio').val())!='' && $.trim($('#cantidad').val())!='' && $('#articulo').val() !=0  && $('#um').val() !=0 && $("#fondo").val()>0 && $("#especifico").val()>0 && $("#dpi_interno").val()>0 ){
         $("#validar_datagried").text('');
-       
+        
         if((parseFloat($("#total_suma_hidden").val()) + parseFloat($("#precio").val()*$("#cantidad").val())) <= parseFloat($("#dpi_monto_asignado").val())){
 
         $('#cabezera').show();

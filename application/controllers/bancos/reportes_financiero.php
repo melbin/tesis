@@ -44,7 +44,7 @@ class Reportes_financiero extends CI_Controller {
 			// All your code goes here
 			//$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv', '{ali_nombre}','',array('ali_estado'=>1),null, '','ali_id', true);
 			$data['fondos'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1),null, '','fon_id', true);
-            $data["titulo"] ="Reporte de distribución por fondo";
+            $data["titulo"] ="Reporte de distribución y disponibilidad por fondo";
 			$data['vista_name'] = "bancos/reportes_financiero/reporte_fondos";
 			$this->__cargarVista($data);
 		}		
@@ -133,6 +133,7 @@ class Reportes_financiero extends CI_Controller {
 		$fecha_out= !empty($_POST['fecha_out'])? date('Y-m-d', strtotime($_POST['fecha_out'])) : date('Y-m-t');
 		$data['detalle'] = $this->regional_model->get_especifico_detalle($id_esp);
 		$data['solicitudes'] = $this->regional_model->solicitudes_especifico($id_fondo, $id_esp, $fecha_in, $fecha_out);
+		
 		$data['html'] = $this->load->view('reportes/reporte_tabla_especifico',$data,true);
 
 		 if($excel==1){

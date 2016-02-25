@@ -35,8 +35,8 @@
                         <td style="text-align:center;"><?= number_format($value['total'],2) ?></td>
                     </tr>
                  <?php 
-                 $cantidad += (float) $value['cantidad'];
-                 $total += (float) $value['total'];
+                 $cantidad  += (float) $value['cantidad'];
+                 $total     = (float) $value['total'];
                  
                 } ?> 
             </tbody>
