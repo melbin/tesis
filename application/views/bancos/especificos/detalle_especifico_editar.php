@@ -64,10 +64,11 @@
                     </td>
                 </tr>
         		<tr>
-                <td width="10%"><label>Descripción:</label></td>
+                <td width="10%"><label>Descripción: <b style="color:red;">*</b></label></td>
                     <td colspan="2">                        
                         <div class="form-group">    
-                            <textarea id="descripcion" name="descripcion" style="width:100%"><?php echo !empty($det_detalles['det_descripcion'])? $det_detalles['det_descripcion']:''; ?></textarea>
+                            <textarea onchange="$('#descripcion_error').text('');" id="descripcion" name="descripcion" style="width:100%"><?php echo !empty($det_detalles['det_descripcion'])? $det_detalles['det_descripcion']:''; ?></textarea>
+                            <div id="descripcion_error" style="color:red;font-size:11px;"></div>
                         </div>              
                     </td>
                 </tr>

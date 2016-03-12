@@ -41,7 +41,7 @@ $(document).ready(function(){
 
 	  var row=0;
       $("#agregar").on("click",function(){
-       if($.trim($('#cantidad').val())!='' && $('#depto').val()>0 && $('#especifico').val()>0 && $('#fondo').val()!=0){
+       if($.trim($('#cantidad').val())!='' && $('#depto').val()>0 && $('#especifico').val()>0 && $('#fondo').val()!=0 && $.trim($("#descripcion").val()) != ''){
         if(parseFloat($("#total_restante_hidden").val())  >= parseFloat($("#cantidad").val())){ 
             var repetido=0; 
             $(".departamentos").each(function(){
@@ -99,6 +99,7 @@ $(document).ready(function(){
             }else{
             $('#depto').addClass('error');
             if(!$("#cantidad").val()>0) {$('#cantidad_error').text('Campo requerido');} 
+            if($.trim($("#descripcion").val()) == '') {$('#descripcion_error').text('Campo requerido');} 
             if($("#depto").val()==0 || $("#depto").val()==null) {$('#depto_error').text('Campo requerido');}
             if($("#especifico").val()==0 || $("#especifico").val()==null) {$('#especifico_error').text('Campo requerido');} 
             if($("#fondo").val()==0) {$('#fondo_error').text('Campo requerido');} 

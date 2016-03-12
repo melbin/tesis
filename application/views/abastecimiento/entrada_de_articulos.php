@@ -116,7 +116,7 @@
         			</td>
         		</tr>
         		<tr>
-        		<td width="10%"><label>Precio:</label></td>
+        		<td width="10%"><label>Precio Unitario:</label></td>
 	        		<td colspan="2">	        			
                         <div class="form-group input-group">	
 		        			<span class="input-group-addon"><i class="fa fa-dollar"></i></span>

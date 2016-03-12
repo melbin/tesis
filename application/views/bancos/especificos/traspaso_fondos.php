@@ -63,10 +63,11 @@
         			</td>
         		</tr>
         		<tr>
-                <td width="10%"><label>Descripción:</label></td>
+                <td width="10%"><label>Descripción: <b style="color:red;"> *</b></label></td>
                     <td colspan="2">                        
                         <div class="form-group">    
-                            <textarea id="descripcion" name="descripcion" style="width:100%"></textarea>
+                            <textarea "$('#descripcion_error').text('');" id="descripcion" name="descripcion" style="width:100%"></textarea>
+                            <div id="descripcion_error" style="color:red;font-size:11px;"></div>
                         </div>              
                     </td>
                 </tr>
@@ -172,7 +173,10 @@
 			if($("#cantidad").val()==0 || $("#cantidad").val()==''){
 				$("#cantidad_error").text('Debe agregar una cantidad');
 			}
-			if($("#cantidad").val()>0 && $("#especifico_origen").val()>0 && $("#especifico_destino").val()>0 && $("#fondo").val()>0){
+            if($.trim($("#descripcion").val()) == ''){
+                $("#descripcion_error").text('Debe agregar una descripción');
+            }
+			if($("#cantidad").val()>0 && $("#especifico_origen").val()>0 && $("#especifico_destino").val()>0 && $("#fondo").val()>0 && $.trim($("#descripcion").val()) != '' ){
 				$("#frm_solicitud").submit();
 			}
 		});  

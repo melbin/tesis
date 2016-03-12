@@ -83,17 +83,18 @@
                     </td>
                 </tr>
         		<tr>
-                <td width="10%"><label>Descripción:</label></td>
+                <td width="10%"><label>Descripción:</label><b style="color:red;"> *</b></td>
                     <td colspan="2">                        
                         <div class="form-group">    
-                            <textarea id="descripcion" name="descripcion" style="width:100%"></textarea>
+                            <textarea onchange="$('#descripcion_error').text('');" id="descripcion" name="descripcion" style="width:100%"></textarea>
+                            <div id="descripcion_error" style="color:red;font-size:11px;"></div>
                         </div>              
                     </td>
                 </tr>
         		<tr>
         		<td width="10%"><label>Fecha:</label></td>
         			<td colspan="2">
-        				<input id="fecha_registro" name="fecha_registro" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control">
+        				<input id="fecha_registro" name="fecha_registro" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
                         <div id="fecha_registro_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>
@@ -127,7 +128,7 @@
             allowClear: true
         });
 
-		$("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
+		//$("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
 		$(".decimales").validarCampo('0123456789.,'); 
 
 		$("#cantidad").blur(function(){
@@ -199,7 +200,10 @@
 			if($("#cantidad").val()==0 || $("#cantidad").val()==''){
 				$("#cantidad_error").text('Debe agregar una cantidad');
 			}
-			if($("#cantidad").val()>0 && $("#especifico").val()>0 && $("#fondo").val()>0){
+            if($.trim($("#descripcion").val()) == ''){
+                $("#descripcion_error").text('Debe agregar una descripción');
+            }
+			if($("#cantidad").val()>0 && $("#especifico").val()>0 && $("#fondo").val()>0 && $.trim($("#descripcion").val()) != '' ){
 
 				$("#frm_solicitud").submit();
 			}

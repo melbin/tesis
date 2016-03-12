@@ -71,7 +71,7 @@
 
                     +'<label>'+$("#proveedor option:selected").text()+'</label></td>'
                     +'<td><label>'+$("#contrato").val()+'</label></td>'
-                    +'<td><label>'+$("#monto").val()+'</label></td>'
+                    +'<td><label>'+$.number($("#monto").val(),2)+'</label></td>'
                     +'<td><label>'+$("#renta").val()+'</label></td>'
                     +'<td><label>'+$("#nit").val()+'</label></td>'
                     +'<td><label>'+$("#retencion").val()+'</label></td>'

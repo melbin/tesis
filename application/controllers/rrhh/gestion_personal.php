@@ -86,7 +86,7 @@ class Gestion_personal extends CI_Controller {
 					'per_telefono'=>'Teléfono',
 					'per_correo'=>'Correo',
 					'per_mun_id'=>'Municipio',
-					'per_gen_id'=>'Genero',
+					'per_gen_id'=>'Sexo',
 					'per_cargo' => 'Cargo',
 					'per_estado'=>'Estado'
 				);

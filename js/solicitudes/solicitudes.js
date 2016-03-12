@@ -138,7 +138,8 @@
             $("#descripcion").attr('disabled',false);
             var articulo = $("#articulo").val();
             // Cargando precio, en proceso.
-            $.ajax({
+            if(articulo>0){
+                $.ajax({
                 //url: 'obtener_precio',
                 url: urlj+"home/solicitudes/obtener_precio",
                 type: 'POST',
@@ -147,12 +148,16 @@
                 success: function(data) {
                     $("#precio").val(data.drop);
                     $("#um").val(data.um);
+                    $("#descripcion").val(data.descripcion);
                     $(".unidad_medida").show();
                     if(data.existencias.length>0){
                         alertify.success(data.existencias);
                     }
                 }
             });            
+            } else {
+                $("#descripcion").val('');
+            }
         });
 
 
@@ -379,7 +384,7 @@
     $("#registrar_solicitud").click(function(event){
     event.preventDefault();
     if($('#datagried tr').length<=1 ){
-        $("#datagried").addClass('error');
+        //$("#datagried").addClass('error');
     $("#validar_datagried").text('Seleccione al menos un producto');
     }
     else{

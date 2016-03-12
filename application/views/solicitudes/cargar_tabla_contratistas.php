@@ -6,7 +6,7 @@
         <tr>
             <td><label><?php echo $value['prv_nombre'].' '.$value['prv_apellido']; ?></label></td>
             <td><label><?php echo $value['con_contrato']; ?></label></td>
-            <td><label><?php echo $value['con_monto']; ?></label></td>
+            <td><label><?php echo number_format($value['con_monto'],'2','.',','); ?></label></td>
             <td><label><?php echo $value['con_renta']; ?></label></td>
             <td><label><?php echo $value['con_nit']; ?></label></td>
             <td><label><?php echo $value['con_retencion']; ?></label></td>
