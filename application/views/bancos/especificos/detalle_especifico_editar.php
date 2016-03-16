@@ -129,6 +129,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        $("input[name='cantidad_depto[]']").numeric();
         $("#fondo").trigger('change', function(){
             alertify.success("El saldo de este fondo es: <b>$"+$.number($("#fondo option:selected").attr('saldo'),2)+'<b>');
       });

@@ -129,9 +129,11 @@ class Reportes_financiero extends CI_Controller {
 		//die(print_r($_POST,true));
 		$id_fondo = $this->input->post('id_fondo');
 		$id_esp   = $this->input->post('id_especifico');
+		
 		$fecha_in = !empty($_POST['fecha_in'])? date('Y-m-d', strtotime($_POST['fecha_in'])) : date('Y-m-01');
 		$fecha_out= !empty($_POST['fecha_out'])? date('Y-m-d', strtotime($_POST['fecha_out'])) : date('Y-m-t');
-		$data['detalle'] = $this->regional_model->get_especifico_detalle($id_esp);
+		$data['detalle'] = $this->regional_model->get_especifico_detalle($id_esp, $id_fondo);
+		
 		$data['solicitudes'] = $this->regional_model->solicitudes_especifico($id_fondo, $id_esp, $fecha_in, $fecha_out);
 		
 		$data['html'] = $this->load->view('reportes/reporte_tabla_especifico',$data,true);

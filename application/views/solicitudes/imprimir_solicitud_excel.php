@@ -46,7 +46,7 @@
 	
 	</tr>
 	<tr>
-		<td><img src="<?php echo base_url();?>media/sistema/escudo02.jpg" width="60" height="90" style="float:left;"></td>
+		<td><img src="<?php echo base_url();?>media/sistema/escudo02.jpg" width="60" height="80" style="float:left;"></td>
 		<td></td>
 		<td></td>
 		<td colspan="2" align="center">
@@ -91,7 +91,7 @@
 			<td colspan="5" class="borde"><?php echo $detalle_sol['des_plazo_entrega'] .' '. 'DIAS DESPUES DE RECIBIDA LA ORDEN DE COMPRA'; ?></td>
 		</tr>
 		<tr>
-			<td colspan="4"><label>NÚMERO DE ENTREGAS:</label></td>
+			<td colspan="4"><label>N&Uacute;MERO DE ENTREGAS:</label></td>
 			<td class="borde"><label>UNA:  ___X___</label></td>
 			<td class="borde"><label>DOS:  _______</label></td>
 			<td class="borde" colspan="2"><label>MÁS:  _______</label></td>
@@ -101,11 +101,11 @@
 			<td colspan="4" class="borde"><?php echo $detalle_sol['ali_nombre']; ?></td>
 		</tr>
 		<tr>
-			<td colspan="3"><label>DIRECCIÓN DE ALMACEN O LUGAR DE ENTREGA:</label></td>
+			<td colspan="3"><label>DIRECCI&Oacute;N DE ALMACEN O LUGAR DE ENTREGA:</label></td>
 			<td colspan="5" class="borde"><?php echo $detalle_sol['ali_direccion']; ?></td>
 		</tr>
 		<tr>
-			<td colspan="3"><label>PERIODO DE UTILIZACIÓN:</label></td>
+			<td colspan="3"><label>PERIODO DE UTILIZACI&Oacute;N:</label></td>
 			<td colspan="5" class="borde"><b>INDEFINIDO</b></td>
 		</tr>
 		<tr>
@@ -117,9 +117,9 @@
 			<td colspan="5" class="borde"><label><b><?php echo $detalle_sol['fon_nombre']; ?></b></label></td>
 		</tr>
 		<tr>
-			<td colspan="3"><label>MONTO PRESUPUESTADO:</label></td>
+			<td colspan="2"><label>MONTO PRESUPUESTADO:</label></td>
 			<td></td>
-			<td colspan="1" class="borde" rowspan="2" align="center"><label><b>$ <?php echo number_format($detalle_sol['des_total'],2); ?></b></label></td>
+			<td colspan="2" class="borde" rowspan="2" align="center"><label><b>$ <?php echo number_format($detalle_sol['des_total'],2); ?></b></label></td>
 			<td colspan="3" class="borde" rowspan="2" align="center"><label><?php echo $valor_letras; ?></label></td>
 		</tr>
 
@@ -130,9 +130,9 @@
 	<table border="1" width="100%" id="detalle_prod"> 
 		<tr>
 			<th width="5%" rowspan="2">#</th>
-			<th width="10%" rowspan="2">CÓDIGO DEL PRODUCTO</th>
-			<th width="10%" rowspan="2">CÓDIGO DEL PRODUCTO SEGÚN CATALOGO NACIONES UNIDAS</th>
-			<th width="35%" rowspan="2">DESCRIPCION DE SUMINISTROS O SERVICIO</th>
+			<th width="10%" rowspan="2">C&Oacute;DIGO DEL PRODUCTO</th>
+			<th width="10%" rowspan="2">C&Oacute;DIGO DEL PRODUCTO SEG&Uacute;N CATALOGO NACIONES UNIDAS</th>
+			<th width="35%" rowspan="2">DESCRIPCI&Oacute;N DE SUMINISTROS O SERVICIO</th>
 			<th width="5%" rowspan="2">UNIDAD DE MEDIDA</th>
 			<th width="5%" rowspan="2">CANTIDAD</th>
 			<th colspan="2">MONTOS ESTIMADOS EN DOLARES</th>
@@ -156,7 +156,8 @@
 	            <td align="center"><?php echo '$ '. number_format($value['pxs_precio']*$value['pxs_cantidad'],2); ?></td>
 	        </tr>
     	<?php 
-    		  $suma = $suma + number_format($value['pxs_precio']*$value['pxs_cantidad'],2);
+    		  $suma = $suma + floatval($value['pxs_precio']*$value['pxs_cantidad']);
+
     		} ?>    
     	<?php if(empty($productos)){ ?>
     		<tr><td colspan="8" align="center">No hay registros...</td></tr>
@@ -164,7 +165,7 @@
    				<tr>
    					<td colspan="6"></td>
    					<td align="center"><label><b>TOTAL...</b></label></td>
-   					<td align="center"><label><b><?php echo '$ '. $suma; ?></b></label></td>
+   					<td align="center"><label><b><?php echo '$ '. number_format($suma,2); ?></b></label></td>
    				</tr>
    		 <?php } ?>
 	</table>

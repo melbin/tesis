@@ -631,12 +631,13 @@ ORDER BY
       return $detalle;  
     }
 
-    function get_especifico_detalle($id_especifico)
+    function get_especifico_detalle($id_especifico, $id_fondo=NULL)
 {
         $this->db->select()
                 ->from('esp_especifico')
                 ->join('det_detalle_especifico',' esp_id = det_esp_id') 
                 ->where('esp_id',$id_especifico)
+                ->where('det_fondo_id',$id_fondo)
                 ; 
 
         $query = $this->db->get()->row_array();

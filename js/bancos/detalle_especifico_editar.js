@@ -71,7 +71,7 @@ $(document).ready(function(){
                     +'<td><input name="cantidad_depto[]" id="cantidad_depto_'+row+'" class="monto_asignado" style="text-align:center;" value="'+$("#cantidad").val()+'"/></td>'
                     +'<td><button type="button" id="remove" id_fila="'+numero_fila+'" class="remove" ><span class="glyphicon glyphicon-remove"></span> Eliminar</button></td>'
                     +'</tr>');
-
+                    $("input[name='cantidad_depto[]']").numeric();
                     $("#cantidad").val('');
                     restante(0);
                     row=row+1;

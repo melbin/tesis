@@ -202,7 +202,7 @@ class Solicitudes extends CI_Controller {
 	  $data['director_regional'] 			= $this->regional_model->get_parametro('director_regional');
 	  $data['jefe_ufi'] 					= $this->regional_model->get_parametro('jefe_ufi');
 	  $data['solicitante']	  				= $this->sistema_model->datos_persona($this->tank_auth->get_user_id());
-	  
+	
 	  $html = $this->load->view('solicitudes/imprimir_solicitud_excel',$data,true);	  	
 
 	  if($imprime==1) die(print_r($html,true));
