@@ -13,6 +13,13 @@ $(document).ready(function(){
         });
 	  $("#saldo, #cantidad").numeric('.');
 
+      $("#cantidad").on('keyup', function(){
+           var numero = $(this).val();
+           var tmp = numero.replace(/^[0]/g,'');
+           $(this).val(tmp.replace(/[^0-9\.]/g,''));
+        });  
+
+
 	  $("#cantidad").blur(function(){
 	  	$("#cantidad_error").text('');
 	  });

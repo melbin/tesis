@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	// Write your code here...
     var pathArray = window.location.pathname.split( '/' );
     var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
@@ -14,7 +15,14 @@ $(document).ready(function(){
             theme: "classic", // bootstrap
             allowClear: true
         });
-	  $("#saldo, #cantidad").numeric("."); 
+        
+        $("#saldo, #cantidad").numeric("."); 
+        
+        $("#saldo, #cantidad").on('keyup', function(){
+           var numero = $(this).val();
+           var tmp = numero.replace(/^[0]/g,'');
+           $(this).val(tmp.replace(/[^0-9\.]/g,''));
+        });  
 
 	  $("#cantidad").blur(function(){
 	  	$("#cantidad_error").text('');
@@ -153,6 +161,7 @@ $(document).ready(function(){
      });
 
      $("#especifico").on('change', function(){
+
         var id_esp = $(this).val();
         var id_fondo = $("#fondo option:selected").val();
         if(id_esp>0 && id_fondo>0){

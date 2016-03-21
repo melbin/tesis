@@ -111,7 +111,7 @@
         		<tr>
         		<td width="10%"><label>Cantidad:</label></td>
 	        		<td colspan="2">	        			
-		        			<input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad">	
+                                    <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad" maxlength="7">	
                             <div id="cantidad_error" style="color:red;font-size:11px;"></div>				
         			</td>
         		</tr>
@@ -120,7 +120,7 @@
 	        		<td colspan="2">	        			
                         <div class="form-group input-group">	
 		        			<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-		        			<input type="text" class="form-control" placeholder="Precio" id="precio" name="precio">	
+                                                <input type="text" class="form-control" placeholder="Precio" id="precio" name="precio" maxlength="7">	
 	        			</div>
                         <div id="precio_error" style="color:red;font-size:11px;"></div>				
         			</td>

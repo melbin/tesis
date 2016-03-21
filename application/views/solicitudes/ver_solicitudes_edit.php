@@ -124,7 +124,7 @@
         		<tr>
                 <td width="10%"><h5>Descripción:</h5></td>
                     <td colspan="2">                        
-                        <div class="form-group" style="margin-bottom:-7px; !important">    
+                        <div class="form-group" style="margin-bottom:-7px !important">    
                             <textarea id="descripcion" name="descripcion" style="width:100%" disabled="disabled"></textarea>
                         </div>              
                     </td>
@@ -157,7 +157,7 @@
 	        		<td colspan="2">	        			
                         <div class="form-group input-group">	
 		        			<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-		        			<input type="text" class="form-control decimales" placeholder="Precio" id="precio" name="precio">	
+                                                <input type="text" class="form-control decimales" placeholder="Precio" id="precio" name="precio" maxlength="7">	
                             <span class="input-group-addon">.00</span>
 	        			</div>
                         <div id="precio_error" style="color:red;font-size:11px;"></div>				

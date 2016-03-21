@@ -219,6 +219,7 @@ class Especificos extends CI_Controller {
 			redirect('/auth/login/');
 		} else {
 			// All your code goes here
+			
 			$opciones="<option value='0' saldo='0' selected>Seleccione</option>";	
 			$fondos = $this->regional_model->get_tabla('fon_fondo', array('fon_estado'=>1));
 			foreach ($fondos as $key => $value) {

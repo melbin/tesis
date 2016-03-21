@@ -90,7 +90,12 @@
         var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
 
 		//$("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
-		$(".decimales").validarCampo('0123456789.,'); 
+		$(".decimales").numeric("."); 
+        
+        $("#cantidad").on('keyup', function(){
+           var numero = $(this).val();
+           $(this).val(numero.replace(/[^0-9\.]/g,''));
+        });    
 
 		$("#cantidad").blur(function(){
 			$("#cantidad_error").text('');

@@ -5,6 +5,12 @@
         var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
                 
         //$("#fecha_registro").datepicker({dateFormat: 'dd-mm-yy',changeMonth: true, changeYear: true});
+        
+        $("#precio, #cantidad").on('keyup', function(){
+           var numero = $(this).val();
+           var tmp = numero.replace(/^[0]/g,'');
+           $(this).val(tmp.replace(/[^0-9\.]/g,''));
+        });
 
         // Codigo para los select
         $("#categoria, #sub_categoria, #bodega ,#proveedor, #entrada, #articulo").select2({

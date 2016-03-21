@@ -66,10 +66,15 @@
     $(document).ready(function(){
 
         $("#saldo").focusout(function(){
-            if(parseFloat($(this).val()) < parseFloat($("#monto_asignado_total").val())){
-                var cantidad = (parseFloat($("#pre_votado").val())).toFixed(2);
+            
+            var saldo = $(this).val();
+            if (saldo == "") {
+                saldo = 0;
+            }
+            if(parseFloat(saldo) < parseFloat($("#monto_asignado_total").val())){
+                var cantidad = (parseFloat($("#pre_votado").attr('saldo'))).toFixed(2);
 
-                if(parseFloat($("#pre_votado").val()) < parseFloat($("#saldo_origen").val())){
+                if(parseFloat($("#pre_votado").attr('saldo')) < parseFloat($("#saldo_origen").val())){
                     cantidad = (parseFloat($("#saldo_origen").val())).toFixed(2);
                 }
                 $(this).val(cantidad);

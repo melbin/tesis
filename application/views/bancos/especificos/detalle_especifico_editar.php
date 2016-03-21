@@ -10,7 +10,6 @@
 </form>
 
 <link href="<?php echo base_url()?>stylesheet/sistema/entrada_articulos.css" rel="stylesheet">
-<script src="<?php echo base_url()?>js/bancos/detalle_especifico_editar.js"></script>  
 
 <div>
 <form class="" id="pro_entrada" name="pro_entrada" method="POST" action="<?php echo base_url()?>bancos/especificos/guardar_detalle_especifico_editar"> 
@@ -58,7 +57,7 @@
                     <td colspan="2">
                         <div class="form-group input-group">    
                             <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                            <input type="text" class="form-control" placeholder="0.00" id="pre_votado" name="pre_votado" maxlength="8" value="<?php echo !empty($det_detalles['det_saldo_votado'])? number_format($det_detalles['det_saldo_votado'],2):''; ?>" disabled="disabled"> 
+                            <input type="text" class="form-control" placeholder="0.00" id="pre_votado" name="pre_votado" saldo="<?php echo !empty($det_detalles['det_saldo_votado'])? $det_detalles['det_saldo_votado']:0; ?>" maxlength="8" value="<?php echo !empty($det_detalles['det_saldo_votado'])? number_format($det_detalles['det_saldo_votado'],2):''; ?>" disabled="disabled"> 
                         </div>                      
                         <div id="saldo_error" style="color:red;font-size:11px;"></div>              
                     </td>
@@ -84,7 +83,7 @@
     </div>
 
     <input type="hidden" id="det_id" name="det_id" value="<?php echo $det_detalles['det_id']; ?>">
-    <input type="hidden" id="saldo_origen" value="<?php echo !empty($det_detalles['det_saldo'])? $det_detalles['det_saldo']:''; ?>">
+    <input type="hidden" id="saldo_origen" value="<?php echo !empty($det_detalles['det_saldo'])? $det_detalles['det_saldo']:0; ?>">
 
 	<div class="panel panel-default">
         <div class="panel-heading">
@@ -135,3 +134,4 @@
       });
     });
 </script>
+<script src="<?php echo base_url()?>js/bancos/detalle_especifico_editar.js"></script>  

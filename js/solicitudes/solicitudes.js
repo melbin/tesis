@@ -5,6 +5,17 @@
         $(".select2-selection__clear").live('click',function(){
             
         });
+        
+        $("#plazo_entrega, #cantidad").on('keyup', function(){
+           var numero = $(this).val();
+           $(this).val(numero.replace(/^[0]/g,''));
+        });
+        
+        $(".decimales").on('keyup', function(){
+           var numero = $(this).val();
+           var tmp = numero.replace(/^[0]/g,'');
+           $(this).val(tmp.replace(/[^0-9\.]/g,''));
+        });
 
         if($("#lugar_entrega").text()!=''){
             $("#lugar_entrega").attr('disabled',false);
@@ -112,9 +123,9 @@
         $("#cantidad").change(function(){
             $("#cantidad_error").text('');
         });
-        $("#um").change(function(){
-            $("#um_error").text('');
-        });
+//        $("#um").change(function(){
+//            $("#um_error").text('');
+//        });
 
         // Codigo para los select
         $(".select2").select2({
@@ -126,7 +137,7 @@
 
         // $("#bodega, #proveedor, #entrada, #articulo").selectmenu();
         $(".enteros").validarCampo('0123456789'); 
-        $(".decimales").validarCampo('0123456789.,'); 
+        $(".decimales").numeric(".");
         $("#numero_entrega").validarCampo('123456789');
 
         $("#cancelar").live("click", function(){

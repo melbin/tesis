@@ -21,7 +21,6 @@ class Welcome extends CI_Controller {
 			$data['logo'] = $this->Regional_model->get_parametro("logo");
 			$data['menu_sistema']=true;
 
-
 			// Obtener los link del panel Izquierdo.
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);

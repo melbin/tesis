@@ -2,3 +2,4 @@
 *.so	
 *.log
 index.php
+/nbproject/private/

@@ -10,7 +10,6 @@
 </form>
 
 <link href="<?php echo base_url()?>stylesheet/sistema/entrada_articulos.css" rel="stylesheet">
-<script src="<?php echo base_url()?>js/bancos/detalle_especifico.js"></script>  
 
 <div>
 <form class="" id="pro_entrada" name="pro_entrada" method="POST" action="<?php echo base_url()?>bancos/especificos/guardar_detalle_especifico"> 
@@ -155,3 +154,5 @@
 
     </form>
 </div>
+
+<script src="<?php echo base_url()?>js/bancos/detalle_especifico.js"></script>  

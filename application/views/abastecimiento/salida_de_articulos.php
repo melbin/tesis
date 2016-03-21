@@ -86,7 +86,7 @@
                 <td width="10%"><label>Cantidad:</label></td>
                     <td colspan="2">                        
                         <div class="form-group">    
-                            <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad" onchange="validar_cantidad();" maxlength="3">    
+                            <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad" onchange="validar_cantidad();" maxlength="5">    
                             <input type="hidden" id="cant_real" name="cant_real">
                             <div id="cantidad_error" style="color:red;font-size:11px;"></div>
                         </div>              
