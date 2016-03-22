@@ -139,12 +139,13 @@ class Solicitudes extends CI_Controller {
                 } else {
                     if ($this->input->post('filtro') == 'sol_fecha') {
                         $fechas = explode('#', $this->input->post('valor'));
-                        $where['sol_fecha >='] = date('Y-m-d', strtotime($fechas[0]));
-                        $where['sol_fecha <='] = date('Y-m-d', strtotime($fechas[1]));
+                        $where["date_format(sol_fecha,'%Y-%m-%d')  >="] = date('Y-m-d', strtotime($fechas[0]));
+                        $where["date_format(sol_fecha,'%Y-%m-%d') <="] = date('Y-m-d', strtotime($fechas[1]));
                     }
                 }
                 //die(print_r($where,true));
                 $data['solicitudes'] = $this->regional_model->detalle_solicitud($where);
+
                 $html = $this->load->view('solicitudes/cargar_tabla', $data, true);
                 echo json_encode(array('drop' => $html));
             }

@@ -232,9 +232,8 @@
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
-            <div class="image_position">
-                <img style="width: 50%; height: 30%;" src="<?php echo base_url(); ?>media/sistema/<?php echo $logo;?>.gif">
-            </div>
+            <img style="position: absolute; top:10px; left: 268px; width: 100px;" src="<?php echo base_url(); ?>media/sistema/<?php echo $logo;?>.gif">
+
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
