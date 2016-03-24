@@ -6,6 +6,7 @@ class Financiero extends CI_Controller {
 		parent:: __construct();
 		$this->load->database();
 		$this->load->library('masterpage');
+		$this->load->model('email_model');
 		$this->load->model('regional_model');
 		$this->load->model('sistema/sistema_model');
 	}
@@ -130,6 +131,20 @@ class Financiero extends CI_Controller {
 
 				$axd_registro = $this->regional_model->actualizar_registro('axd_asignacionxdetalle_especifico', $axd_array, array('axd_id'=> $historial_sol['axd_id']));
 
+				// Enviar correo a Solicitante
+					$mail_solicititante_flag = $this->regional_model->get_parametro('mail_to_solicitante');
+					if($mail_solicititante_flag){
+						$to = $this->regional_model->get_correo_solicitante($id_solicitud);
+						$from = $this->regional_model->get_parametro('regional_mail');
+						$subjet = "Seguimiento de Solicitud";
+						$message  = "<b>Solicitud aprobada por San Salvador</b><br><br>";
+						$message .= "Su solicitud se encuentra en Negociación con los Proveedores.<br><br>";
+						$message .= "<i>Solicitud No:</i> <b>$id_solicitud</b>";
+						
+						if(!empty($to))
+							@$this->email_model->sendEmail($from, $to, $subjet, $message);
+					}
+
 				// No llevaria Movimiento financiero. 
 			$alerta=array('registro'=>$registro,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Se envió la solicitud a abastecimiento.");	
 			} else {  // Solicitud actualizada 
@@ -141,6 +156,16 @@ class Financiero extends CI_Controller {
 		}
 	} // End aprobar solicitud
 
+	// function send_mail($to, $subject=NULL, $message, $from)
+	// {
+	
+	// 	$headers ="From:<$from> \r\n";
+	// 	$headers.="MIME-version: 1.0 \r\n";
+	// 	$headers.="Content-type: text/html; charset= iso-8859-1\r\n";
+
+	// 	mail($to, $subject, $message, $headers);
+
+	// }
 
 		function __cargarVista($data=0)
 	{	

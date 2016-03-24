@@ -301,7 +301,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        
+        //debugger;
         tipo_alerta='<?php echo $this->session->flashdata('tipo_alerta');?>';
         texto_alerta = '<?php echo $this->session->flashdata('texto_alerta') ?>';
 

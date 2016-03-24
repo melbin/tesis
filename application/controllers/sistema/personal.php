@@ -91,7 +91,6 @@ class Personal extends CI_Controller {
 		 	$crud->unset_jquery(); // No llama al jQuery del Grocery Crud
 		 	$output = $crud->render();
 		 	//$this->load->view('sistema/pais',$output);
-		 	
 		 	$data['vista_name']='bancos/index';
 		 	$data['texto'] = $this->load->view('sistema/personal/usuarios', $output, true); 
 
@@ -200,6 +199,13 @@ class Personal extends CI_Controller {
 	function delopc()
 	{
 		$this->sistema_model->del_opc($_POST['rol'],$_POST['opc']);
+	}
+
+	function activar_envio_correo()
+	{
+		$estado = $this->input->post('estado');
+		$registro = $this->regional_model->actualizar_registro('par_parametro', array('par_valor'=>$estado), array('par_nombre'=>'mail_to_solicitante'));
+		echo json_encode(array('drop'=>$registro,'estado'=>$estado));
 	}
 
 

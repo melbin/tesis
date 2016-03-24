@@ -8,6 +8,7 @@ class Abastecimiento extends CI_Controller {
 		$this->load->library('grocery_CRUD');
 		$this->load->library('masterpage');
 		$this->load->model('regional_model');
+		$this->load->model('email_model');
 		$this->load->model('sistema/sistema_model');
 		$this->load->model('inventario/productos_model','pro_model');
 		$this->load->library('session');
@@ -342,6 +343,24 @@ class Abastecimiento extends CI_Controller {
 			
 				if($row_afected>0)
 				{
+						$message = "Solicitud <b>RECHAZADA</b> por el Departamento Financiero.<br><br>";
+					if($depto==1){
+						$message = "Solicitud <b>RECHAZADA</b> por el Departamento de Abastecimiento.<br><br>";
+					}
+
+					// Enviar correo a Solicitante
+					$mail_solicititante_flag = $this->regional_model->get_parametro('mail_to_solicitante');
+					if($mail_solicititante_flag){
+
+						$to = $this->regional_model->get_correo_solicitante($sol);
+						$from = $this->regional_model->get_parametro('regional_mail');
+						$subjet = "Solicitud (Rechazada) - Regional";
+						$message .= "<b>Motivo:</b> <i>".$motivo."</i><br><br>";
+						$message .= "<i>Solicitud No:</i> <b>".$sol."</b><br>";
+						
+						if(!empty($to))
+							@$this->email_model->sendEmail($from, $to, $subjet, $message);
+					}
 					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Transacción Exitosa",'texto_alerta'=>"Se rechazo la solicitud de manera exitosa.");
 				} else
 				{
@@ -350,6 +369,7 @@ class Abastecimiento extends CI_Controller {
 			} else { $alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Transaccion no realizada",'texto_alerta'=>"La solicitud no pudo ser aprobada."); }
 	
 			$this->session->set_flashdata($alerta);       
+			if($depto!=1) redirect('home/financiero/procesar_solicitudes'); 
 			redirect('home/abastecimiento/procesar_solicitudes');
 
 			}
@@ -376,7 +396,7 @@ class Abastecimiento extends CI_Controller {
 			$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));
 			$info['menu_principal'] = $this->sistema_model->get_menu('sic_sistema_catalogo',6, $user_id);
 		 	$data['menus'] = $this->load->view('menu/opciones_menu',$info, true);
-		 	
+			
 			$this->__cargarVista($data);
 		}
 	}
@@ -459,7 +479,7 @@ class Abastecimiento extends CI_Controller {
 				$total += floatval($det_registro['det_saldo_devengado']) - floatval($des_saldo_anterior);
 			}
 
-			$this->sistema_model->actualizar_registro('det_detalle_especifico', array('det_saldo_devengado'=>$total, 'det_usu_mod'=>$this->tank_auth->get_user_id(), 'det_fecha_mod'=> date('Y-m-d')), array('det_id'=>$det_registro['det_id']));	
+			$this->sistema_model->actualizar_registro('det_detalle_especifico', array('det_saldo_devengado'=>$total, 'det_usu_mod'=>$this->tank_auth->get_user_id(), 'det_fecha_mod'=> date('Y-m-d')), array('det_id'=>$det_registro['det_id']));
 
 			// crear alerta OK
 			$alerta=array('registro'=>$row_affected,'tipo_alerta'=> 'success','titulo_alerta'=>"Proceso Exitoso",'texto_alerta'=>"Edición de solicitud exitosa.");
@@ -526,6 +546,20 @@ class Abastecimiento extends CI_Controller {
 			$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
 			if($row_afected>0)
 				{
+					// Enviar correo a Solicitante
+					$mail_solicititante_flag = $this->regional_model->get_parametro('mail_to_solicitante');
+					if($mail_solicititante_flag){
+						$to = $this->regional_model->get_correo_solicitante($sol);
+						$from = $this->regional_model->get_parametro('regional_mail');
+						$subjet = "Seguimiento de Solicitud";
+						$message = "Su solicitud fue aprobada por Abastecimiento, Actualmente esta se encuentra en Financiero.<br><br>";
+						$message .= "<i>Solicitud No:</i> <b>$sol<b> ";
+
+						if(!empty($to))
+							@$this->email_model->sendEmail($from, $to, $subjet, $message);
+
+					}
+
 					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Aprobación Exitosa",'texto_alerta'=>"Se aprobo la solicitud de manera exitosa.");
 				} else
 				{
@@ -550,6 +584,20 @@ class Abastecimiento extends CI_Controller {
 			$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
 			if($row_afected>0)
 				{
+					// Enviar correo a Solicitante
+
+					$mail_solicititante_flag = $this->regional_model->get_parametro('mail_to_solicitante');
+					if($mail_solicititante_flag){
+						$to = $this->regional_model->get_correo_solicitante($sol);
+						$from = $this->regional_model->get_parametro('regional_mail');
+						$subjet = "Seguimiento de Solicitud";
+						$message = "Su solicitud se encuentra actualmente en <i><b>San Salvador</b></i>, Esperando liberación de efectivo.<br><br>";
+						$message .= "<i>Solicitud No:</i> <b>$sol</b> ";
+						
+						if(!empty($to))
+							@$this->email_model->sendEmail($from, $to, $subjet, $message);
+					}
+
 					$alerta=array('tipo_alerta'=> 'success','titulo_alerta'=>"Aprobación Exitosa",'texto_alerta'=>"Se aprobo la solicitud de manera exitosa.");
 				} else
 				{
@@ -647,6 +695,17 @@ class Abastecimiento extends CI_Controller {
 	 }
 	
 	}
+
+	// function send_mail($to, $subject=NULL, $message, $from)
+	// {
+	
+	// 	$headers ="From:<$from> \r\n";
+	// 	$headers.="MIME-version: 1.0 \r\n";
+	// 	$headers.="Content-type: text/html; charset= iso-8859-1\r\n";
+
+	// 	mail($to, $subject, $message, $headers);
+
+	// }
 
 
 

@@ -20,6 +20,13 @@ foreach($css_files as $file): ?>
 <script>
     $(document).ready(function() {
         $("#field-per_telefono").mask('9999-9999');
+        $("input[name*='fecha']").mask("99/99/9999");    
+        $("input[name='per_edad']").on('keyup', function(){
+           var numero = $(this).val();
+           var tmp = numero.replace(/^[0]/g,'');
+           $(this).val(tmp.replace(/[^0-9\.]/g,''));
+        });
+        //$("#per_fecha_nac_input_box").html($("#per_fecha_nac_input_box").html().replace('(dd/mm/yyyy) hh:mm:ss','(dd/mm/yyyy)'));
 
         $('#dataTables-example').DataTable({
                 responsive: true,

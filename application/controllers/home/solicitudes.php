@@ -11,6 +11,7 @@ class Solicitudes extends CI_Controller {
         $this->load->library('grocery_CRUD');
         $this->load->library('masterpage');
         $this->load->library('enLetras');
+        $this->load->model('email_model');
         $this->load->model('regional_model');
         $this->load->model('sistema/sistema_model');
         $this->load->model('inventario/productos_model');
@@ -281,6 +282,7 @@ class Solicitudes extends CI_Controller {
                 'sol_tps_id' => NULL,
                 'sol_estado' => 1,
                 'sol_usu_mod' => $this->tank_auth->get_user_id(),
+                'sol_usu_crea' => $this->tank_auth->get_user_id(),
                 'sol_fecha_mod' => date('Y-m-d H:i:s')
             );
 
@@ -374,7 +376,8 @@ class Solicitudes extends CI_Controller {
                 $descripcion = $this->input->post('descripcion');
                 $renta = $this->input->post('renta');
                 $nit = $this->input->post('nit');
-
+                $solicitud = $this->regional_model->detalle_sol($_POST['sol_id']);
+                
                 // Actualizar el estado de la solicitud
                 $this->sistema_model->actualizar_registro('des_detalle_solicitud', array('des_ets_id' => 5, 'des_usu_mod' => $this->tank_auth->get_user_id(), 'des_fecha_mod' => date('Y-m-d H:i:s')), array('des_sol_id' => $_POST['sol_id']));
 
@@ -408,6 +411,24 @@ class Solicitudes extends CI_Controller {
                 }
 
                 if (isset($id_contratista) && $id_contratista > 0) {
+
+                	// Enviar correo a Solicitante
+					$mail_solicititante_flag = $this->regional_model->get_parametro('mail_to_solicitante');
+					
+					if($mail_solicititante_flag && $solicitud[0]['des_ets_id']!=5){
+
+						$to = $this->regional_model->get_correo_solicitante($this->input->post('sol_id'));
+						$from = $this->regional_model->get_parametro('regional_mail');
+						$subjet = "Solicitud (Finalizada) - Regional";
+						$message = "Su solicitud ya fue procesada satisfactoriamente.<br>";
+						$message .= "Puede pasar a la bodega: <b>".$solicitud[0]['ali_nombre']."</b> a retirar sus productos.<br><br>";
+						$message .= "<i>Solicitud No:</i> <b>".$this->input->post('sol_id')."</b>";
+
+						if(!empty($to))
+							@$this->email_model->sendEmail($from, $to, $subjet, $message);
+
+					}
+
                     // crear alerta OK
                     $alerta = array('registro' => $registro, 'tipo_alerta' => 'success', 'titulo_alerta' => "Registro ingresado", 'texto_alerta' => "Registro ingresado exitosamente.");
                 } else {
@@ -447,6 +468,17 @@ class Solicitudes extends CI_Controller {
             }
         }
     }
+
+    function send_mail($to, $subject=NULL, $message, $from)
+	{
+	
+		$headers ="From:<$from> \r\n";
+		$headers.="MIME-version: 1.0 \r\n";
+		$headers.="Content-type: text/html; charset= iso-8859-1\r\n";
+
+		mail($to, $subject, $message, $headers);
+
+	}
 
     function __cargarVista($data = 0) {
         $vista = $data['vista_name'];

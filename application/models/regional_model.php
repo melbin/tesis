@@ -107,6 +107,17 @@ class Regional_model extends CI_Model
 		return $query['par_valor'];
 	}
 
+    function get_correo_solicitante($id_sol)
+    {
+        $this->db->select('email')
+                ->from('sol_solicitud')
+                ->join('users', 'users.id = sol_usu_crea')
+                ->where('sol_id',$id_sol)
+                ;
+        $query = $this->db->get()->row_array();
+        return $query['email'];        
+    }
+
     function get_existencias2()
     {
         $query = "
