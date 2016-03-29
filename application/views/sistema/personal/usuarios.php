@@ -87,5 +87,9 @@ foreach($css_files as $file): ?>
 
         }
 
+        // Cuando sea lectura, ocultar campos que no se desea mostrar
+        $("#new_password_key_field_box, #banned_display_as_box, #ban_reason_field_box, #new_email_field_box, #new_email_key_field_box").hide();
+        $("#new_password_requested_field_box, #last_ip_field_box, #last_login_field_box, #banned_field_box").hide();
+
     });
 </script>        

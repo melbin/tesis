@@ -67,7 +67,7 @@ class Regional_model extends CI_Model
                     ->from('esp_especifico')
                     ->join('det_detalle_especifico', 'det_esp_id = esp_id', 'left')
                     ->where('det_estado',1)
-                    ->where('det_saldo >=',$saldo_minimo)
+                    ->where('(det_saldo - det_saldo_ejecutado) >=',$saldo_minimo)
                     ->where('det_fondo_id',$fondo_id)
                     ;
         $result = $this->db->get()->result_array();

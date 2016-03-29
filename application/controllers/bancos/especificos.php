@@ -791,7 +791,7 @@ class Especificos extends CI_Controller {
                 $this->db->where('det_saldo_congelado >', 0);
             }
             $especificos = $this->regional_model->get_especificos($fondo_id, $saldo_minimo);
-
+            
             $opciones = "<option value='0' saldo='0' selected>Seleccione</option>";
 
             foreach ($especificos as $key => $value) {

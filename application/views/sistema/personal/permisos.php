@@ -4,7 +4,7 @@ var pathArray = window.location.pathname.split( '/' );
 var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
 
  $(document).ready(function () {
-
+ 		
         $("#rol").select2();
         $("#opc").select2();
         cargarOpciones();
