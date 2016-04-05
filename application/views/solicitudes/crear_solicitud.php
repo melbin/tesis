@@ -189,7 +189,7 @@
                 Precio ($)
             </th>
             <th style="">
-                Sub-Total
+                Sub-Total ($)
             </th>
             <!--<th style="">
                 Fecha de caducidad

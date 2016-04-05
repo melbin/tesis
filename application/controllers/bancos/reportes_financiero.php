@@ -44,7 +44,7 @@ class Reportes_financiero extends CI_Controller {
 			// All your code goes here
 			//$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv', '{ali_nombre}','',array('ali_estado'=>1),null, '','ali_id', true);
 			$data['fondos'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1),null, '','fon_id', true);
-            $data["titulo"] ="Reporte de distribución y disponibilidad por fondo";
+            $data["titulo"] ="Reporte de Distribución y Disponibilidad por Fondo";
 			$data['vista_name'] = "bancos/reportes_financiero/reporte_fondos";
 			$this->__cargarVista($data);
 		}		
@@ -57,7 +57,7 @@ class Reportes_financiero extends CI_Controller {
 		} else {
 			// All your code goes here
 			$data['fondos'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1),null, '','fon_id', true);
-            $data["titulo"] ="Reporte solicitud por específico";
+            $data["titulo"] ="Reporte Solicitud por Específico";
 			$data['vista_name'] = "bancos/reportes_financiero/reporte_especifico";
 			$this->__cargarVista($data);
 		}		
@@ -71,7 +71,7 @@ class Reportes_financiero extends CI_Controller {
 		} else {
 			// All your code goes here
 			$data['fondos'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}','',array('fon_estado'=>1),null, '','fon_id', true);
-            $data["titulo"] ="Reporte de saldos congelados";
+            $data["titulo"] ="Reporte de Saldos Congelados";
 			$data['vista_name'] = "bancos/reportes_financiero/reporte_saldos_congelados";
 			$this->__cargarVista($data);
 		}		
@@ -117,7 +117,7 @@ class Reportes_financiero extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
-                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'detalle por Fondo <br> Fondo: '.strtoupper($fondo['fon_nombre']).'<br> Desde: '.date('d-m-Y', strtotime($_POST['fecha_in'])).'<br>Hasta: '.date('d-m-Y', strtotime($_POST['fecha_out'])));
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Distribución y Disponibilidad por Fondo <br> Fondo: '.strtoupper($fondo['fon_nombre']).'<br> Desde: '.date('d-m-Y', strtotime($_POST['fecha_in'])).'<br>Hasta: '.date('d-m-Y', strtotime($_POST['fecha_out'])));
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
         }

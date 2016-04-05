@@ -168,7 +168,7 @@ $(function(){
 					},
 					error: function (request, status, error) {
 						 //alertify.set({ delay: 8000 });
-	        			 alertify.error('Este registro posee integridad referencial,<br>Por lo tanto, No podra ser eliminado.');
+	        			 alertify.error('Otros registros dependen de este,<br>Por lo tanto, No podra ser eliminado.');
 	    			}
 				});
 			}

@@ -73,7 +73,7 @@ class Welcome extends CI_Controller {
 				$user_id	= $this->tank_auth->get_user_id();
 				$data['username']	= $this->tank_auth->get_username();
 				$data['vista_name']='pages/perfil_usuario.php';
-			 	$data['titulo']="Perfil de usuario";
+			 	$data['titulo']="Perfil de Usuario";
 
 				 	// Obtener los link del panel Izquierdo.
 				$info['info_padre'] = $this->sistema_model->get_registro('sio_sistema_opcion',array('sio_estado'=>1,'sio_menu'=>1));

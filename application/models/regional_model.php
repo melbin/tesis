@@ -13,7 +13,7 @@ class Regional_model extends CI_Model
 
 	}
 
-    function detalle_sol($id_sol=NUL)
+    function detalle_sol($id_sol=NULL)
     {
         $query = $this->db->select()
                     ->from('sol_solicitud')
@@ -25,8 +25,9 @@ class Regional_model extends CI_Model
                     ->join('cat_catalogo','cat_id = des_cat_id','left')
                     ->join('ets_estado_solicitud','ets_id=des_ets_id','left')
                     ->join('fon_fondo','fon_id=des_fon_id','left')
-                    ->where('sol_id',$id_sol);
                     ;
+        if(!empty($id_sol))
+            $this->db->where('sol_id',$id_sol);            
 
         $result = $this->db->get()->result_array();               
         return $result;             
@@ -63,7 +64,7 @@ class Regional_model extends CI_Model
 
     function get_especificos($fondo_id, $saldo_minimo=0)
     {
-        $query = $this->db->select('esp_id, esp_nombre, det_saldo, det_saldo_congelado, det_saldo_ejecutado')
+        $query = $this->db->select('esp_id, esp_nombre, det_saldo, det_saldo_congelado, det_saldo_ejecutado, (SELECT SUM(axd_cantidad) FROM axd_asignacionxdetalle_especifico WHERE axd_det_id = det_id AND axd_estado = 1) AS saldo_asignado',false)
                     ->from('esp_especifico')
                     ->join('det_detalle_especifico', 'det_esp_id = esp_id', 'left')
                     ->where('det_estado',1)
@@ -722,6 +723,23 @@ ORDER BY
         $query = $this->db->get()->result_array();
         return $query;    
     
+    }
+
+    function get_seguimiento_solicitud($sol_id, $fecha_in, $fecha_out)
+    {
+        $this->db->select('emh_sol_id AS sol_id, emh_descripcion, emh_fecha, per_nombre, per_apellido, dpi_nombre')
+                ->from('emh_empleado_historial')
+                ->join('sol_solicitud', 'sol_id = emh_sol_id')
+                ->join('dpi_departamento_interno', 'dpi_id = sol_dpi_id')
+                ->join('users', 'users.id = emh_usu_crea')
+                ->join('per_persona', 'per_persona.per_id = users.per_id')
+                ->where('emh_fecha >=', $fecha_in)
+                ->where('emh_fecha <=', $fecha_out)
+                ->where('sol_id',$sol_id)
+            ;
+            
+        $query = $this->db->get()->result_array();
+        return $query;        
     }
 
     public function get_categorias()

@@ -10,7 +10,7 @@ th, td {
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        Solicitudes
+        Listado de Solicitudes
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">

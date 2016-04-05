@@ -71,3 +71,15 @@
 	var message_alert_edit_form = "<?php echo $this->l('alert_edit_form')?>";
 	var message_update_error = "<?php echo $this->l('update_error')?>";
 </script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		var estado = $(".form-input-box > div[id*='estado']").text();
+		if(estado == 1) {
+			$(".form-input-box > div[id*='estado']").text('Activo');
+		} else
+		if(estado == 0){
+			$(".form-input-box > div[id*='estado']").text('Inactivo');
+		}
+	});
+</script>

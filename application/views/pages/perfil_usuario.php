@@ -3,7 +3,7 @@
 
 		<div class="panel panel-default">
 		        <div class="panel-heading">
-		        	<b>Editar usuario</b> 
+		        	<b>Editar Usuario</b> 
 		        </div>
 		       
 		        <div class="panel-body">

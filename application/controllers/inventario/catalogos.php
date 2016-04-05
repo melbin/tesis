@@ -356,8 +356,21 @@ function procesos(){
 			
 			$columnas = array(
 				'pro_codigo',
+				'pro_codigo_nac',
 				'pro_nombre',
 				'pro_sub_id',
+				// 'pro_esp_id',
+				'pro_uni_id',
+				'pro_tip_id',
+				'pro_descripcion',
+				'pro_estado'
+				);
+
+			$add_edit = array(
+				'pro_codigo',
+				'pro_nombre',
+				'pro_sub_id',
+				'pro_codigo_nac',
 				// 'pro_esp_id',
 				'pro_uni_id',
 				'pro_tip_id',
@@ -375,7 +388,7 @@ function procesos(){
 				);
 
 			$alias = array(
-					'pro_codigo' => 'Código',
+					'pro_codigo' => 'Código producto',
 					'pro_nombre' => 'Nombre',
 					'pro_codigo_nac' => 'Cod. Naciones Unidas',
 					'pro_sub_id' => 'Subcatálogo',
@@ -389,13 +402,15 @@ function procesos(){
 			$crud->required_fields($requeridos);
 			$crud->columns($columnas);
 			$crud->display_as($alias);
-			$crud->edit_fields($columnas);
-			$crud->add_fields($columnas);
+			$crud->edit_fields($add_edit);
+			$crud->add_fields($add_edit);
 			$crud->set_rules('pro_codigo', 'Código','trim|required|xss_clean|campo_unico[pro_producto.pro_codigo]');	
 			$crud->field_type('pro_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('pro_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('pro_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
-
+			
+			$codigo = $this->Regional_model->get_parametro('codigo_naciones_unidas');
+			$crud->field_type('pro_codigo_nac', 'hidden', $codigo);
 			// Relacion de 1 a muchos. 
 			// $crud->set_relation('pro_esp_id','esp_especifico','esp_nombre');
 			$crud->set_relation('pro_uni_id','uni_unidad_medida','uni_valor');
@@ -420,6 +435,7 @@ function procesos(){
 		 	$this->__cargarVista($data);	 	 
 	 }
 	}
+
 
 	function __cargarVista($data=0)
 	{	

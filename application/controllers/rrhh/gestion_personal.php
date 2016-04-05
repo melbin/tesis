@@ -104,7 +104,7 @@ class Gestion_personal extends CI_Controller {
 			$crud->field_type('per_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
 
 		// Datos generales de la pagina	
-			$data['titulo']="Gestión de personas";
+			$data['titulo']="Gestión de Personas";
 
 		// Guardar esta persona como un empleado
 			// $crud->callback_after_insert(array($this, 'add_empleado'));	

@@ -43,7 +43,7 @@ class Consultas extends CI_Controller {
 		} else {
 			// All your code goes here
 			$data['deptos'] = $this->regional_model->get_dropdown('dpi_departamento_interno', '{dpi_nombre}','',array('dpi_estado'=>1),null, '','dpi_id', true);
-            $data["titulo"] ="Reporte solicitudes rechazadas";
+            $data["titulo"] ="Solicitudes Rechazadas";
 			$data['vista_name'] = "reportes/solicitudes_rechazadas";
 			$this->__cargarVista($data);
 		}	
@@ -57,8 +57,28 @@ class Consultas extends CI_Controller {
 		} else {
 			// All your code goes here
 			$data['deptos'] = $this->regional_model->get_dropdown('dpi_departamento_interno', '{dpi_nombre}','',array('dpi_estado'=>1),null, '','dpi_id', true);
-            $data["titulo"] ="Reporte solicitudes rechazadas";
+            $data["titulo"] ="Solicitudes Finalizadas";
 			$data['vista_name'] = "reportes/reporte_solicitud_finalizada";
+			$this->__cargarVista($data);
+		}	
+	
+	}
+
+		public function reporte_movimiento_solicitud()
+	{
+
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		} else {
+			// All your code goes here
+			$solicitudes = $this->regional_model->detalle_sol();
+			$html="<option value='0' selected>Seleccione</option>";
+			foreach ($solicitudes as $key => $value) {
+			$html .= "<option value= ".$value['sol_id']." > ".$value['sol_id'].'::'.$value['dpi_nombre'].'::'.'$'.number_format($value['des_total'],2,',','.')."</option>";
+		}
+			$data['solicitudes'] = $html;
+            $data["titulo"] ="Movimiento de Solicitud";
+			$data['vista_name'] = "reportes/reporte_movimiento_solicitud";
 			$this->__cargarVista($data);
 		}	
 	
@@ -119,6 +139,37 @@ class Consultas extends CI_Controller {
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Solicitudes Finalizadas');
+        } else {
+            echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
+        }
+	
+	}
+
+		public function imprimir_movimiento_solicitud($excel=null)
+	{
+
+		$id_solicitud = !empty($_POST['sol_id'])? $this->input->post('sol_id'): null;
+		$fecha_in = !empty($_POST['fecha_in'])? date('Y-m-d H:i:s', strtotime($_POST['fecha_in'])) : date('Y-m-01');
+		$fecha_out= !empty($_POST['fecha_out'])? date('Y-m-d H:i:s', strtotime($_POST['fecha_out'].date('H:i:s'))) : date('Y-m-t');
+		$data['solicitudes'] = $this->regional_model->get_seguimiento_solicitud($id_solicitud, $fecha_in, $fecha_out);
+		$data['pdf'] = $excel;	
+		$data['html'] = $this->load->view('reportes/tabla_seguimiento_solicitud',$data,true);
+
+		 if($excel==1){
+            $filename = 'reporte_movimiento_solicitud_'.date('dmY').'_'.substr(uniqid(md5(rand()), true), 0, 7);
+            // ob_end_clean();
+            // ob_start();
+            header("Content-Type: application/vnd.ms-excel");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("content-disposition: attachment;filename=" . $filename . ".xls");
+
+            echo $data['html'];
+        }
+        else
+        if($excel==2) {
+                $this->load->library('pdf'); //libreria pdf
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Movimiento de Solicitud','L');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
         }

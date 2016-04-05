@@ -181,7 +181,7 @@
                     +'<label name="producto_label" id="productos"/>'+$("#articulo option:selected").text()+'</td>'
                     +'<td><label name="cantidad_label" id="cantidadl'+row+'"/>'+parseFloat($("#cantidad").val()).toFixed(2)+'</td>'
                     +'<td><label name="precio_label" id="preciol'+row+'"/>'+ parseFloat($("#precio").val()).toFixed(2)+'</td>'
-                    +'<td><label name="subtotal" id="subtotal'+row+'"/>'+'$ '+parseFloat($("#precio").val() * $("#cantidad").val()).toFixed(2)+ '</td>'
+                    +'<td><label name="subtotal" id="subtotal'+row+'"/>'+parseFloat($("#precio").val() * $("#cantidad").val()).toFixed(2)+ '</td>'
                     +'<td><button type="button" id="remove" id_fila="'+numero_fila+'" class="remove" ><span class="glyphicon glyphicon-remove"></span> Anular</button>'
                     +'</tr>');
 

@@ -115,7 +115,7 @@ class Abastecimiento extends CI_Controller {
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "abastecimiento/salida_de_articulos";
 			$data['logo'] = $this->regional_model->get_parametro("logo");
-			$data['titulo']="Salida de artículos";
+			$data['titulo']="Salida de Artículos";
 
 			// Obtenemos los valores de los Select
 			$data['articulos'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),null,'','ali_id',true);
@@ -210,7 +210,7 @@ class Abastecimiento extends CI_Controller {
 			$data['username']	= $this->tank_auth->get_username();
 			$data['vista_name'] = "abastecimiento/entrada_de_articulos";
 			$data['logo'] = $this->regional_model->get_parametro("logo");
-			$data['titulo']="Entrada de artículos";
+			$data['titulo']="Entrada de Artículos";
 
 			// Obtenemos los valores de los Select
 			$data['articulos'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),null,'','ali_id',true);
@@ -310,6 +310,23 @@ class Abastecimiento extends CI_Controller {
 
 				$sol_rechazada = $this->regional_model->insertar_registro('res_rechazo_solicitud', $array);
 
+				 // Actualizar el Log
+				if($sol_rechazada > 0){
+					$depto_rechaza = $depto == 1 ? 'Departamento de Abastecimiento': 'Departamento Financiero';
+
+	            	$tmp_array = array(
+	            			'emh_sol_id'	=> $sol,
+	            			'emh_descripcion'	=> 'Solicitud anulada: '. $this->input->post('motivo').' - '.$depto_rechaza,
+	            			'emh_fecha'			=> date('Y-m-d H:i:s'),
+	            			'emh_sol_monto'		=> NULL,
+	            			'emh_estado'		=> 1,
+	            			'emh_usu_crea'		=> $this->tank_auth->get_user_id(),
+	            			'emh_usu_mod'		=> $this->tank_auth->get_user_id(),
+	            			'emh_fecha_mod'		=> date('Y-m-d H:i:s')	
+	            		);
+	            	$emh_id = $this->regional_model->insertar_registro('emh_empleado_historial', $tmp_array);		            
+				}
+
 				if($sol_rechazada>0){
 				
 				$where = array('des_sol_id'=>$sol);
@@ -383,7 +400,7 @@ class Abastecimiento extends CI_Controller {
 		} else {
 			
 			$data['logo'] = $this->regional_model->get_parametro("logo");
-			$data['titulo']="Solicitudes pendientes";
+			$data['titulo']="Procesar Solicitudes";
 			$data['vista_name'] = "solicitudes/procesar_solicitudes";
 			$user_id	= $this->tank_auth->get_user_id();
 				// All your code goes here
@@ -430,7 +447,22 @@ class Abastecimiento extends CI_Controller {
 						'des_usu_mod'	=>	$this->tank_auth->get_user_id(),
 						'des_fecha_mod'	=>	date('Y-m-d H:i:s')		
 						);				
-					$this->regional_model->actualizar_registro('des_detalle_solicitud', $detalle, array('des_sol_id'=>$id_sol));
+					$des_id =  $this->regional_model->actualizar_registro('des_detalle_solicitud', $detalle, array('des_sol_id'=>$id_sol));
+
+					 // Actualizar el Log
+		            if($des_id > 0 ){
+		            	$tmp_array = array(
+		            			'emh_sol_id'	=> $id_sol,
+		            			'emh_descripcion'	=> 'Editar solicitud',
+		            			'emh_fecha'			=> date('Y-m-d H:i:s'),
+		            			'emh_sol_monto'		=> $this->input->post('total'),
+		            			'emh_estado'		=> 1,
+		            			'emh_usu_crea'		=> $this->tank_auth->get_user_id(),
+		            			'emh_usu_mod'		=> $this->tank_auth->get_user_id(),
+		            			'emh_fecha_mod'		=> date('Y-m-d H:i:s')	
+		            		);
+		            	$emh_id = $this->regional_model->insertar_registro('emh_empleado_historial', $tmp_array);
+		            }
 
 					// Obtener datos del formulario
 					$productos = $this->input->post('productos');
@@ -492,7 +524,7 @@ class Abastecimiento extends CI_Controller {
 			} // End POST
 
 			$data['logo'] = $this->regional_model->get_parametro("logo");
-			$data['titulo']="Solicitudes pendientes";
+			$data['titulo']="Procesar Solicitud";
 			$data['vista_name'] = "solicitudes/ver_solicitudes_edit";
 
 			// All your code goes here
@@ -546,6 +578,21 @@ class Abastecimiento extends CI_Controller {
 			$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
 			if($row_afected>0)
 				{
+
+					// Actualizar el Log
+	            	$tmp_array = array(
+	            			'emh_sol_id'	=> $sol,
+	            			'emh_descripcion'	=> 'Solicitud aprobada por Abastecimiento',
+	            			'emh_fecha'			=> date('Y-m-d H:i:s'),
+	            			'emh_sol_monto'		=> NULL,
+	            			'emh_estado'		=> 1,
+	            			'emh_usu_crea'		=> $this->tank_auth->get_user_id(),
+	            			'emh_usu_mod'		=> $this->tank_auth->get_user_id(),
+	            			'emh_fecha_mod'		=> date('Y-m-d H:i:s')	
+	            		);
+	            	$emh_id = $this->regional_model->insertar_registro('emh_empleado_historial', $tmp_array);
+		            
+
 					// Enviar correo a Solicitante
 					$mail_solicititante_flag = $this->regional_model->get_parametro('mail_to_solicitante');
 					if($mail_solicititante_flag){
@@ -584,6 +631,21 @@ class Abastecimiento extends CI_Controller {
 			$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
 			if($row_afected>0)
 				{
+
+					// Actualizar el Log
+	            	$tmp_array = array(
+	            			'emh_sol_id'	=> $sol,
+	            			'emh_descripcion'	=> 'Solicitud aprobada por Financiero',
+	            			'emh_fecha'			=> date('Y-m-d H:i:s'),
+	            			'emh_sol_monto'		=> NULL,
+	            			'emh_estado'		=> 1,
+	            			'emh_usu_crea'		=> $this->tank_auth->get_user_id(),
+	            			'emh_usu_mod'		=> $this->tank_auth->get_user_id(),
+	            			'emh_fecha_mod'		=> date('Y-m-d H:i:s')	
+	            		);
+	            	$emh_id = $this->regional_model->insertar_registro('emh_empleado_historial', $tmp_array);
+		       
+
 					// Enviar correo a Solicitante
 
 					$mail_solicititante_flag = $this->regional_model->get_parametro('mail_to_solicitante');

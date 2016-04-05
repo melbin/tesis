@@ -156,7 +156,7 @@ class Especificos extends CI_Controller {
         if (!$this->tank_auth->is_logged_in()) {
             redirect('/auth/login/');
         } else {
-            $data['titulo'] = "Detalle de específicos";
+            $data['titulo'] = "Detalle de Específicos";
             $data['vista_name'] = "bancos/especificos/detalle_especifico";
 
             // All your code goes here
@@ -206,7 +206,7 @@ class Especificos extends CI_Controller {
             $data['especificos'] = $this->regional_model->get_dropdown('esp_especifico', '{esp_nombre}', '', array('esp_estado' => 1), $det_detalles['esp_id'], '', 'esp_id', true);
             $data['departamentos'] = $this->regional_model->get_dropdown('dpi_departamento_interno', '{dpi_nombre}', '', array('dpi_estado' => 1), null, '', 'dpi_id', true);
 
-            $data['titulo'] = "Detalle específico editar";
+            $data['titulo'] = "Edición de Detalle Específico";
             $data['vista_name'] = "bancos/especificos/detalle_especifico_editar";
 
             $this->__cargarVista($data);
@@ -231,7 +231,7 @@ class Especificos extends CI_Controller {
             $data['especificos'] = $this->regional_model->get_dropdown('esp_especifico', '{esp_nombre}', '', array('esp_estado' => 1), null, '', 'esp_id', true);
             $data['departamentos'] = $this->regional_model->get_dropdown('dpi_departamento_interno', '{dpi_nombre}', '', array('dpi_estado' => 1), null, '', 'dpi_id', true);
 
-            $data['titulo'] = "Detalle de específicos";
+            $data['titulo'] = "Detalle de Específicos";
             $data['vista_name'] = "bancos/especificos/crear_detalle_especifico";
             $this->__cargarVista($data);
         }
@@ -554,7 +554,7 @@ class Especificos extends CI_Controller {
                 $data['fondo'] = $opciones;
                 $data['especificos'] = $this->regional_model->get_dropdown('esp_especifico', '{esp_nombre}', '', array('esp_estado' => 1), null, '', 'esp_id', true);
 
-                $data['titulo'] = "Asignación de fondos";
+                $data['titulo'] = "Asignación de Fondos";
                 $data['vista_name'] = "bancos/especificos/asignar_fondos";
                 $this->__cargarVista($data);
             }
@@ -771,7 +771,7 @@ class Especificos extends CI_Controller {
                 // Hacer los registros de Movimiento
             } else {
                 // All your code goes here
-                $data['titulo'] = "Congelar fondos";
+                $data['titulo'] = "Congelar Fondos";
                 $data['vista_name'] = "bancos/especificos/congelar_fondos";
                 $data['fondo'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}', '', array('fon_estado' => 1), null, '', 'fon_id', true);
                 $this->__cargarVista($data);
@@ -795,8 +795,8 @@ class Especificos extends CI_Controller {
             $opciones = "<option value='0' saldo='0' selected>Seleccione</option>";
 
             foreach ($especificos as $key => $value) {
-                $saldo = floatval($value['det_saldo']) - floatval($value['det_saldo_ejecutado']) - floatval(!empty($value['det_saldo_congelado']) ? $value['det_saldo_congelado'] : 0);
-                $opciones .= "<option value=" . $value['esp_id'] . " saldo=" . $saldo . " > " . $value['esp_nombre'] . "</option>";
+                $saldo = floatval($value['det_saldo']) - floatval($value['det_saldo_ejecutado']) - floatval($value['saldo_asignado']) - floatval(!empty($value['det_saldo_congelado']) ? $value['det_saldo_congelado'] : 0);
+                if($saldo >0 ) $opciones .= "<option value=" . $value['esp_id'] . " saldo=" . $saldo . " > " . $value['esp_nombre'] . "</option>";
             }
 
             $result = array('especificos_origen' => $opciones);
@@ -947,7 +947,7 @@ class Especificos extends CI_Controller {
                 redirect('bancos/bancos');
             } else {
                 // All your code goes here
-                $data['titulo'] = "Reactivar fondos";
+                $data['titulo'] = "Reactivar Fondos";
                 $data['vista_name'] = "bancos/especificos/reactivar_fondos";
                 $data['fondo'] = $this->regional_model->get_dropdown('fon_fondo', '{fon_nombre}', '', array('fon_estado' => 1), null, '', 'fon_id', true);
                 $this->__cargarVista($data);

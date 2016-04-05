@@ -43,7 +43,7 @@ class Reportes extends CI_Controller {
         } else {
 
             $data['logo'] = $this->regional_model->get_parametro("logo");
-			$data["titulo"] ="Reporte de existencias";
+			$data["titulo"] ="Reporte de Existencias";
 			$data['vista_name'] = "reportes/reporte_existencias";
 
 			// All your code goes here
@@ -67,7 +67,7 @@ class Reportes extends CI_Controller {
             // Datos para los filtros
 
 			$data['bodegas'] = $this->regional_model->get_dropdown('ali_almacen_inv', '{ali_nombre}','',array('ali_estado'=>1),null, '','ali_id', true);
-            $data["titulo"] ="Inventario por bodega";
+            $data["titulo"] ="Inventario por Bodega";
 			$data['vista_name'] = "reportes/por_departamento";
 			$this->__cargarVista($data);
         }
@@ -200,7 +200,7 @@ class Reportes extends CI_Controller {
         }
         else {
                 $this->load->library('pdf'); //libreria pdf
-                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Productos por bodega <br> Bodega: '.$bodega_nombre);
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Productos por Bodega <br> Bodega: '.$bodega_nombre);
         }
 
     }
@@ -213,7 +213,7 @@ class Reportes extends CI_Controller {
             // Datos para los filtros
 
             $data['proveedor']  =   $this->regional_model->get_dropdown('prv_proveedor', '{prv_nombre}','',array('prv_estado'=>1),null, '','prv_id', true);
-            $data["titulo"] ="Reporte por proveedor";
+            $data["titulo"] ="Reporte por Proveedor";
             $data['vista_name'] = "reportes/proveedor";
             $this->__cargarVista($data);
         }
@@ -241,7 +241,7 @@ class Reportes extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
-                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Existencias por proveedor');
+                $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Existencias por Proveedor');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
         }

@@ -8,8 +8,8 @@ th, td {
 }
 </style>
 <script type="text/javascript">
-	var accion_excel="<?php echo base_url('home/reportes/imprimir_proveedor/1'); ?>";
- 	var accion_pdf="<?php echo base_url('home/reportes/imprimir_proveedor/2'); ?>";
+	var accion_excel="<?php echo base_url('home/consultas/imprimir_movimiento_solicitud/1'); ?>";
+ 	var accion_pdf="<?php echo base_url('home/consultas/imprimir_movimiento_solicitud/2'); ?>";
 </script>
 <div class="panel panel-default">
         <div class="panel-heading">
@@ -19,19 +19,30 @@ th, td {
         <div class="panel-body">
         	<!-- All your code here -->
             
-        	<table width="50%" align="left" border="0">
-        		<tr><th width="23%"></th><th></th><th></th></tr>
+        	<table width="70%" align="left" border="0" style="margin-top:30px;">
+                <tr><th width="15%"></th><th></th><th></th><th></th></tr>
         		<tr> <!-- <i id="requerido">*</i> -->
-        		<td width="10%"><label>Proveedor:<b style="color:red;">*</b></label></td>
-        			<td colspan="2">
-        				<select class="form-control select2" id="proveedor" name="proveedor" placeholder="seleccione">
-        					<?php echo (isset($proveedor))? $proveedor:null; ?>
+        		<td width="10%"><label>Solicitud:<b style="color:red;">*</b></label></td>
+        			<td colspan="3">
+        				<select class="form-control select2" id="solicitud" name="solicitud" placeholder="seleccione">
+        					<?php echo (isset($solicitudes))? $solicitudes:null; ?>
         				</select>	
-                        <div id="proveedor_error" style="color:red;font-size:11px;"></div>
+                        <div id="solicitud_error" style="color:red;font-size:11px;"></div>
         			</td>
         		</tr>
         		<tr>
-        			<td align="center" colspan="3"><button id="buscar" name="buscar" type="button" class="btn btn-primary"> <span class="fa fa-search"> Buscar</span></button></td>
+                    <td width="10%"><label>Fecha inicio:<b style="color:red;">*</b></label></td>
+                    <td>
+                        <input id="fecha_inicio" name="fecha_inicio" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
+                    </td>
+                    <td width="10%"><label>Fecha fin:<b style="color:red;">*</b></label></td>
+                    <td>
+                        <input id="fecha_fin" name="fecha_fin" type="text" value="<?php echo date('d-m-Y'); ?>" maxlength="19" placeholder="__/__/____" class="datetime-input form-control fecha">
+                    </td>
+                </tr>
+        		<tr>
+                    <td></td>
+                    <td align="left" colspan="3"><button id="buscar" name="buscar" type="button" class="btn btn-primary"> <span class="fa fa-search"> Buscar</span></button></td>
         		</tr>
         	</table>
         </div>	
@@ -43,13 +54,15 @@ th, td {
         </div>
        <div class="panel panel-default">
         <div class="panel-heading">
-            <!-- <b>Existencias</b>  -->
+            <b></b> 
         </div>
        
         <div class="panel-body">
             <!-- All your code here -->
             <form target="_blank" id="frm-descarga" method="POST">
-                <input type="hidden" name="id_proveedor" id="id_proveedor">
+                <input type="hidden" name="sol_id" id="sol_id">
+                <input type="hidden" name="fecha_in" id="fecha_in">
+                <input type="hidden" name="fecha_out" id="fecha_out">
                 <div class="form-actions">
                     <button type="button"  onclick="javascript: this.form.action=accion_excel; this.form.submit(); " class="btn btn-info" title="Exportar a excel" id="" ><strong><span class="icomoon-icon-file-excel white"></span>Exportar a excel</strong></button>
                     <button type="button"  onclick="javascript: this.form.action=accion_pdf; this.form.submit(); " class="btn btn-info" title="Exportar a PDF" id="" ><strong><span class="icomoon-icon-file-pdf white"></span>Exportar PDF</strong></button>
@@ -80,33 +93,35 @@ th, td {
 
 		$("#buscar").on('click',function(){
 			
-			if( $.trim($("#proveedor").val())!='' && $.trim($("#proveedor").val())>0 )
+			if( $.trim($("#fecha_inicio").val())!='' && $.trim($("#fecha_fin").val()) != '' && $("#solicitud").val() > 0 )
 			{	
 
 			$.ajax({
-	            url: urlj+'home/reportes/imprimir_proveedor',
+	            url: urlj+'home/consultas/imprimir_movimiento_solicitud',
 	            type: 'POST',
 	            dataType: 'json',
-	            data: { id_proveedor : $("#proveedor").val() },
+	            data: {sol_id : $("#solicitud").val(), fecha_in: $("#fecha_inicio").val(), fecha_out: $("#fecha_fin").val() },
 	            success:function(data) {
-	               $("#id_proveedor").val($("#proveedor").val());
-	               $("#contenedor_informe").show("slide", { direction: "left" }, 1000);
-	               $("#div_detalle").html('').hide("slide", {direction: "right"}, 1000);
+                    $("#sol_id").val($("#solicitud").val());
+	            	$("#fecha_in").val($("#fecha_inicio").val());
+                    $("#fecha_out").val($("#fecha_fin").val());
+	                $("#contenedor_informe").show("slide", { direction: "left" }, 1000);
+	                $("#div_detalle").html('').hide("slide", {direction: "right"}, 1000);
                     $("#div_detalle").html(data.drop).show("slide", { direction: "left" }, 1000);
                     $('#dataTables-example').DataTable({
                         responsive: true,
                         emptyTable: "No existen registros",     
                     });
-                    $(".dataTables_empty").text("No se encontraron registros...");
-                    // $("#td_temporal").attr("colspan",8);
-                    // $(".drop").remove();
+                    $("#td_temporal").attr("colspan",5); // Pendiete
+                    $(".drop").remove();
 	            }
 	        });
 
 			} else {
-				alertify.error("Debe de seleccionar un proveedor");
+				alertify.error("Los campos con * en rojo son obligatorios");
 			}
 		});	
 
 	});
 </script>
+

@@ -82,7 +82,7 @@ th, td {
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        Proceso de solicitudes
+        Listado de Solicitudes
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
@@ -245,6 +245,12 @@ th, td {
                  $("#tabla_dinamica").show("slide", {
                   direction: 'left'
                 }, 500);
+
+                 $('#dataTables-example').DataTable({
+                        responsive: true,
+                        emptyTable: "No existen registros",     
+                  });
+
                }
              });
       });

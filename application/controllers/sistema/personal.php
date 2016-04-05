@@ -83,7 +83,7 @@ class Personal extends CI_Controller {
 			$crud->field_type('activated','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
 
 		// Datos generales de la pagina	
-			$data['titulo']="Gestión de usuarios";
+			$data['titulo']="Gestión de Usuarios";
 
 			$crud->callback_before_insert(array($this,'_add_password'));
 			$crud->callback_before_update(array($this,'_add_password'));

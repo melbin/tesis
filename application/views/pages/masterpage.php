@@ -182,7 +182,7 @@
             <ul class="nav navbar-top-links navbar-left">
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <li>
-                    <a  href="<?php echo base_url(); ?>welcome">Home</a>
+                    <a  href="<?php echo base_url(); ?>welcome">Inicio</a>
                 </li>
                 <?php if(count($accede_sistema)>0){ ?>
                 |
@@ -268,7 +268,7 @@
         <div id="page-wrapper">
             <div class="row" id="contenido">
                 <div class="col-lg-12">
-                    <h1 class="page-header"><?php if(isset($titulo)){echo $titulo;} else {echo "Inicio";} ?></h1>
+                    <h2 class="page-header"><?php if(isset($titulo)){echo $titulo;} else {echo "Inicio";} ?></h2>
 
                 <?php if(isset($contenido)) {echo $contenido;} else {echo '';} ?>
                 <!-- /.col-lg-12 -->

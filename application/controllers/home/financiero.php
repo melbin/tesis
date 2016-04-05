@@ -65,7 +65,7 @@ class Financiero extends CI_Controller {
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-			$data['titulo']="Solicitudes pendientes";
+			$data['titulo']="Procesar Solicitudes";
 			$data['vista_name'] = "financiero/procesar_solicitudes";
 
 				// All your code goes here
@@ -99,8 +99,21 @@ class Financiero extends CI_Controller {
 			$sol_registo = $this->regional_model->actualizar_registro('des_detalle_solicitud', $sol_datos, array('des_sol_id'=>$id_solicitud));
 
 			if($sol_registo>0){
+
+			// Actualizar el Log
+            	$tmp_array = array(
+            			'emh_sol_id'	=> $id_solicitud,
+            			'emh_descripcion'	=> 'Aprobación de fondos por San Salvador',
+            			'emh_fecha'			=> date('Y-m-d H:i:s'),
+            			'emh_sol_monto'		=> NULL,
+            			'emh_estado'		=> 1,
+            			'emh_usu_crea'		=> $this->tank_auth->get_user_id(),
+            			'emh_usu_mod'		=> $this->tank_auth->get_user_id(),
+            			'emh_fecha_mod'		=> date('Y-m-d H:i:s')	
+            		);
+            	$emh_id = $this->regional_model->insertar_registro('emh_empleado_historial', $tmp_array);
+
 				// Actualizacion del det_detalle_especifico
-			
 				$monto_solicitud = floatval($historial_sol['des_total']);
 				$det_devengado   = floatval($historial_sol['det_saldo_devengado']);
 				$det_saldo_ejecutado = floatval($historial_sol['det_saldo_ejecutado']);

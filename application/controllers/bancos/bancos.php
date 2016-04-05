@@ -74,7 +74,7 @@ class Bancos extends CI_Controller {
 
 
 		// Datos generales de la pagina	
-			$data['titulo']="Gestión de fondos";
+			$data['titulo']="Gestión de Fondos";
 
 		// 	Estas tres lineas son principales cuando se desea imprimir un Grocery Crud en el sistema
 		 	$crud->unset_jquery(); // No llama al jQuery del Grocery Crud

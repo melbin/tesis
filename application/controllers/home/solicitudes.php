@@ -218,7 +218,7 @@ class Solicitudes extends CI_Controller {
         } else {
 
             $data['logo'] = $this->regional_model->get_parametro("logo");
-            $data['titulo'] = "Solicitudes en proceso";
+            $data['titulo'] = "Seguimiento de Solicitudes";
             $data['vista_name'] = "solicitudes/ver_solicitudes";
 
             // All your code goes here
@@ -250,7 +250,7 @@ class Solicitudes extends CI_Controller {
             $data['username'] = $this->tank_auth->get_username();
             $data['vista_name'] = "solicitudes/crear_solicitud";
             $data['logo'] = $this->regional_model->get_parametro("logo");
-            $data['titulo'] = "Crear solicitud";
+            $data['titulo'] = "Crear Solicitud";
 
             // Cargar los datos para las solicitudes
             //$data['dep_internos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','dpi_nombre','',array('dpi_estado'=>1),null,'','dpi_id',true);
@@ -305,6 +305,21 @@ class Solicitudes extends CI_Controller {
                 'des_fecha_mod' => date('Y-m-d H:i:s')
             );
             $des_id = $this->regional_model->insertar_registro('des_detalle_solicitud', $detalle);
+
+            // Actualizar el Log
+            if($des_id > 0 ){
+            	$tmp_array = array(
+            			'emh_sol_id'	=> $sol_id,
+            			'emh_descripcion'	=> 'Crear solicitud',
+            			'emh_fecha'			=> date('Y-m-d H:i:s'),
+            			'emh_sol_monto'		=> $this->input->post('total'),
+            			'emh_estado'		=> 1,
+            			'emh_usu_crea'		=> $this->tank_auth->get_user_id(),
+            			'emh_usu_mod'		=> $this->tank_auth->get_user_id(),
+            			'emh_fecha_mod'		=> date('Y-m-d H:i:s')	
+            		);
+            	$emh_id = $this->regional_model->insertar_registro('emh_empleado_historial', $tmp_array);
+            }
 
 
             // Insertar articulo asociado a solicitud
@@ -397,6 +412,21 @@ class Solicitudes extends CI_Controller {
                     );
 
                     $id_contratista = $this->regional_model->insertar_registro('con_contratista', $array_contratista);
+
+                    if($id_contratista > 0){
+                    	// Actualizar el Log
+		            	$tmp_array = array(
+		            			'emh_sol_id'	=> $_POST['sol_id'],
+		            			'emh_descripcion'	=> "Registrar compra (Contrato = $contrato[$key], Monto = \$$monto[$key])",
+		            			'emh_fecha'			=> date('Y-m-d H:i:s'),
+		            			'emh_sol_monto'		=> NULL,
+		            			'emh_estado'		=> 1,
+		            			'emh_usu_crea'		=> $this->tank_auth->get_user_id(),
+		            			'emh_usu_mod'		=> $this->tank_auth->get_user_id(),
+		            			'emh_fecha_mod'		=> date('Y-m-d H:i:s')	
+		            		);
+		            	$emh_id = $this->regional_model->insertar_registro('emh_empleado_historial', $tmp_array);
+                    }
 
                     if ($id_contratista > 0) {
                         $detalle_array = array(

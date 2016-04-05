@@ -82,7 +82,7 @@ th, td {
     $(document).ready(function(){
 
         var pathArray = window.location.pathname.split( '/' );
-        var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";   
+        var urlj=window.location.protocol+"//"+window.location.host+"/"+pathArray[1]+"/";
 
         $(".select2").select2({
             minimumResultsForSearch: 4,

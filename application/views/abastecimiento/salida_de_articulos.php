@@ -105,7 +105,7 @@
             <!-- Creacion del datatable -->
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5><b>Detalle de productos</b></h5>
+            <h5><b>Detalle de Productos</b></h5>
         </div>
         <div class="panel-body">
         <br /><small id="validar_datagried" style="color:red;" ></small>    
