@@ -143,6 +143,10 @@ class Reportes extends CI_Controller {
         }
         else if($tipo==2){
             $this->load->library('pdf'); //libreria pdf
+            $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+            $this->pdf->SetAuthor('Melbin Cruz');
+            $this->pdf->setPrintHeader(false);
+            $this->pdf->setPrintFooter(false);
             $this->pdf->reportePDF('reportes/reporte_existencia_pdf', $data, 'Existencias');
         }
 	}
@@ -200,6 +204,11 @@ class Reportes extends CI_Controller {
         }
         else {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+                $this->pdf->setPrintHeader(false);
+                $this->pdf->setPrintFooter(false);
+
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Productos por Bodega <br> Bodega: '.$bodega_nombre);
         }
 
@@ -241,6 +250,10 @@ class Reportes extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+                $this->pdf->setPrintHeader(false);
+                $this->pdf->setPrintFooter(false);
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Existencias por Proveedor');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID

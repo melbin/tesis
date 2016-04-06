@@ -117,6 +117,10 @@ class Reportes_financiero extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+                $this->pdf->setPrintHeader(false);
+                $this->pdf->setPrintFooter(false);
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Distribución y Disponibilidad por Fondo <br> Fondo: '.strtoupper($fondo['fon_nombre']).'<br> Desde: '.date('d-m-Y', strtotime($_POST['fecha_in'])).'<br>Hasta: '.date('d-m-Y', strtotime($_POST['fecha_out'])));
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
@@ -152,6 +156,10 @@ class Reportes_financiero extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+                $this->pdf->setPrintHeader(false);
+                $this->pdf->setPrintFooter(false);
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Detalle por específico');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
@@ -183,6 +191,10 @@ class Reportes_financiero extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+                $this->pdf->setPrintHeader(false);
+                $this->pdf->setPrintFooter(false);
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Saldos Congelados');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID

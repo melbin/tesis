@@ -2,9 +2,10 @@
 if(!empty($pdf)){ ?>
     <style type="text/css">
     table, th, td {
-    border: 0.1px solid gray;
+        border: 0.1px solid gray;
+    }
 <?php } ?>
-}
+
     
 </style>
 <!--    <table cellpadding="0" cellspacing="0" border="0" class="responsive dynamicTable display table table-bordered" width="100%"> -->

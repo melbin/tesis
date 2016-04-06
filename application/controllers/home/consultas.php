@@ -108,6 +108,10 @@ class Consultas extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+                $this->pdf->setPrintHeader(false);
+                $this->pdf->setPrintFooter(false);
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Solicitudes Rechazadas');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
@@ -138,6 +142,10 @@ class Consultas extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+                $this->pdf->setPrintHeader(false);
+                $this->pdf->setPrintFooter(false);
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Solicitudes Finalizadas');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
@@ -169,6 +177,12 @@ class Consultas extends CI_Controller {
         else
         if($excel==2) {
                 $this->load->library('pdf'); //libreria pdf
+                $this->pdf->SetTitle('Regional - '.date('d-m-Y'));
+                $this->pdf->SetAuthor('Melbin Cruz');
+				$this->pdf->setPrintHeader(false);
+				$this->pdf->setPrintFooter(false);
+				$this->pdf->SetMargins(-10,10, 10);
+				
                 $this->pdf->reportePDF('reportes/reporte_pdf', $data, 'Movimiento de Solicitud','L');
         } else {
             echo json_encode(array('drop'=>$data['html'])); // Mostrar los resultados en una GRID
