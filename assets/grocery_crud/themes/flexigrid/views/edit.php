@@ -81,7 +81,7 @@
 	var message_update_error = "<?php echo $this->l('update_error')?>";
 
 	$(document).ready(function(){
-		if($("select.chosen-select option:selected").val()==''){
+		if($("select[name*='estado'] option:selected").val()==''){
 			$(".chosen-select option[value='0']").attr('selected',true);
 			$('.chosen-select').trigger('liszt:updated');
 		}	
