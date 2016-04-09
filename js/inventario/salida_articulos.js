@@ -180,6 +180,7 @@
     }
       var row=0;
       $("#agregar").on("click",function(){
+         validar_cantidad();
          $("#unidad_medida").hide();       
        if($.trim($('#cantidad').val())!='' && $("#cantidad").val() > 0 && $('#articulo').val() !=0){
         $("#validar_datagried").text('');
@@ -256,6 +257,7 @@
         var cantidad_act = cadena_select.split('::');
         var total = parseFloat(cantidad_act[1]) - parseFloat(cantidad_sug).toFixed(1);
 
+        if($.trim(cantidad_sug)!='')
         if(total<0)
         {
             alertify.alert("Por favor, ingrese una cantidad menor").setHeader('');
