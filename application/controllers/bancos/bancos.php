@@ -56,22 +56,31 @@ class Bancos extends CI_Controller {
 				'fon_estado'
 				);
 
+			$fields = array(
+				'fon_nombre',
+				'fon_cantidad',
+				'fon_fecha',
+				'fon_estado',
+				'fon_usu_mod',
+				'fon_fecha_mod'
+				);
+
 			$alias = array(
 					'fon_nombre'	=>'Nombre',
-					'fon_cantidad'	=> 'Cantidad',
+					'fon_cantidad'	=> 'Cantidad ($)',
 					'fon_fecha' 	=> 'Fecha',
 					'fon_estado'	=>'Estado'
 				);
 
 			$crud->required_fields($columnas);
 			$crud->columns($columnas);
-			$crud->fields($columnas);
+			$crud->fields($fields);
 			$crud->display_as($alias);
 
 			$crud->field_type('fon_usu_mod', 'hidden', $this->tank_auth->get_user_id());
 			$crud->field_type('fon_fecha_mod', 'hidden', date('Y-m-d H:i:s'));
 			$crud->field_type('fon_estado','dropdown', array('1'=>'Activo','0'=>'Inactivo'));
-
+			$crud->callback_column('fon_cantidad',array($this,'_formato_dinero'));
 
 		// Datos generales de la pagina	
 			$data['titulo']="Gestión de Fondos";
@@ -87,6 +96,10 @@ class Bancos extends CI_Controller {
 	
 	}
 	
+	function _formato_dinero($value, $row)
+	{
+		return number_format($value,2,'.',',');
+	}
 
 	function __cargarVista($data=0)
 	{	

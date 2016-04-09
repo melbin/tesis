@@ -73,10 +73,17 @@
 	<?php echo form_close(); ?>
 </div>
 </div>
-<script>
+<script type="text/javascript">
 	var validation_url = '<?php echo $validation_url?>';
 	var list_url = '<?php echo $list_url?>';
 
 	var message_alert_edit_form = "<?php echo $this->l('alert_edit_form')?>";
 	var message_update_error = "<?php echo $this->l('update_error')?>";
+
+	$(document).ready(function(){
+		if($("select.chosen-select option:selected").val()==''){
+			$(".chosen-select option[value='0']").attr('selected',true);
+			$('.chosen-select').trigger('liszt:updated');
+		}	
+	});
 </script>

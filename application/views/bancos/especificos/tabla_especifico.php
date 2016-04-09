@@ -4,7 +4,7 @@
         <th>#</th>
         <th align="center" style="vertical-align: text-top;">Nombre</th>
         <th align="center" style="vertical-align: text-top;">Fondo</th>
-        <th align="center" style="vertical-align: text-top;">Presupuesto Votado</th>
+        <th align="center" style="vertical-align: text-top;">Presupuesto Votado ($)</th>
         <th align="center" style="vertical-align: text-top;">Saldo ($)</th>
         <th align="center" style="vertical-align: text-top;">Asignado (%)</th>
         <th align="center" style="vertical-align: text-top;">Devengado (%)</th>
