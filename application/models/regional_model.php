@@ -736,6 +736,7 @@ ORDER BY
                 ->where('emh_fecha >=', $fecha_in)
                 ->where('emh_fecha <=', $fecha_out)
                 ->where('sol_id',$sol_id)
+                ->order_by('emh_fecha',ASC)
             ;
             
         $query = $this->db->get()->result_array();
