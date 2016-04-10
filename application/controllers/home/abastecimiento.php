@@ -425,15 +425,19 @@ class Abastecimiento extends CI_Controller {
 		} else {
 
 			if($_POST){
-			//	die(print_r($_POST));
+				//die(print_r($_POST));
 				$id_sol = $this->input->post('id_sol');
 				$act_solicitud = array(
 					'sol_dpi_id'		=> 	$this->input->post('dpi_interno'),
 					'sol_num_entregas'	=> 	$this->input->post('numero_entrega'),
-					'sol_soe_id'		=>	1, // Pendiente
 					'sol_usu_mod'		=>	$this->tank_auth->get_user_id(),
 					'sol_fecha_mod'		=>	date('Y-m-d H:i:s')
 				);
+
+				if(isset($_POST['select_tipo_envio'])){
+					$act_solicitud['sol_soe_id']	=	$this->input->post('select_tipo_envio');
+				}
+
 				$row_affected = $this->regional_model->actualizar_registro('sol_solicitud',$act_solicitud,array('sol_id'=>$id_sol));
 			
 				if($row_affected==1){
@@ -518,9 +522,10 @@ class Abastecimiento extends CI_Controller {
 			} else {
 			// crear alerta FAIL
 			$alerta=array('tipo_alerta'=> 'error','titulo_alerta'=>"Solicitud No editada",'texto_alerta'=>"Por favor, revisar datos ingresados.");
-		}
-			$this->session->set_flashdata($alerta);       
-			redirect('home/abastecimiento/ver_solicitudes_edit/'.$id_sol);
+			}
+				$this->session->set_flashdata($alerta);       
+				if($_POST['financiero']==1) redirect('home/abastecimiento/ver_solicitudes_edit/'.$id_sol.'/2');
+				redirect('home/abastecimiento/ver_solicitudes_edit/'.$id_sol);
 			} // End POST
 
 			$data['logo'] = $this->regional_model->get_parametro("logo");
@@ -533,6 +538,7 @@ class Abastecimiento extends CI_Controller {
 			$detalle_solicitud = $this->regional_model->detalle_sol($id);
 			
 			$data['detalle_sol'] = $detalle_solicitud;
+			$data['tipo_envio']	=	$this->regional_model->get_dropdown('soe_solicitud_envio','soe_descripcion','',array('soe_estado'=>1),$detalle_solicitud[0]['sol_soe_id'],'','soe_id',true);
 			$data['dep_internos'] = $this->regional_model->get_dropdown('dpi_departamento_interno','dpi_nombre','',array('dpi_estado'=>1),$detalle_solicitud[0]['dpi_id'],'','dpi_id',true);
 			$data['bodega'] = $this->regional_model->get_dropdown('ali_almacen_inv','ali_nombre','',array('ali_estado'=>1),$detalle_solicitud[0]['ali_id'],'','ali_id',true);	
 			$data['categoria'] = $this->regional_model->get_dropdown('cat_catalogo','{cat_nombre}::{cat_codigo}','',array('cat_estado'=>1),$detalle_solicitud[0]['des_cat_id'],'','cat_id',true);
@@ -570,6 +576,7 @@ class Abastecimiento extends CI_Controller {
 	{
 		if($_POST){
 			$sol = $this->input->post('solicitud');
+			$tipo_envio = ($_POST['tipo_envio'])? $this->input->post('tipo_envio'):1;
 			$where = array('des_sol_id'=>$sol);
 			$array = array(
 				'des_ets_id'=>6,
@@ -578,6 +585,8 @@ class Abastecimiento extends CI_Controller {
 			$row_afected = $this->sistema_model->actualizar_registro('des_detalle_solicitud', $array, $where);	
 			if($row_afected>0)
 				{
+					// Actualizar el tipo de envio
+					$this->sistema_model->actualizar_registro('sol_solicitud',array('sol_soe_id'=>$tipo_envio), array('sol_id'=>$sol));
 
 					// Actualizar el Log
 	            	$tmp_array = array(

@@ -33,7 +33,7 @@
                 $subtotal += floatval($value['axd_cantidad']);
                 ?>
                 
-                <tr id="<?php echo $row; ?>" bgcolor="<?php echo (!empty($value['axd_reserva']) && $value['axd_reserva']>0)? '#00FF7F':''; ?>">
+                <tr id="<?php echo $row; ?>" bgcolor="<?php echo (!empty($value['axd_reserva']) && $value['axd_reserva']>0)? '#FBA569':''; ?>">
                     <td>
                         <input type="hidden" value="<?php echo $row; ?>" name="ids_filaP[]" />
                         <input type="hidden" name="departamentos[]" class="departamentos" value="<?php echo $value['axd_depto_id']; ?>"/>

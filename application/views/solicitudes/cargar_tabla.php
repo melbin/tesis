@@ -13,7 +13,7 @@
     <?php 
     foreach ($solicitudes as $key => $value) {   ?>
 
-        <tr>
+        <tr <?php echo ($value['sol_soe_id']==2)? "style='background-color:#FBA569;'":NULL;  ?>>
             <td><?php echo $value['sol_id']; ?></td>
             <td><?php echo $value['dpi_nombre']; ?></td>
             <td><?php echo date('d-m-Y g:i a', strtotime($value['sol_fecha']));?></td>

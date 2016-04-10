@@ -74,7 +74,6 @@ class Financiero extends CI_Controller {
 			$data['html'] = $this->load->view('solicitudes/cargar_tabla',$data,true);
 			$this->__cargarVista($data);
 		}
-
 	}
 
 	public function aprobar_solicitud()

@@ -14,7 +14,29 @@
 
         	<table width="50%" align="left">
         		<tr><th width="23%"></th><th></th><th></th></tr>
-        		
+        		<?php 
+                    if(empty($financiero)){ ?>
+                        <tr>
+                            <td width="10%"><h5>Tipo de env&iacute;o:<b style="color:red;">*</b></h5></td>
+                            <td colspan="2">
+                                <input type="hidden" name="financiero" value="0">
+                                <select class="form-control select2" id="select_tipo_envio" name="select_tipo_envio" placeholder="seleccione" onchange="$('#tipo_envio_error').text('');">
+                                    <?php if(isset($tipo_envio)) {echo $tipo_envio;} ?>
+                                </select>
+                                <div id="tipo_envio_error" style="color:red;font-size:11px;"></div>
+                            </td>
+                        </tr>    
+
+                 <?php } else { ?>
+                        <tr>
+                            <td width="10%"><h5>Tipo de env&iacute;o:</td>
+                            <td colspan="2">
+                                <input type="text" disabled="disabled" value="<?php echo $detalle_sol[0]['soe_nombre']; ?>" class="form-control" />
+                                <input type="hidden" name="financiero" value="1">
+                            </td>
+                        </tr>                     
+                 <?php } ?>
+                
                 <tr>
                 <td width="10%"><h5>Financiamiento:<b style="color:red;">*</b></h5></td>
                     <td colspan="2">
@@ -236,6 +258,13 @@
     $("#id_sol").val(pathArray[pathArray.length-1]);
     $("#categoria").trigger("change");    
     
+    $("#select_tipo_envio option[value='0']").remove();
+
+    $("#tipo_envio").val($("#select_tipo_envio option:selected").val());
+    $("#select_tipo_envio").on('change',function(){
+        $("#tipo_envio").val($(this).val());
+    });
+
     setTimeout(function(){ 
         $("#especifico").trigger("change");
      }, 400);

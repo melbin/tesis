@@ -383,7 +383,11 @@ ORDER BY
                     ->join('des_detalle_solicitud','des_sol_id=sol_id','left')
                     ->join('ets_estado_solicitud','des_ets_id = ets_id','left')
                     ->where('sol_estado',1)
-                    ->where_in('des_ets_id',array('1','2','4','5'));
+                    ->where_in('des_ets_id',array('1','2','4','5'))
+                    ->order_by('sol_soe_id',DESC)
+                    ->order_by('ets_id',6)
+                    ->order_by('sol_fecha',ASC)
+                    
                     ;
           if(!empty($where)){
             $this->db->where($where);
@@ -409,7 +413,8 @@ ORDER BY
                     ->join('des_detalle_solicitud','des_sol_id=sol_id','left')
                     ->join('ets_estado_solicitud','des_ets_id = ets_id','left')
                     ->where('sol_estado',1)
-                    ->where_in('des_ets_id',array('6','7')); // Financiero vera nada mas las aprobadas por Abastecimiento
+                    ->where_in('des_ets_id',array('6','7')) // Financiero vera nada mas las aprobadas por Abastecimiento
+                    ->order_by('sol_soe_id',DESC);
                     ;
           if(!empty($where)){
             $this->db->where($where);

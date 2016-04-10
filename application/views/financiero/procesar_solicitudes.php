@@ -63,6 +63,7 @@ th, td {
 
         $('#dataTables-example').DataTable({
                 responsive: true,
+                "aaSorting": [],
                 emptyTable:     "No data available in table",     
         });
 

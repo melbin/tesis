@@ -255,6 +255,10 @@
                 required: true,
                 min: 1
             },
+            select_tipo_envio: {
+                required:true,
+                min:1
+            },
             bodega: {
                 required: true,
                 min: 1
@@ -285,6 +289,7 @@
             categoria: "Seleccione una categoría",      
             dpi_interno: "Seleccione un departamento",
             especifico: "Seleccione un especifico",
+            select_tipo_envio: "Seleccione un tipo de envío",
             fondo: "Seleccione un fondo",
             lugar_entrega: {
                  required: "Ingrese un lugar de entrega",
