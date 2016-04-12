@@ -85,10 +85,10 @@
         });
 
         $(".monto_asignado").focusout(function(){
-
+            
             $(this).css('background-color','#FFFFFF');
             if(parseFloat($(this).attr('saldo_reserva'))>0){
-                if(parseFloat($(this).val()) < parseFloat($(this).attr('saldo_reserva'))){
+                if( $.trim($(this).val()) == '' || !$.isNumeric($(this).val()) || (parseFloat($(this).val()) < parseFloat($(this).attr('saldo_reserva'))) ){
                     alertify.error("Posee saldo en movimiento.");
                     $(this).val($.number($(this).attr('saldo_reserva'),2));
                 } 

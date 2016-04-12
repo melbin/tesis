@@ -157,7 +157,7 @@ $(document).ready(function(){
 }); // End document ready
 
     function restante(id){
-
+        
         event.preventDefault();
         var total=parseFloat($("#saldo").val());
         var valor = 0;

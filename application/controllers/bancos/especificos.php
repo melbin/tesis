@@ -795,7 +795,7 @@ class Especificos extends CI_Controller {
             $opciones = "<option value='0' saldo='0' selected>Seleccione</option>";
 
             foreach ($especificos as $key => $value) {
-                $saldo = floatval($value['det_saldo']) - floatval($value['det_saldo_ejecutado']) - floatval($value['saldo_asignado']) - floatval(!empty($value['det_saldo_congelado']) ? $value['det_saldo_congelado'] : 0);
+                $saldo = floatval($value['det_saldo']) - floatval($value['det_saldo_ejecutado']) /*- floatval($value['saldo_asignado'])*/ - floatval(!empty($value['det_saldo_congelado']) ? $value['det_saldo_congelado'] : 0);
                 if($saldo >0 ) $opciones .= "<option value=" . $value['esp_id'] . " saldo=" . $saldo . " > " . $value['esp_nombre'] . "</option>";
             }
 
